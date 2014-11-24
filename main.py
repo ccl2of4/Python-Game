@@ -1,4 +1,5 @@
 import sys, pygame, time
+from Player import Player
 
 pygame.init()
 
@@ -8,17 +9,15 @@ black = 0, 0, 0
 
 screen = pygame.display.set_mode(size)
 
-ball = pygame.image.load("mariostand.png")
-ballrect = ball.get_rect()
+player = Player ()
+allsprites = pygame.sprite.RenderPlain (player)
+
+clock = pygame.time.Clock ()
 
 while 1:
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT: sys.exit()
-
-	ballrect = ballrect.move(speed)
-
-	screen.fill(black)
-	screen.blit(ball, ballrect)
-	pygame.display.flip()
-
-	time.sleep (1.0/60)
+	clock.tick (60)
+	allsprites.update ()
+	screen.fill (black)
+	allsprites.draw (screen)
+	pygame.display.flip ()
+	pygame.event.pump ()
