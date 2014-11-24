@@ -7,9 +7,9 @@ pygame.init()
 
 screen = pygame.display.set_mode((constants.window_width, constants.window_height))
 
-player = Player ("mariostand.png")
+player = Player ("images/mariostand.png")
 
-platform = Entity ("platform.png",0,300,200,20)
+platform = Entity ("images/platform.png",0,300,200,20)
 platform.set_affected_by_gravity (False)
 
 all_entities = pygame.sprite.RenderPlain (player,platform)
