@@ -12,7 +12,6 @@ class Entity (pygame.sprite.Sprite) :
 		self.physical = True
 		self.affected_by_gravity = True
 		self.velocity = (0,0)
-		self.acceleration = (0,0)
 		self.grounded = False
 	
 	def is_physical (self) :
@@ -27,11 +26,11 @@ class Entity (pygame.sprite.Sprite) :
 
 	def update (self) :
 		if self.affected_by_gravity :
-			self.acceleration = (0,constants.gravity)
-			self.velocity = (self.velocity[0] + self.acceleration[0], self.velocity[1] + self.acceleration[1])
+			self.velocity = self.velocity[0], self.velocity[1] + constants.gravity
 		if self.grounded :
-			self.velocity = (self.velocity[0], 0)
+			self.velocity = self.velocity[0], min (0, self.velocity[1])
 		self.rect.move_ip (*self.velocity)
+		self.grounded = False
 
 	def did_collide (self, other) :
 		self.grounded = True
