@@ -51,6 +51,3 @@ class Player (Entity) :
 
 	def run (self) :
 		pass
-
-	def did_collide (self, other) :
-		Entity.did_collide (self, other)

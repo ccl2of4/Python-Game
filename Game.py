@@ -1,7 +1,8 @@
 import pygame
 import constants
+from Entity import EntityDelegate
 
-class Game :
+class Game (EntityDelegate) :
 	def __init__(self) :
 		pygame.init()
 		self.screen = pygame.display.set_mode((constants.window_width, constants.window_height))
@@ -17,16 +18,10 @@ class Game :
 			
 			self.all_entities.update ()
 
-			#collision detection
-			for entity in self.all_entities :
-				for other_entity in self.all_entities :
-					if entity is other_entity :
-						continue
-					if entity.rect.colliderect (other_entity.rect) :
-						entity.did_collide (other_entity)
-						other_entity.did_collide (entity)
-
 			self.screen.fill (constants.background_color)
 			self.all_entities.draw (self.screen)
 			pygame.display.flip ()
 			pygame.event.pump ()
+
+	def get_all_entities (self) :
+		return self.all_entities
