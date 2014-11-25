@@ -2,6 +2,7 @@ import pygame
 
 import constants
 from Entity import *
+from Projectile import Projectile
 
 global jump_accel
 jump_accel = -15
@@ -126,13 +127,33 @@ class Player (Entity) :
 		self.velocity = self.velocity[0] + accel, self.velocity[1]
 
 	def attack (self) :
-		entities = self.delegate.get_all_entities ()
-		for entity in entities :
-			touching = get_touching (self.rect, entity.rect)
-			if touching == Location.right and self.direction == Direction.right :
-				entity.was_attacked ((10,-5))
-			elif touching == Location.left and self.direction == Direction.left :
-				entity.was_attacked((-10,-5))
+		if False :
+			entities = self.delegate.get_all_entities ()
+			for entity in entities :
+				touching = get_touching (self.rect, entity.rect)
+				if touching == Location.right and self.direction == Direction.right :
+					entity.was_attacked ((10,-5))
+				elif touching == Location.left and self.direction == Direction.left :
+					entity.was_attacked((-10,-5))
+		else :
+			if self.direction == Direction.right :
+				p_x = self.rect.right
+			else :
+				p_x = self.rect.left
+			p_y = self.rect.center[1]
+			p_width = 20
+			p_height = 5
+
+			v_y = 0
+			if (self.direction == Direction.right) :
+				v_x = 100
+			else :
+				v_x = -100
+
+			projectile = Projectile (p_x, p_y, p_width, p_height, default='images/platform.png')
+			projectile.set_delegate (self.delegate)
+			self.delegate.spawn_entity (projectile)
+			projectile.fire ((v_x,v_y))
 
 	def was_attacked (self, knockback) :
 		self.velocity = self.velocity[0] + knockback[0], self.velocity[1] + knockback[1]

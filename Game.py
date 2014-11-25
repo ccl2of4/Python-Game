@@ -46,3 +46,6 @@ class Game (EntityDelegate) :
 
 	def get_all_entities (self) :
 		return self.all_entities
+
+	def spawn_entity (self, entity) :
+		self.add_entity (entity)

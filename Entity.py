@@ -3,7 +3,9 @@ import constants
 import math
 
 class EntityDelegate :
-	def get_all_entities () :
+	def get_all_entities (self) :
+		pass
+	def spawn_entity (self, entity) :
 		pass
 
 class Entity (pygame.sprite.Sprite) :
