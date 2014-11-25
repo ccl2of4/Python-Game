@@ -7,7 +7,6 @@ from Camera import Camera
 from UserController import UserController
 from AIController import AIController
 
-
 game = Game (constants.window_width, constants.window_height)
 camera = Camera (constants.window_width, constants.window_height)
 game.set_camera (camera)
