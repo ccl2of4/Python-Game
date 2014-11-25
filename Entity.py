@@ -5,13 +5,6 @@ class EntityDelegate :
 	def get_all_entities () :
 		pass
 
-class Location :
-	none = 0
-	above = 2 << 1
-	below = 2 << 2
-	left = 2 << 3
-	right = 2 << 4
-
 class Entity (pygame.sprite.Sprite) :
 	def __init__ (self,x=0, y=0,width=0,height=0,**images) :
 		pygame.sprite.Sprite.__init__ (self)
@@ -67,6 +60,7 @@ class Entity (pygame.sprite.Sprite) :
 					continue
 
 				touching = get_touching (self.rect, entity.rect)
+
 				if Location.above == touching :
 					self.grounded = True
 					if self.sliding : 
@@ -82,6 +76,7 @@ class Entity (pygame.sprite.Sprite) :
 
 			target_rect = self.rect.move (v_x, v_y)
 			union_rect = self.rect.union (target_rect)
+
 			for entity in entities :
 				if entity is self :
 					continue
@@ -102,8 +97,8 @@ class Entity (pygame.sprite.Sprite) :
 						v_y = max (v_y, entity.rect.bottom - self.rect.top)
 
 		if self.grounded :
-			assert (v_y <= 0)
-			self.grounded = v_y == 0 #won't be grounded for next update if you're leaving the ground
+			assert (v_y < 1)
+			self.grounded = abs (v_y) == 0 #won't be grounded for next update if you're leaving the ground
 			#if you leave the ground horizontally that would also cause a problem
 
 		self.velocity = v_x, v_y
@@ -116,31 +111,14 @@ class Entity (pygame.sprite.Sprite) :
 		if self.width != 0 or self.height != 0 :
 			self.image = pygame.transform.scale (self.image, (self.width,self.height))
 
-'''
-	def location (self, other) :
-		result = 0
-		if (self.rect.right <= other.rect.left) :
-			result += Location.left
-		if (self.rect.left >= other.rect.right) :
-			result += Location.right
-		if (self.rect.top >= other.rect.bottom) :
-			result += Location.below
-		if (self.rect.bottom <= other.rect.top) :
-			result += Location.above
-		return result
+class Location :
+	none = 0
+	above = 2 << 0
+	below = 2 << 1
+	left = 2 << 2
+	right = 2 << 3
 
-	def touching (self, other) :
-		if (self.rect.right == other.rect.left and (self.rect.bottom < other.rect.top and self.rect.top > other.rect.bottom)) :
-			return Location.right
-		if (self.rect.left == other.rect.right and (self.rect.bottom < other.rect.top and self.rect.top > other.rect.bottom)) :
-			return Location.left
-		if (self.rect.top == other.rect.bottom and (self.rect.right > other.rect.left and self.rect.left < other.rect.right)) :
-			return Location.below
-		if (self.rect.bottom == other.rect.top and (self.rect.right > other.rect.left and self.rect.left < other.rect.right)) :
-			return Location.above
-		return Location.none
-'''
-
+#additional pygame.Rect utility functions
 def get_location (rect1, rect2) :
 	result = 0
 	if (rect1.right <= rect2.left) :
