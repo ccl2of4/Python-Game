@@ -35,6 +35,9 @@ class Entity (pygame.sprite.Sprite) :
 	def set_delegate (self, delegate) :
 		self.delegate = delegate
 
+	def is_grounded (self) :
+		return self.grounded
+
 	def is_physical (self) :
 		return self.physical
 	def set_physical (self, physical) :
@@ -72,7 +75,8 @@ class Entity (pygame.sprite.Sprite) :
 
 				touching = self.touching (entity)
 				if Location.above == touching :
-					self.grounded = True
+					#won't be grounded for the next update if your v_y isn't 0
+					self.grounded = v_y == 0
 					if self.sliding : 
 						v_x *= .9
 				elif Location.below == touching :

@@ -9,10 +9,14 @@ class Game (EntityDelegate) :
 		self.screen = pygame.display.set_mode((width, height))
 		self.clock = pygame.time.Clock ()
 		self.all_entities = pygame.sprite.Group ()
+		self.all_controllers = []
 		self.camera = camera
 
 	def add_entity (self, entity) :
 		self.all_entities.add (entity)
+
+	def add_controller (self, controller) :
+		self.all_controllers.append (controller)
 
 	def get_camera (self) :
 		return self.camera
@@ -26,6 +30,9 @@ class Game (EntityDelegate) :
 		while 1:
 			self.clock.tick (60)
 			
+			for controller in self.all_controllers :
+				controller.update ()
+
 			self.all_entities.update ()
 
 			self.camera.update ()

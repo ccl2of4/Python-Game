@@ -4,7 +4,7 @@ import constants
 from Entity import Entity
 
 global jump_accel
-jump_accel = -10
+jump_accel = -15
 
 global walk_accel
 walk_accel = 1.0
@@ -39,38 +39,6 @@ class Player (Entity) :
 		Entity.__init__ (self,x,y,width,height,**images)
 
 	def update (self) :
-		keys = pygame.key.get_pressed ()
-
-		self.walking = False
-		self.running = False
-		self.jumping = False
-
-		if keys[pygame.K_a] :
-			self.walking = True
-			self.direction = Direction.left
-		elif keys[pygame.K_d] :
-			self.walking = True
-			self.direction = Direction.right
-		else :
-			self.walking = False
-		if keys[pygame.K_w] :
-			pass
-		if keys[pygame.K_s] :
-			self.running = self.walking #can't be running if you're not walking
-			self.walking = False #can't be running AND walking
-		else :
-			self.running = False
-		if keys[pygame.K_SPACE] :
-			self.jumping = True
-
-		if self.running or self.walking :
-			self.move_horizontally ()
-		else :
-			self.idle ()
-		
-		if self.jumping :
-			self.jump ()
-
 		Entity.update (self)
 
 	def update_image (self) :
@@ -112,28 +80,39 @@ class Player (Entity) :
 
 		Entity.update_image (self)
 
+	def look_right (self) :
+		self.direction = Direction.right
+	def look_left (self) :
+		self.direction = Direction.left
+
 	def jump (self) :
+		self.jumping = True
 		if self.grounded:
 			self.velocity = self.velocity[0], self.velocity[1] + jump_accel
 		else :
-			self.velocity = self.velocity[0], self.velocity[1] - 0.25*constants.gravity
+			self.velocity = self.velocity[0], self.velocity[1] - 0.35*constants.gravity
 
-	def move_horizontally (self) :
+	def walk (self, running) :
 		self.sliding = False
+		self.running = running
+		self.walking = not running
 		accel = self.horizontal_acceleration ()
 		self.velocity = self.velocity[0] + accel, self.velocity[1]
 
 	def idle (self) :
 		self.sliding = True
+		self.running = False
+		self.walking = False
+		self.jumping = False
 		self.velocity = self.velocity[0]*.99, self.velocity[1]
 
-	def is_running (self) :
-		return self.running
-
 	def horizontal_acceleration (self) :
+		assert (self.walking or self.running)
+
 		v_x = self.velocity[0]
 		accel = walk_accel
 		term_vel = terminal_walk_velocity
+
 		if self.running :
 			accel *= run_accel_factor
 			term_vel *= run_velocity_factor
