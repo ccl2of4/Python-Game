@@ -5,6 +5,7 @@ from Player import Player
 from Entity import Entity
 from Camera import Camera
 from UserController import UserController
+from AIController import AIController
 
 
 game = Game (constants.window_width, constants.window_height)
@@ -20,8 +21,19 @@ player = Player (50,0,46,80,
 	run_left='images/mario_run_left.png',
 	run_right='images/mario_run_right.png')
 player.set_delegate (game)
-
 player_controller = UserController (player)
+
+player_ai1 = Player (100,0,46,80,
+	default = 'images/mario_stand_right.png',
+	stand_left='images/mario_stand_left.png',
+	stand_right='images/mario_stand_right.png',
+	walk_left='images/mario_walk_left.png',
+	walk_right='images/mario_walk_right.png',
+	run_left='images/mario_run_left.png',
+	run_right='images/mario_run_right.png')
+player_ai1.set_delegate (game)
+player_ai_controller = AIController (player_ai1)
+player_ai_controller.set_target_entity (player)
 
 platform = Entity (0,300,500,20,default='images/platform.png')
 platform.set_affected_by_gravity (False)
@@ -36,11 +48,13 @@ platform2.set_affected_by_gravity (False)
 platform2.set_delegate (game)
 
 game.add_entity (player)
+game.add_entity (player_ai1)
 game.add_entity (platform)
 game.add_entity (platform1)
 game.add_entity (platform2)
 
 game.add_controller (player_controller)
+game.add_controller (player_ai_controller)
 
 game.set_main_entity (player)
 
