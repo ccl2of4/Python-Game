@@ -22,6 +22,7 @@ class Entity (pygame.sprite.Sprite) :
 		self.affected_by_gravity = True
 		self.velocity = (0,0)
 		self.grounded = False
+		self.sliding = True
 		self.delegate = None
 		self.image = None
 		self.update_image ()
@@ -70,8 +71,17 @@ class Entity (pygame.sprite.Sprite) :
 					v_x = max (v_x, entity.rect.right - self.rect.left)
 
 				touching = self.touching (entity)
-				if (Location.above == touching) :
+				if Location.above == touching :
 					self.grounded = True
+					if self.sliding : 
+						v_x *= .9
+				elif Location.below == touching :
+					if self.sliding :
+						v_x *= .9
+				elif Location.left == touching :
+					pass
+				elif Location.right == touching :
+					pass
 
 		if self.grounded :
 			pass
