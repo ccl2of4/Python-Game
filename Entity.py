@@ -61,7 +61,7 @@ class Entity (pygame.sprite.Sprite) :
 
 		if self.physical :
 
-			#apply friction before testing for collisions
+			#apply friction and test for collisions
 			for entity in entities :
 				if entity is self :
 					continue
@@ -79,22 +79,25 @@ class Entity (pygame.sprite.Sprite) :
 				elif Location.right == touching :
 					pass
 
-
-			#test for collisions or nearby entities
+			#test for presence of nearby entities
 			for entity in entities :
 				if entity is self :
 					continue
 				
 				location = self.location (entity)
-				if Location.below == location :
-					v_y = max (v_y, entity.rect.bottom - self.rect.top)
-				elif Location.above == location :
-					v_y = min (v_y, entity.rect.top - self.rect.bottom)
-
-				elif Location.left == location :
+				
+				#horizontal
+				if Location.left == location :
 					v_x = min (v_x, entity.rect.left - self.rect.right)
 				elif Location.right == location :
 					v_x = max (v_x, entity.rect.right - self.rect.left)
+
+				#vertical
+				elif Location.above == location :
+					v_y = min (v_y, entity.rect.top - self.rect.bottom)
+				elif Location.below == location :
+					v_y = max (v_y, entity.rect.bottom - self.rect.top)
+
 
 		if self.grounded :
 			assert (v_y <= 0)
@@ -111,25 +114,25 @@ class Entity (pygame.sprite.Sprite) :
 			self.image = pygame.transform.scale (self.image, (self.width,self.height))
 
 	def location (self, other) :
-		if (self.rect.right <= other.rect.left and self.rect.bottom > other.rect.top and self.rect.top < other.rect.bottom) :
-			return Location.left
-		if (self.rect.left >= other.rect.right and self.rect.bottom > other.rect.top and self.rect.top < other.rect.bottom) :
-			return Location.right
-		if (self.rect.top >= other.rect.bottom and self.rect.right > other.rect.left and self.rect.left < other.rect.right) :
-			return Location.below
-		if (self.rect.bottom <= other.rect.top and self.rect.right > other.rect.left and self.rect.left < other.rect.right) :
-			return Location.above
-		else :
-			return Location.none
+		result = 0
+		if (self.rect.right <= other.rect.left) :
+			result += Location.left
+		if (self.rect.left >= other.rect.right) :
+			result += Location.right
+		if (self.rect.top >= other.rect.bottom) :
+			result += Location.below
+		if (self.rect.bottom <= other.rect.top) :
+			result += Location.above
+		return result
 
 	def touching (self, other) :
+		result = 0
 		if (self.rect.right == other.rect.left and (self.rect.bottom <= other.rect.top and self.rect.top >= other.rect.bottom)) :
-			return Location.right
+			result += Location.right
 		if (self.rect.left == other.rect.right and (self.rect.bottom <= other.rect.top and self.rect.top >= other.rect.bottom)) :
-			return Location.left
+			result += Location.left
 		if (self.rect.top == other.rect.bottom and (self.rect.right >= other.rect.left and self.rect.left <= other.rect.right)) :
-			return Location.below
+			result += Location.below
 		if (self.rect.bottom == other.rect.top and (self.rect.right >= other.rect.left and self.rect.left <= other.rect.right)) :
-			return Location.above
-		else :
-			return Location.none
+			result += Location.above
+		return result
