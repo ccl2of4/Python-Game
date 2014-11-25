@@ -9,6 +9,3 @@ background_color = 255,255,255
 
 global gravity
 gravity = 1
-
-global terminal_velocity
-terminal_velocity = 15

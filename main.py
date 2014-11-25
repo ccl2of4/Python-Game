@@ -3,9 +3,12 @@ import constants
 from Game import Game
 from Player import Player
 from Entity import Entity
+from Camera import Camera
 
 
-game = Game ()
+game = Game (constants.window_width, constants.window_height)
+camera = Camera (constants.window_width, constants.window_height)
+game.set_camera (camera)
 
 player = Player (50,0,46,80, stand_left='images/mario_stand_left.png',stand_right='images/mario_stand_right.png',walk_left='images/mario_walk_left.png',walk_right='images/mario_walk_right.png',run_left='images/mario_run_left.png',run_right='images/mario_run_right.png')
 player.set_delegate (game)
@@ -26,5 +29,7 @@ game.add_entity (player)
 game.add_entity (platform)
 game.add_entity (platform1)
 game.add_entity (platform2)
+
+game.set_main_entity (player)
 
 game.run ()
