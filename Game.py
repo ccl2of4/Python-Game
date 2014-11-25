@@ -49,3 +49,7 @@ class Game (EntityDelegate) :
 
 	def spawn_entity (self, entity) :
 		self.add_entity (entity)
+		entity.delegate = self
+
+	def despawn_entity (self, entity) :
+		self.all_entities.remove (entity)

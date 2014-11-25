@@ -7,6 +7,8 @@ class EntityDelegate :
 		pass
 	def spawn_entity (self, entity) :
 		pass
+	def despawn_entity (self, entity) :
+		pass
 
 class Entity (pygame.sprite.Sprite) :
 	def __init__ (self,x=0, y=0,width=0,height=0,**images) :
@@ -24,7 +26,8 @@ class Entity (pygame.sprite.Sprite) :
 		self.update_image ()
 		self.rect = self.image.get_rect ()
 		self.rect.move_ip (x,y)
-
+		self.pass_through_entities = []
+		self.friendly_entities = []
 
 	def get_delegate (self) :
 		return self.delegate
@@ -44,6 +47,18 @@ class Entity (pygame.sprite.Sprite) :
 	def set_affected_by_gravity (self, affected_by_gravity) :
 		self.affected_by_gravity = affected_by_gravity
 
+	#entities that this entity should pass through without touching
+	def get_pass_through_entities (self) :
+		return self.pass_through_entities
+	def set_pass_through_entities (self, pass_through_entities) :
+		self.pass_through_entities = pass_through_entities
+
+	#entities that this entity should not harm
+	def get_friendly_entities (self) :
+		return self.friendly_entities
+	def set_friendly_entities (self, friendly_entities) :
+		self.friendly_entities = friendly_entities
+
 	def was_attacked (self, knockback) :
 		pass
 
@@ -62,7 +77,9 @@ class Entity (pygame.sprite.Sprite) :
 
 			#apply friction and test for collisions
 			for entity in entities :
-				if entity is self :
+				if (entity is self 
+					or entity in self.pass_through_entities 
+					or self in entity.pass_through_entities) :
 					continue
 
 				touching = get_touching (self.rect, entity.rect)
@@ -83,7 +100,9 @@ class Entity (pygame.sprite.Sprite) :
 			union_rect = self.rect.union (target_rect)
 
 			for entity in entities :
-				if entity is self :
+				if (entity is self 
+					or entity in self.pass_through_entities 
+					or self in entity.pass_through_entities) :
 					continue
 
 				#this means velocity vector will cause an interection with the current entity
@@ -121,6 +140,7 @@ class Location :
 	below = 2 << 1
 	left = 2 << 2
 	right = 2 << 3
+	inside = 3 << 4
 
 #additional pygame.Rect utility functions
 def get_location (rect1, rect2) :
@@ -144,4 +164,6 @@ def get_touching (rect1, rect2) :
 		return Location.below
 	if (rect1.bottom == rect2.top and (rect1.right > rect2.left and rect1.left < rect2.right)) :
 		return Location.above
+	if (rect1.colliderect(rect2)) :
+		return Location.inside
 	return Location.none
