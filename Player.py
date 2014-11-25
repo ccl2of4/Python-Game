@@ -25,14 +25,8 @@ running_anim_duraction = 5
 global walking_anim_duration
 walking_anim_duration = 10
 
-class Direction :
-	left = 0
-	right = 1
-
 class Player (Entity) :
 	def __init__(self,x=0,y=0,width=0,height=0, **images) :
-
-		self.direction = Direction.right
 
 		#used for animation
 		self.walking = False
@@ -107,6 +101,8 @@ class Player (Entity) :
 
 		Entity.update_image (self)
 
+
+
 	def look_right (self) :
 		self.direction = Direction.right
 	def look_left (self) :
@@ -126,40 +122,26 @@ class Player (Entity) :
 		accel = self.horizontal_acceleration ()
 		self.velocity = self.velocity[0] + accel, self.velocity[1]
 
+	def shoot (self) :
+		if self.weapon != None :
+			self.weapon.fire ()
+
 	def attack (self) :
-		if False :
-			entities = self.delegate.get_all_entities ()
-			for entity in entities :
-				touching = get_touching (self.rect, entity.rect)
-				if touching == Location.right and self.direction == Direction.right :
-					entity.was_attacked ((10,-5))
-				elif touching == Location.left and self.direction == Direction.left :
-					entity.was_attacked((-10,-5))
-		else :
-			p_width = 20
-			p_height = 5
-
-			if self.direction == Direction.right :
-				p_x = self.rect.right
-			else :
-				p_x = self.rect.left - p_width
-			p_y = self.rect.center[1]
-
-			v_y = 0
-			if (self.direction == Direction.right) :
-				v_x = 10
-			else :
-				v_x = -10
-
-			projectile = Projectile (p_x, p_y, p_width, p_height, default='images/platform.png')
-			projectile.set_affected_by_gravity (False)
-			projectile.set_shooter (self)
-			projectile.set_knockback ((10,0))
-			self.delegate.spawn_entity (projectile)
-			projectile.fire ((v_x,v_y))
+		entities = self.delegate.get_all_entities ()
+		for entity in entities :
+			touching = get_touching (self.rect, entity.rect)
+			if touching == Location.right and self.direction == Direction.right :
+				entity.was_attacked ((20,-10))
+			elif touching == Location.left and self.direction == Direction.left :
+				entity.was_attacked((-20,-10))
 
 	def was_attacked (self, knockback) :
 		self.velocity = self.velocity[0] + knockback[0], self.velocity[1] + knockback[1]
+
+	def found_weapon (self, weapon) :
+		if self.weapon == None :
+			self.weapon = weapon
+			weapon.owner = self
 
 	def horizontal_acceleration (self) :
 		assert (self.walking or self.running)

@@ -1,6 +1,9 @@
 import pygame
 import constants
-import math
+
+class Direction :
+	left = 0
+	right = 1
 
 class EntityDelegate :
 	def get_all_entities (self) :
@@ -13,6 +16,7 @@ class EntityDelegate :
 class Entity (pygame.sprite.Sprite) :
 	def __init__ (self,x=0, y=0,width=0,height=0,**images) :
 		pygame.sprite.Sprite.__init__ (self)
+		self.direction = Direction.right
 		self.images = images
 		self.width = width
 		self.height = height
@@ -23,6 +27,7 @@ class Entity (pygame.sprite.Sprite) :
 		self.sliding = True
 		self.delegate = None
 		self.image = None
+		self.weapon = None
 		self.update_image ()
 		self.rect = self.image.get_rect ()
 		self.rect.move_ip (x,y)
@@ -62,6 +67,10 @@ class Entity (pygame.sprite.Sprite) :
 	def was_attacked (self, knockback) :
 		pass
 
+	def found_weapon (self, weapon) :
+		pass
+
+
 	def update (self) :
 
 		v_x = self.velocity[0]
@@ -79,7 +88,8 @@ class Entity (pygame.sprite.Sprite) :
 			for entity in entities :
 				if (entity is self 
 					or entity in self.pass_through_entities 
-					or self in entity.pass_through_entities) :
+					or self in entity.pass_through_entities
+					or not entity.is_physical ()) :
 					continue
 
 				touching = get_touching (self.rect, entity.rect)
@@ -102,7 +112,8 @@ class Entity (pygame.sprite.Sprite) :
 			for entity in entities :
 				if (entity is self 
 					or entity in self.pass_through_entities 
-					or self in entity.pass_through_entities) :
+					or self in entity.pass_through_entities
+					or not entity.is_physical ()) :
 					continue
 
 				#this means velocity vector will cause an interection with the current entity
