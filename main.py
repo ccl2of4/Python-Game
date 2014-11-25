@@ -18,7 +18,9 @@ player = Player (50,0,46,80,
 	walk_left='images/mario_walk_left.png',
 	walk_right='images/mario_walk_right.png',
 	run_left='images/mario_run_left.png',
-	run_right='images/mario_run_right.png')
+	run_right='images/mario_run_right.png',
+	jump_left='images/mario_jump_left.png',
+	jump_right='images/mario_jump_right.png')
 player.set_delegate (game)
 player_controller = UserController (player)
 
@@ -29,7 +31,9 @@ player_ai1 = Player (100,0,46,80,
 	walk_left='images/mario_walk_left.png',
 	walk_right='images/mario_walk_right.png',
 	run_left='images/mario_run_left.png',
-	run_right='images/mario_run_right.png')
+	run_right='images/mario_run_right.png',
+	jump_left='images/mario_jump_left.png',
+	jump_right='images/mario_jump_right.png')
 player_ai1.set_delegate (game)
 player_ai_controller = AIController (player_ai1)
 player_ai_controller.set_target_entity (player)

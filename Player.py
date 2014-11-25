@@ -30,24 +30,50 @@ class Direction :
 
 class Player (Entity) :
 	def __init__(self,x=0,y=0,width=0,height=0, **images) :
+
+		self.direction = Direction.right
+
+		#used for animation
 		self.walking = False
 		self.running = False
 		self.jumping = False
-		self.direction = Direction.right
 		self.running_duration = 0
 		self.walking_duration = 0
+
+		#can't call init before we know which image we're going to use
 		Entity.__init__ (self,x,y,width,height,**images)
 
-	def update (self) :
+	def update (self) :	
+		
+		#slow the character if not inputing anything
+		if not self.walking and not self.running :
+			self.velocity = self.velocity[0]*.99, self.velocity[1]
+		
 		Entity.update (self)
+		
+		#reset all bools for the next update
+		self.sliding = True
+		self.running = False
+		self.walking = False
+		self.jumping = False
 
 	def update_image (self) :
 		direction = self.direction
 
+		should_use_running_anim = self.running
 		should_use_walking_anim = self.walking
 		should_use_standing_anim = True
 
-		if self.running :
+		if self.jumping :
+			if direction == Direction.left :
+				self.image = pygame.image.load (self.images['jump_left'])
+			else :
+				self.image = pygame.image.load (self.images['jump_right'])
+			should_use_running_anim = False
+			should_use_walking_anim = False
+			should_use_standing_anim = False
+
+		if should_use_running_anim :
 			self.running_duration += 1
 			if (self.running_duration < running_anim_duraction) :
 				if direction == Direction.left :
@@ -98,13 +124,6 @@ class Player (Entity) :
 		self.walking = not running
 		accel = self.horizontal_acceleration ()
 		self.velocity = self.velocity[0] + accel, self.velocity[1]
-
-	def idle (self) :
-		self.sliding = True
-		self.running = False
-		self.walking = False
-		self.jumping = False
-		self.velocity = self.velocity[0]*.99, self.velocity[1]
 
 	def attack (self) :
 		entities = self.delegate.get_all_entities ()

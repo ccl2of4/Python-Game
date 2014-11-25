@@ -19,6 +19,8 @@ class UserController (Controller) :
 		self.jumping = False
 		self.attacking = False
 
+
+
 		if keys[pygame.K_a] :
 			self.entity.look_left ()
 			self.walking = True
@@ -40,10 +42,11 @@ class UserController (Controller) :
 		else :
 			self.jump_needs_reset = False
 
+
+
+
 		if self.walking :
 			self.entity.walk (self.running)
-		else :
-			self.entity.idle ()
 
 		if self.attacking :
 			if not self.attack_needs_reset :
