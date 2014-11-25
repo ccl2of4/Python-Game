@@ -18,5 +18,5 @@ class AIController (Controller) :
 
 		self.entity.walk (False)
 
-		if self.target_entity.rect.center < self.entity.rect.center :
-			self.entity.jump ()
+		#if self.target_entity.rect.center < self.entity.rect.center :
+			#self.entity.jump ()

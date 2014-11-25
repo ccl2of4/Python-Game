@@ -1,7 +1,7 @@
 import pygame
 
 import constants
-from Entity import Entity
+from Entity import *
 
 global jump_accel
 jump_accel = -15
@@ -105,6 +105,18 @@ class Player (Entity) :
 		self.walking = False
 		self.jumping = False
 		self.velocity = self.velocity[0]*.99, self.velocity[1]
+
+	def attack (self) :
+		entities = self.delegate.get_all_entities ()
+		for entity in entities :
+			touching = get_touching (self.rect, entity.rect)
+			if touching == Location.right and self.direction == Direction.right :
+				entity.was_attacked ((10,-5))
+			elif touching == Location.left and self.direction == Direction.left :
+				entity.was_attacked((-10,-5))
+
+	def was_attacked (self, knockback) :
+		self.velocity = self.velocity[0] + knockback[0], self.velocity[1] + knockback[1]
 
 	def horizontal_acceleration (self) :
 		assert (self.walking or self.running)

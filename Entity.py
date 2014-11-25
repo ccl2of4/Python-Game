@@ -1,5 +1,6 @@
 import pygame
 import constants
+import math
 
 class EntityDelegate :
 	def get_all_entities () :
@@ -41,6 +42,9 @@ class Entity (pygame.sprite.Sprite) :
 	def set_affected_by_gravity (self, affected_by_gravity) :
 		self.affected_by_gravity = affected_by_gravity
 
+	def was_attacked (self, knockback) :
+		pass
+
 	def update (self) :
 
 		v_x = self.velocity[0]
@@ -73,7 +77,6 @@ class Entity (pygame.sprite.Sprite) :
 				elif Location.right == touching :
 					pass
 
-
 			target_rect = self.rect.move (v_x, v_y)
 			union_rect = self.rect.union (target_rect)
 
@@ -97,7 +100,6 @@ class Entity (pygame.sprite.Sprite) :
 						v_y = max (v_y, entity.rect.bottom - self.rect.top)
 
 		if self.grounded :
-			assert (v_y < 1)
 			self.grounded = abs (v_y) == 0 #won't be grounded for next update if you're leaving the ground
 			#if you leave the ground horizontally that would also cause a problem
 
@@ -132,9 +134,9 @@ def get_location (rect1, rect2) :
 	return result
 
 def get_touching (rect1, rect2) :
-	if (rect1.right == rect2.left and (rect1.bottom < rect2.top and rect1.top > rect2.bottom)) :
+	if (rect1.right == rect2.left and (rect1.bottom > rect2.top and rect1.top < rect2.bottom)) :
 		return Location.right
-	if (rect1.left == rect2.right and (rect1.bottom < rect2.top and rect1.top > rect2.bottom)) :
+	if (rect1.left == rect2.right and (rect1.bottom > rect2.top and rect1.top < rect2.bottom)) :
 		return Location.left
 	if (rect1.top == rect2.bottom and (rect1.right > rect2.left and rect1.left < rect2.right)) :
 		return Location.below

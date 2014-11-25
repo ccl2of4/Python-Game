@@ -7,7 +7,9 @@ class UserController (Controller) :
 		self.walking = False
 		self.running = False
 		self.jumping = False
+		self.attacking = False
 		self.jump_needs_reset = False
+		self.attack_needs_reset = False
 
 	def update (self) :
 		keys = pygame.key.get_pressed ()
@@ -15,6 +17,7 @@ class UserController (Controller) :
 		self.walking = False
 		self.running = False
 		self.jumping = False
+		self.attacking = False
 
 		if keys[pygame.K_a] :
 			self.entity.look_left ()
@@ -25,7 +28,9 @@ class UserController (Controller) :
 		else :
 			self.walking = False
 		if keys[pygame.K_w] :
-			pass
+			self.attacking = True
+		else :
+			self.attack_needs_reset = False
 		if keys[pygame.K_s] :
 			self.running = True
 		else :
@@ -39,6 +44,11 @@ class UserController (Controller) :
 			self.entity.walk (self.running)
 		else :
 			self.entity.idle ()
+
+		if self.attacking :
+			if not self.attack_needs_reset :
+				self.entity.attack ()
+				self.attack_needs_reset = True
 
 		if self.jumping :
 			if self.entity.is_grounded () and not self.jump_needs_reset :
