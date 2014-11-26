@@ -1,9 +1,9 @@
-from Controller import Controller
+from EntityController import EntityController
 from Entity import *
 
-class AIController (Controller) :
+class AIEntityController (EntityController) :
 	def __init__ (self, entity) :
-		Controller.__init__ (self, entity)
+		EntityController.__init__ (self, entity)
 		self.target_entity = None
 
 	def get_target_entity (self) :

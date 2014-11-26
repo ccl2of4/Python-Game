@@ -1,5 +1,5 @@
 #base class for a controller for an entity
-class Controller :
+class EntityController :
 
 	def __init__ (self, entity=None) :
 		self.entity = entity

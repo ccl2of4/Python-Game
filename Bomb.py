@@ -13,6 +13,11 @@ class Bomb (Weapon, Projectile) :
 	def attack (self) :
 		v_x, v_y = 0, 0
 		if self.owner != None :
+
+			#make sure bomb doesn't hurt its owner
+			self.friendly_entities.append (self.owner)
+			self.pass_through_entities.append (self.owner)
+
 			if self.owner.direction == Direction.right :
 				v_x = 10.0
 			else :

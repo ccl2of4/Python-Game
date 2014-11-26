@@ -1,10 +1,10 @@
 import pygame
-from Controller import Controller
+from EntityController import EntityController
 from Entity import *
 
-class UserController (Controller) :
+class UserInputEntityController (EntityController) :
 	def __init__ (self, entity) :
-		Controller.__init__ (self,entity)
+		EntityController.__init__ (self,entity)
 		
 		self.walking = False
 		self.running = False

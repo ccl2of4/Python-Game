@@ -16,9 +16,6 @@ class Game (EntityDelegate) :
 		self.log_message = None
 		self.log_message_duration = None
 
-	def add_entity (self, entity) :
-		self.all_entities.add (entity)
-
 	def add_controller (self, controller) :
 		self.all_controllers.append (controller)
 
@@ -72,7 +69,7 @@ class Game (EntityDelegate) :
 		return self.all_entities
 
 	def spawn_entity (self, entity) :
-		self.add_entity (entity)
+		self.all_entities.add (entity)
 		entity.delegate = self
 
 	def despawn_entity (self, entity) :

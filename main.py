@@ -3,8 +3,8 @@ from Game import Game
 from Player import Player
 from Entity import Entity
 from Camera import Camera
-from UserController import UserController
-from AIController import AIController
+from UserInputEntityController import UserInputEntityController
+from AIEntityController import AIEntityController
 from Gun import Gun
 from Bomb import Bomb
 from StatusDisplay import StatusDisplay
@@ -20,23 +20,26 @@ player = Player (50,0,46,80,
 	walk='images/mario_walk.png',
 	run='images/mario_run.png',
 	jump='images/mario_jump.png',)
+player.set_name ("Main")
 game.spawn_entity (player)
 game.set_main_entity (player)
 
-player_c = UserController (player)
+player_c = UserInputEntityController (player)
 game.add_controller (player_c)
 player.set_life_controller (LifeController ())
 player.set_status_display (StatusDisplay (100,50))
 
-player_ai = Player (400,0,46,80,
-	default = 'images/mario_stand.png',
-	stand='images/mario_stand.png',
-	walk='images/mario_walk.png',
-	run='images/mario_run.png',
-	jump='images/mario_jump.png',)
-game.spawn_entity (player_ai)
-player_ai.set_life_controller (LifeController ())
-player_ai.set_status_display (StatusDisplay (100,50))
+for i in range (1000,3000,200) :
+	player_ai = Player (i,0,46,80,
+		default = 'images/mario_stand.png',
+		stand='images/mario_stand.png',
+		walk='images/mario_walk.png',
+		run='images/mario_run.png',
+		jump='images/mario_jump.png',)
+	player_ai.set_name ("AI")
+	game.spawn_entity (player_ai)
+	player_ai.set_life_controller (LifeController ())
+	player_ai.set_status_display (StatusDisplay (100,50))
 
 gun = Gun (150,250,40,5,default='images/platform.png')
 game.spawn_entity (gun)
@@ -44,7 +47,7 @@ game.spawn_entity (gun)
 bomb = Bomb (200,0,10,10,default='images/platform.png')
 game.spawn_entity (bomb)
 
-platform = Entity (0,300,2000,20,default='images/platform.png')
+platform = Entity (0,300,5000,20,default='images/platform.png')
 platform.set_gravity (0)
 game.spawn_entity (platform)
 

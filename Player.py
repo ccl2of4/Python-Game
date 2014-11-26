@@ -31,6 +31,7 @@ class Player (Entity, StatusDisplayClient) :
 
 
 		self.weapon = None
+		self.name = "Player"
 		self.life_controller = None
 		self.status_display = None
 
@@ -90,17 +91,22 @@ class Player (Entity, StatusDisplayClient) :
 	def get_max_health (self) :
 		return self.life_controller.get_max_health ()
 	def get_name (self) :
-		return "Player"
+		return self.name
+	def set_name (self, name) :
+		self.name = name
 
 	#player cannot have a status display if it does not have a life controller
+	#	also must already be spawned in before adding status display
 	def get_status_display (self) :
 		return self.status_display
 	def set_status_display (self, status_display) :
+		assert (self.life_controller != None)
+		assert (self.delegate != None)
+
 		if self.status_display :
 			self.status_display.set_client (None)
 			self.delegate.despawn_entity (self.status_display)
 		if status_display :
-			assert (self.life_controller != None)
 			status_display.set_client (self)
 			self.delegate.spawn_entity (status_display)
 		self.status_display = status_display
