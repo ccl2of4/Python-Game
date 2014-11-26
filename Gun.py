@@ -1,7 +1,7 @@
 import pygame
 
 from Entity import *
-from Projectile import Projectile
+from Bullet import Bullet
 from Weapon import Weapon
 
 class Gun (Weapon) :
@@ -26,19 +26,13 @@ class Gun (Weapon) :
 		else :
 			v_x = -self.firing_velocity
 
-		knockback_x = 10
-		if (v_x < 0) :
-			knockback_x *= -1
-		knockback_y = 0
-
 		#shoot a bullet
-		bullet = Projectile (b_x, b_y, b_width, b_height, default='images/platform.png')
-		bullet.set_gravity (0)
+		bullet = Bullet (b_x, b_y, b_width, b_height, default='images/platform.png')
 		bullet.set_pass_through_entities ([self, self.owner])
 		bullet.set_friendly_entities ([self, self.owner])
-		bullet.set_knockback ((knockback_x, knockback_y))
 		self.delegate.spawn_entity (bullet)
 		bullet.launch ((v_x,v_y))
+
 
 	#how quickly does a bullet shot from this gun travel?
 	def get_firing_velocity (self) :

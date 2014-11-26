@@ -6,6 +6,7 @@ from Camera import Camera
 from UserController import UserController
 from AIController import AIController
 from Gun import Gun
+from Bomb import Bomb
 
 game = Game (800, 400)
 camera = Camera (800, 400)
@@ -33,6 +34,9 @@ player_ai_controller.set_target_entity (player)
 gun = Gun (150,250,40,5,default='images/platform.png')
 gun.set_delegate (game)
 
+bomb = Bomb (200,0,10,10,default='images/platform.png')
+bomb.set_delegate (game)
+
 platform = Entity (0,300,2000,20,default='images/platform.png')
 platform.set_gravity (0)
 platform.set_delegate (game)
@@ -51,6 +55,7 @@ game.add_entity (platform)
 game.add_entity (platform1)
 game.add_entity (platform2)
 game.add_entity (gun)
+game.add_entity (bomb)
 
 game.add_controller (player_controller)
 #game.add_controller (player_ai_controller)
