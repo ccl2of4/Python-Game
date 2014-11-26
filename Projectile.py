@@ -18,9 +18,9 @@ class Projectile (Entity) :
 		self.knockback = knockback
 
 	#how many screen updates does this projectile have before it despawns?
-	def get_time_to_live (self) :
+	def get_frames_to_live (self) :
 		return self.frames_to_live
-	def set_time_to_live (self, frames_to_live) :
+	def set_frames_to_live (self, frames_to_live) :
 		self.frames_to_live = frames_to_live
 
 	def update (self) :
