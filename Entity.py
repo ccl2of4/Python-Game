@@ -89,6 +89,13 @@ class Entity (pygame.sprite.Sprite) :
 	def was_attacked (self, knockback) :
 		pass
 
+	#returns the x,y that a weapon should
+	#	use as its center
+	#should be overriden if a subclass wants to provide
+	#	support for using weapons
+	def get_weapon_rect_center (self) :
+		pass
+
 	#called when the entity touches an available weapon
 	#can be overriden in subclass
 	def found_weapon (self, weapon) :

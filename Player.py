@@ -73,6 +73,7 @@ class Player (Entity) :
 	def set_jump_slow_fall_factor (self, jump_slow_fall_factor) :
 		self.jump_slow_fall_factor = jump_slow_fall_factor
 
+
 	##############
 	#actions
 	##############
@@ -110,6 +111,14 @@ class Player (Entity) :
 
 	def was_attacked (self, knockback) :
 		self.velocity = self.velocity[0] + knockback[0], self.velocity[1] + knockback[1]
+
+	def get_weapon_rect_center (self) :
+		if self.direction == Direction.left :
+			x = self.rect.left
+		else :
+			x = self.rect.right
+		y = self.rect.center[1]
+		return (x,y)
 
 	def found_weapon (self, weapon) :
 		if self.weapon == None :

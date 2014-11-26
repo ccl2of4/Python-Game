@@ -57,17 +57,11 @@ class Gun (Entity) :
 		if self.owner != None :
 			self.velocity = (0,0)
 			
-			if self.owner.direction == Direction.left :
-				x = self.owner.rect.left - self.rect.width
-			else :
-				x = self.owner.rect.right
+			center = self.owner.get_weapon_rect_center ()
+			direction = self.owner.get_direction ()
 
-			y = self.owner.rect.center[1]
-
-			self.rect.x = x
-			self.rect.y = y
-
-			self.direction = self.owner.direction
+			self.set_direction (direction)
+			self.rect.center = center
 
 		else :
 			entities = self.delegate.get_all_entities ()
