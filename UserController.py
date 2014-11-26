@@ -75,7 +75,7 @@ class UserController (Controller) :
 				self.entity.jump ()
 
 		if self.dropping :
-			self.entity.drop ()
+			self.entity.drop_weapon ()
 
 		if self.w_attacking :
 			if not self.w_attack_needs_reset :

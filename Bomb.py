@@ -17,7 +17,7 @@ class Bomb (Weapon, Projectile) :
 			else :
 				v_x = -10.0
 			v_y = -10.0
-			self.owner.drop ()
+			self.owner.drop_weapon ()
 		self.launch ((v_x,v_y))
 
 	def launch (self, velocity) :

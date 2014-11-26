@@ -11,6 +11,8 @@ class EntityDelegate :
 		pass
 	def despawn_entity (self, entity) :
 		pass
+	def log (self, message) :
+		pass
 
 class Entity (pygame.sprite.Sprite) :
 	def __init__ (self,x=0, y=0,width=0,height=0,**images) :

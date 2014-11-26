@@ -148,22 +148,26 @@ class Player (Entity) :
 
 	def found_weapon (self, weapon) :
 		if self.weapon == None :
-			self.pick_up (weapon)
+			self.pick_up_weapon (weapon)
 
-	def pick_up (self, weapon) :
-		self.weapon = weapon
-		weapon.set_owner (self)
-	def drop (self) :
+	def pick_up_weapon (self, weapon) :
+		if weapon.pick_up (self) :
+			self.weapon = weapon
+	def drop_weapon (self) :
 		if (self.weapon != None) :
 
 			#throw the weapon away a little so it doesn't just get picked up again
+			y = self.rect.centery
 			if self.direction == Direction.left :
-				self.weapon.rect.right = self.rect.left - 5
+				x = self.rect.left - self.weapon.rect.width - 5
 			else :
-				self.weapon.rect.left = self.rect.right + 5
+				x = self.rect.right + 5
+			drop_rect = pygame.Rect (x, y, self.weapon.rect.width, self.weapon.rect.height)
 
-			self.weapon.set_owner (None)
-			self.weapon = None
+			if self.weapon.drop (drop_rect) :
+				self.weapon = None
+			else :
+				self.delegate.log ("Can't drop weapon here.")
 
 	def update (self) :	
 		#slow the character if not inputing anything

@@ -22,6 +22,6 @@ class Bullet (Projectile) :
 		elif Location.below == touching :
 			return (0,f)
 		elif Location.inside == touching :
-			return (0,f)
+			return (0,-f)
 		
 		assert (False)
