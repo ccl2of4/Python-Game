@@ -9,9 +9,9 @@ class StatusDisplayClient :
 		pass
 
 class StatusDisplay (Entity) :
-	def __init__(self, x=0, y=0, width=0, height=0) :
+	def __init__(self, width=0, height=0) :
 		self.client = None
-		Entity.__init__ (self,x,y,width,height)
+		Entity.__init__ (self,0,0,width,height)
 		self.set_physical (False)
 		self.set_gravity (0)
 

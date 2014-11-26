@@ -92,13 +92,17 @@ class Player (Entity, StatusDisplayClient) :
 	def get_name (self) :
 		return "Player"
 
+	#player cannot have a status display if it does not have a life controller
 	def get_status_display (self) :
 		return self.status_display
 	def set_status_display (self, status_display) :
 		if self.status_display :
 			self.status_display.set_client (None)
+			self.delegate.despawn_entity (self.status_display)
 		if status_display :
+			assert (self.life_controller != None)
 			status_display.set_client (self)
+			self.delegate.spawn_entity (status_display)
 		self.status_display = status_display
 
 	#update the location of the status display -- make it
@@ -117,24 +121,27 @@ class Player (Entity, StatusDisplayClient) :
 		if self.life_controller != None :
 			pass
 		if self.weapon != None :
-			self.delegate.despawn_entity (self.weapon)
+			if not self.do_drop_weapon () :
+				self.delegate.despawn_entity (self.weapon)
 		if self.status_display != None :
 			self.delegate.despawn_entity (self.status_display)
 
 		self.delegate.despawn_entity (self)
-
-
-	##############
-	#actions
-	##############
 
 	#the life controller that monitors this player's life
 	#	players do not need life controllers to function properly
 	def get_life_controller (self) :
 		return self.life_controller
 	def set_life_controller (self, life_controller) :
+		if self.life_controller :
+			self.life_controller.set_client (None)
+		if life_controller :
+			life_controller.set_client (self)
 		self.life_controller = life_controller
-		self.life_controller.client = self
+
+	##############
+	#actions
+	##############
 
 	#the weapon the player is currently carrying
 	#swap weapons using pick_up/drop
@@ -200,19 +207,24 @@ class Player (Entity, StatusDisplayClient) :
 			self.weapon = weapon
 	def drop_weapon (self) :
 		if (self.weapon != None) :
-
-			#throw the weapon away a little so it doesn't just get picked up again
-			y = self.rect.centery
-			if self.direction == Direction.left :
-				x = self.rect.left - self.weapon.rect.width - 5
-			else :
-				x = self.rect.right + 5
-			drop_rect = pygame.Rect (x, y, self.weapon.rect.width, self.weapon.rect.height)
-
-			if self.weapon.drop (drop_rect) :
-				self.weapon = None
-			else :
+			if not self.do_drop_weapon () :
 				self.delegate.log ("Can't drop weapon here.")
+
+	def do_drop_weapon (self) :
+		assert (self.weapon != None)
+
+		#throw the weapon away a little so it doesn't just get picked up again
+		y = self.rect.centery
+		if self.direction == Direction.left :
+			x = self.rect.left - self.weapon.rect.width - 5
+		else :
+			x = self.rect.right + 5
+		
+		drop_rect = pygame.Rect (x, y, self.weapon.rect.width, self.weapon.rect.height)
+		if self.weapon.drop (drop_rect) :
+			self.weapon = None
+		return self.weapon == None
+
 
 	def update_weapon_rect (self) :
 		if self.weapon != None :
