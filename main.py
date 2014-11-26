@@ -41,7 +41,7 @@ platform1 = Entity (600,150,500,20,default='images/platform.png')
 platform1.set_gravity (0)
 platform1.set_delegate (game)
 
-platform2 = Entity (450,120,20,100,default='images/platform.png')
+platform2 = Entity (450,250,20,100,default='images/platform.png')
 platform2.set_gravity (0)
 platform2.set_delegate (game)
 

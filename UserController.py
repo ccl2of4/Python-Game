@@ -9,11 +9,12 @@ class UserController (Controller) :
 		self.walking = False
 		self.running = False
 		self.jumping = False
-		self.shooting = False
+		self.w_attacking = False
 		self.attacking = False
+		self.dropping = False
 
 		self.jump_needs_reset = False
-		self.shoot_needs_reset = False
+		self.w_attack_needs_reset = False
 		self.attack_needs_reset = False
 
 	def update (self) :
@@ -22,8 +23,9 @@ class UserController (Controller) :
 		self.walking = False
 		self.running = False
 		self.jumping = False
-		self.shooting = False
+		self.w_attacking = False
 		self.attacking = False
+		self.dropping = False
 
 		#walk
 		if keys[pygame.K_a] :
@@ -43,11 +45,15 @@ class UserController (Controller) :
 		else :
 			self.jump_needs_reset = False
 
-		#shoot
+		#attack with weapon
 		if keys[pygame.K_p] :
-			self.shooting = True
+			self.w_attacking = True
 		else :
-			self.shoot_needs_reset = False
+			self.w_attack_needs_reset = False
+
+		#drop weapon
+		if keys[pygame.K_i] :
+			self.dropping = True
 
 		#attack
 		if keys[pygame.K_o] :
@@ -68,10 +74,13 @@ class UserController (Controller) :
 			elif not self.entity.is_grounded () :
 				self.entity.jump ()
 
-		if self.shooting :
-			if not self.shoot_needs_reset :
-				self.entity.shoot ()
-				self.shoot_needs_reset = True
+		if self.dropping :
+			self.entity.drop ()
+
+		if self.w_attacking :
+			if not self.w_attack_needs_reset :
+				self.entity.attack_with_weapon ()
+				self.w_attack_needs_reset = True
 		elif self.attacking : #can't attack and shoot at the same time
 			if not self.attack_needs_reset :
 				self.entity.attack ()

@@ -2,16 +2,15 @@ import pygame
 
 from Entity import *
 from Projectile import Projectile
+from Weapon import Weapon
 
-class Gun (Entity) :
+class Gun (Weapon) :
 	def __init__(self,x=0,y=0,width=0,height=0, **images) :
-		Entity.__init__ (self,x,y,width,height,**images)
-		self.set_physical (False)
-		self.set_gravity (0)
-		self.owner = None
+		Weapon.__init__ (self,x,y,width,height,**images)
 		self.firing_velocity = 10
 
-	def fire (self) :
+	#fire the gun
+	def attack (self) :
 		b_width = 5
 		b_height = 5
 
@@ -41,12 +40,6 @@ class Gun (Entity) :
 		self.delegate.spawn_entity (bullet)
 		bullet.launch ((v_x,v_y))
 
-	#the owner should be invulnerable to any bullets fired by the gun
-	def get_owner (self) :
-		return self.owner
-	def set_owner (self, owner) :
-		self.owner = owner
-
 	#how quickly does a bullet shot from this gun travel?
 	def get_firing_velocity (self) :
 		return self.firing_velocity
@@ -54,20 +47,4 @@ class Gun (Entity) :
 		self.firing_velocity = firing_velocity
 
 	def update (self) :
-		if self.owner != None :
-			self.velocity = (0,0)
-			
-			center = self.owner.get_weapon_rect_center ()
-			direction = self.owner.get_direction ()
-
-			self.set_direction (direction)
-			self.rect.center = center
-
-		else :
-			entities = self.delegate.get_all_entities ()
-			for entity in entities :
-				touching = get_touching (entity.rect, self.rect)
-				if touching :
-					entity.found_weapon (self)
-
-		Entity.update (self)
+		Weapon.update (self)

@@ -27,7 +27,6 @@ class Entity (pygame.sprite.Sprite) :
 		self.sliding = True
 		self.delegate = None
 		self.image = None
-		self.weapon = None
 		self.gravity = 1.0
 		self.update_image ()
 		self.rect = self.image.get_rect().move (x,y)
@@ -87,13 +86,6 @@ class Entity (pygame.sprite.Sprite) :
 	#called when the entity is attacked by another entity
 	#can be overriden in subclasses
 	def was_attacked (self, knockback) :
-		pass
-
-	#returns the x,y that a weapon should
-	#	use as its center
-	#should be overriden if a subclass wants to provide
-	#	support for using weapons
-	def get_weapon_rect_center (self) :
 		pass
 
 	#called when the entity touches an available weapon

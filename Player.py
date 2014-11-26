@@ -27,6 +27,9 @@ class Player (Entity) :
 		self.run_terminal_velocity_factor = 1.5
 		self.jump_slow_fall_factor = 0.35
 
+		#players can carry weapons
+		self.weapon = None
+
 		#can't call init before we know which image we're going to use
 		Entity.__init__ (self,x,y,width,height,**images)
 
@@ -78,6 +81,11 @@ class Player (Entity) :
 	#actions
 	##############
 
+	#the weapon the player is currently carrying
+	#swap weapons using pick_up/drop
+	def get_weapon (self) :
+		return self.weapon
+
 	#make the player jump
 	def jump (self) :
 		self.jumping = True
@@ -94,10 +102,10 @@ class Player (Entity) :
 		accel = self.calculate_horizontal_acceleration ()
 		self.velocity = self.velocity[0] + accel, self.velocity[1]
 
-	#fire a weapon
-	def shoot (self) :
+	#use a weapon
+	def attack_with_weapon (self) :
 		if self.weapon != None :
-			self.weapon.fire ()
+			self.weapon.attack ()
 
 	#melee attack
 	def attack (self) :
@@ -112,27 +120,47 @@ class Player (Entity) :
 	def was_attacked (self, knockback) :
 		self.velocity = self.velocity[0] + knockback[0], self.velocity[1] + knockback[1]
 
-	def get_weapon_rect_center (self) :
-		if self.direction == Direction.left :
-			x = self.rect.left
-		else :
-			x = self.rect.right
-		y = self.rect.center[1]
-		return (x,y)
+	def update_weapon_rect (self) :
+		if self.weapon != None :
+
+			if self.direction == Direction.left :
+				x = self.rect.left
+			else :
+				x = self.rect.right
+			y = self.rect.center[1]
+
+			self.weapon.set_direction (self.direction)
+			self.weapon.rect.center = (x,y)
 
 	def found_weapon (self, weapon) :
 		if self.weapon == None :
-			self.weapon = weapon
-			weapon.owner = self
+			self.pick_up (weapon)
+
+	def pick_up (self, weapon) :
+		self.weapon = weapon
+		weapon.set_owner (self)
+	def drop (self) :
+		if (self.weapon != None) :
+
+			#throw the weapon away a little so it doesn't just get picked up again
+			if self.direction == Direction.left :
+				self.weapon.rect.right = self.rect.left - 5
+			else :
+				self.weapon.rect.left = self.rect.right + 5
+
+			self.weapon.set_owner (None)
+			self.weapon = None
 
 	def update (self) :	
-		
 		#slow the character if not inputing anything
 		if not self.walking and not self.running :
 			self.velocity = self.velocity[0]*.99, self.velocity[1]
 		
 		Entity.update (self)
-		
+
+		#make the weapon follow the player around
+		self.update_weapon_rect ()
+
 		#reset all bools for the next update
 		self.sliding = True
 		self.running = False
