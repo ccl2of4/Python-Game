@@ -1,5 +1,4 @@
 import pygame
-import constants
 
 class Direction :
 	left = 0
@@ -16,41 +15,54 @@ class EntityDelegate :
 class Entity (pygame.sprite.Sprite) :
 	def __init__ (self,x=0, y=0,width=0,height=0,**images) :
 		pygame.sprite.Sprite.__init__ (self)
+
+		#instance variables
 		self.direction = Direction.right
 		self.images = images
 		self.width = width
 		self.height = height
 		self.physical = True
-		self.affected_by_gravity = True
 		self.velocity = (0,0)
 		self.grounded = False
 		self.sliding = True
 		self.delegate = None
 		self.image = None
 		self.weapon = None
+		self.gravity = 1.0
 		self.update_image ()
-		self.rect = self.image.get_rect ()
-		self.rect.move_ip (x,y)
+		self.rect = self.image.get_rect().move (x,y)
 		self.pass_through_entities = []
 		self.friendly_entities = []
 
+	#default value None
 	def get_delegate (self) :
 		return self.delegate
 	def set_delegate (self, delegate) :
 		self.delegate = delegate
 
+	#is the entity on top of another entity?
 	def is_grounded (self) :
 		return self.grounded
 
+	#does the entity collide with other entities?
 	def is_physical (self) :
 		return self.physical
 	def set_physical (self, physical) :
 		self.physical = physical
 
-	def is_affected_by_gravity (self) :
-		return self.affected_by_gravity
-	def set_affected_by_gravity (self, affected_by_gravity) :
-		self.affected_by_gravity = affected_by_gravity
+	#control how fast an entity sinks when free falling
+	#setting to 0 effectively disables gravity on this entity
+	def get_gravity (self) :
+		return self.gravity
+	def set_gravity (self, gravity) :
+		self.gravity = gravity
+
+	#which direction is the entity facing?
+	#irrelevant for some entities, but probably useful for most
+	def get_direction (self) :
+		return self.direction
+	def set_direction (self, direction) :
+		self.direction = direction
 
 	#entities that this entity should pass through without touching
 	def get_pass_through_entities (self) :
@@ -64,13 +76,26 @@ class Entity (pygame.sprite.Sprite) :
 	def set_friendly_entities (self, friendly_entities) :
 		self.friendly_entities = friendly_entities
 
+	#is this entity able to collide with the given entity?
+	def can_collide_with_entity (self, entity) :
+		return (entity is not self 
+				and self.is_physical ()
+				and entity.is_physical ()
+				and not (entity in self.pass_through_entities) 
+				and not (self in entity.pass_through_entities))
+
+	#called when the entity is attacked by another entity
+	#can be overriden in subclasses
 	def was_attacked (self, knockback) :
 		pass
 
+	#called when the entity touches an available weapon
+	#can be overriden in subclass
 	def found_weapon (self, weapon) :
 		pass
 
-
+	#can be overriden in subclasses
+	#this code should be called anyway though
 	def update (self) :
 
 		v_x = self.velocity[0]
@@ -78,18 +103,14 @@ class Entity (pygame.sprite.Sprite) :
 		self.grounded = False
 
 		entities = self.delegate.get_all_entities ()
-
-		if self.affected_by_gravity :
-			v_y += constants.gravity
+		
+		v_y += self.gravity
 
 		if self.physical :
 
 			#apply friction and test for collisions
 			for entity in entities :
-				if (entity is self 
-					or entity in self.pass_through_entities 
-					or self in entity.pass_through_entities
-					or not entity.is_physical ()) :
+				if not self.can_collide_with_entity (entity) :
 					continue
 
 				touching = get_touching (self.rect, entity.rect)
@@ -110,13 +131,10 @@ class Entity (pygame.sprite.Sprite) :
 			union_rect = self.rect.union (target_rect)
 
 			for entity in entities :
-				if (entity is self 
-					or entity in self.pass_through_entities 
-					or self in entity.pass_through_entities
-					or not entity.is_physical ()) :
+				if not self.can_collide_with_entity (entity) :
 					continue
 
-				#this means velocity vector will cause an interection with the current entity
+				#this works well enough for now
 				if union_rect.colliderect (entity.rect) :
 					location_before = get_location (self.rect, entity.rect)
 					location_after = get_location (target_rect, entity.rect)
@@ -133,18 +151,26 @@ class Entity (pygame.sprite.Sprite) :
 
 		if self.grounded :
 			self.grounded = abs (v_y) == 0 #won't be grounded for next update if you're leaving the ground
-			#if you leave the ground horizontally that would also cause a problem
+			#if you leave the ground horizontally that would also cause a problem, but meh
 
 		self.velocity = v_x, v_y
 		self.rect.move_ip (*self.velocity)
 		self.update_image ()
 
+	#called after update
+	#can be overriden. this code should be called at the end of the overriding class's code
 	def update_image (self) :
 		if self.image == None :
 			self.image = pygame.image.load (self.images['default'])
 		if self.width != 0 or self.height != 0 :
 			self.image = pygame.transform.scale (self.image, (self.width,self.height))
 
+
+#############################################
+#additional utility functions for pygame.Rect
+#############################################
+
+#an enum for bit-masking
 class Location :
 	none = 0
 	above = 2 << 0
@@ -153,7 +179,6 @@ class Location :
 	right = 2 << 3
 	inside = 3 << 4
 
-#additional pygame.Rect utility functions
 def get_location (rect1, rect2) :
 	result = 0
 	if (rect1.right <= rect2.left) :

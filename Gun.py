@@ -1,6 +1,5 @@
 import pygame
 
-import constants
 from Entity import *
 from Projectile import Projectile
 
@@ -8,51 +7,53 @@ class Gun (Entity) :
 	def __init__(self,x=0,y=0,width=0,height=0, **images) :
 		Entity.__init__ (self,x,y,width,height,**images)
 		self.set_physical (False)
-		self.set_affected_by_gravity (False)
+		self.set_gravity (0)
 		self.owner = None
+		self.firing_velocity = 10
 
 	def fire (self) :
-		p_width = 5
-		p_height = 5
+		b_width = 5
+		b_height = 5
 
 		if self.direction == Direction.right :
-			p_x = self.rect.right
+			b_x = self.rect.right
 		else :
-			p_x = self.rect.left - p_width
-		p_y = self.rect.center[1]
+			b_x = self.rect.left - b_width
+		b_y = self.rect.center[1]
 
 		v_y = 0
 		if (self.direction == Direction.right) :
-			v_x = 10
+			v_x = self.firing_velocity
 		else :
-			v_x = -10
+			v_x = -self.firing_velocity
 
 		knockback_x = 10
 		if (v_x < 0) :
 			knockback_x *= -1
 		knockback_y = 0
 
-		#make a projectile
-		projectile = Projectile (p_x, p_y, p_width, p_height, default='images/platform.png')
-		projectile.set_affected_by_gravity (False)
-		projectile.set_pass_through_entities ([self, self.owner])
-		projectile.set_friendly_entities ([self, self.owner])
-		projectile.set_knockback ((knockback_x, knockback_y))
-		self.delegate.spawn_entity (projectile)
-		projectile.launch ((v_x,v_y))
+		#shoot a bullet
+		bullet = Projectile (b_x, b_y, b_width, b_height, default='images/platform.png')
+		bullet.set_gravity (0)
+		bullet.set_pass_through_entities ([self, self.owner])
+		bullet.set_friendly_entities ([self, self.owner])
+		bullet.set_knockback ((knockback_x, knockback_y))
+		self.delegate.spawn_entity (bullet)
+		bullet.launch ((v_x,v_y))
 
-	def get_direction (self) :
-		return self.direction
-	def set_direction (self) :
-		self.direction = direction
-
+	#the owner should be invulnerable to any bullets fired by the gun
 	def get_owner (self) :
 		return self.owner
 	def set_owner (self, owner) :
 		self.owner = owner
 
-	def update (self) :
+	#how quickly does a bullet shot from this gun travel?
+	def get_firing_velocity (self) :
+		return self.firing_velocity
+	def set_firing_velocity (self, firing_velocity) :
+		self.firing_velocity = firing_velocity
 
+	def update (self) :
 		if self.owner != None :
 			self.velocity = (0,0)
 			

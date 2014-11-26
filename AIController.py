@@ -1,4 +1,5 @@
 from Controller import Controller
+from Entity import *
 
 class AIController (Controller) :
 	def __init__ (self, entity) :
@@ -12,11 +13,8 @@ class AIController (Controller) :
 
 	def update (self) :
 		if self.target_entity.rect.center > self.entity.rect.center :
-			self.entity.look_right ()
+			self.entity.set_direction (Direction.right)
 		else :
-			self.entity.look_left ()
+			self.entity.set_direction (Direction.left)
 
 		self.entity.walk (False)
-
-		#if self.target_entity.rect.center < self.entity.rect.center :
-			#self.entity.jump ()

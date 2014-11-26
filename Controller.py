@@ -1,3 +1,4 @@
+#base class for a controller for an entity
 class Controller :
 
 	def __init__ (self, entity=None) :
@@ -8,5 +9,7 @@ class Controller :
 	def set_entity (self, entity) :
 		self.entity = entity
 
+	#overriden by subclasses
+	#do logic here to control an entity
 	def update (self) :
 		pass

@@ -1,5 +1,4 @@
 import sys, pygame, time
-import constants
 from Game import Game
 from Player import Player
 from Entity import Entity
@@ -8,8 +7,8 @@ from UserController import UserController
 from AIController import AIController
 from Gun import Gun
 
-game = Game (constants.window_width, constants.window_height)
-camera = Camera (constants.window_width, constants.window_height)
+game = Game (800, 400)
+camera = Camera (800, 400)
 game.set_camera (camera)
 
 player = Player (50,0,46,80,
@@ -43,15 +42,15 @@ gun = Gun (150,250,40,5,default='images/platform.png')
 gun.set_delegate (game)
 
 platform = Entity (0,300,500,20,default='images/platform.png')
-platform.set_affected_by_gravity (False)
+platform.set_gravity (0)
 platform.set_delegate (game)
 
 platform1 = Entity (600,280,500,20,default='images/platform.png')
-platform1.set_affected_by_gravity (False)
+platform1.set_gravity (0)
 platform1.set_delegate (game)
 
 platform2 = Entity (450,200,20,100,default='images/platform.png')
-platform2.set_affected_by_gravity (False)
+platform2.set_gravity (0)
 platform2.set_delegate (game)
 
 game.add_entity (player)
@@ -62,7 +61,7 @@ game.add_entity (platform2)
 game.add_entity (gun)
 
 game.add_controller (player_controller)
-game.add_controller (player_ai_controller)
+#game.add_controller (player_ai_controller)
 
 game.set_main_entity (player)
 

@@ -6,6 +6,8 @@ from Camera import Camera
 class Game (EntityDelegate) :
 	def __init__(self, width, height, camera=None) :
 		pygame.init()
+		self.last_update_time = pygame.time.get_ticks ()
+		self.time_since_last_update = 0
 		self.screen = pygame.display.set_mode((width, height))
 		self.clock = pygame.time.Clock ()
 		self.all_entities = pygame.sprite.Group ()
@@ -28,6 +30,8 @@ class Game (EntityDelegate) :
 
 	def run (self) :
 		while 1:
+
+			#framerate stuff
 			self.clock.tick (60)
 			
 			for controller in self.all_controllers :
@@ -43,6 +47,11 @@ class Game (EntityDelegate) :
 			self.all_entities.draw (self.screen)
 			pygame.display.flip ()
 			pygame.event.pump ()
+
+	
+	#######################
+	#EntityDelegate methods
+	#######################
 
 	def get_all_entities (self) :
 		return self.all_entities

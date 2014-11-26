@@ -1,5 +1,6 @@
 import pygame
 from Controller import Controller
+from Entity import *
 
 class UserController (Controller) :
 	def __init__ (self, entity) :
@@ -26,10 +27,10 @@ class UserController (Controller) :
 
 		#walk
 		if keys[pygame.K_a] :
-			self.entity.look_left ()
+			self.entity.set_direction (Direction.left)
 			self.walking = True
 		elif keys[pygame.K_d] :
-			self.entity.look_right ()
+			self.entity.set_direction (Direction.right)
 			self.walking = True
 		
 		#run
@@ -53,7 +54,6 @@ class UserController (Controller) :
 			self.attacking = True
 		else :
 			self.attack_needs_reset = False
-
 
 
 

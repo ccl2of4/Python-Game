@@ -1,35 +1,39 @@
+import pygame
 from Entity import *
 
 class Projectile (Entity) :
 	def __init__(self,x=0,y=0,width=0,height=0, **images) :
 		Entity.__init__ (self,x,y,width,height,**images)
-		self.frames_to_live = 60
+		self.launch_time = None
+		self.time_to_live = 1000
 
+	#launch the projectile
+	#in most cases, this should be called immediately after spawning into the game
 	def launch (self, velocity) :
 		self.velocity = velocity
+		self.launch_time = pygame.time.get_ticks ()
 
+	#how much knockback does this projectile transfer to its target?
 	def get_knockback (self) :
 		return self.knockback
 	def set_knockback (self, knockback) :
 		self.knockback = knockback
 
-	def get_frames_to_live (self) :
-		return self.frames_to_live
-	def set_frames_to_live (self, frames_to_live) :
-		self.frames_to_live = frames_to_live
+	#how much time (ms) does this projectile have before it despawns?
+	def get_time_to_live (self) :
+		return self.time_to_live
+	def set_time_to_live (self, time_to_live) :
+		self.time_to_live = time_to_live
 
 	def update (self) :
-		
-		self.frames_to_live -= 1
-		if self.frames_to_live < 0 :
+		current_time = pygame.time.get_ticks ()
+		alive_time = current_time - self.launch_time
+		if alive_time > self.time_to_live :
 			self.delegate.despawn_entity (self)
 
 		entities = self.delegate.get_all_entities ()
 		for entity in entities :
-			if (entity is self
-				or entity in self.friendly_entities
-				or entity in self.pass_through_entities
-				or not entity.is_physical ()) :
+			if not self.can_collide_with_entity (entity) :
 				continue
 
 			touching = get_touching (self.rect, entity.rect)
@@ -39,11 +43,9 @@ class Projectile (Entity) :
 
 			v_x, v_y = self.knockback
 
-			entity.was_attacked (self.knockback)
+			if not (entity in self.friendly_entities) :
+				entity.was_attacked (self.knockback)
 
 			self.delegate.despawn_entity (self)
 
 		Entity.update (self)
-
-	def update_image (self) :
-		Entity.update_image (self)

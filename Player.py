@@ -1,23 +1,7 @@
 import pygame
 
-import constants
 from Entity import *
 from Projectile import Projectile
-
-global jump_accel
-jump_accel = -15
-
-global walk_accel
-walk_accel = 1.0
-
-global terminal_walk_velocity
-terminal_walk_velocity = 8
-
-global run_velocity_factor
-run_velocity_factor = 2
-
-global run_accel_factor
-run_accel_factor = 2
 
 global running_anim_duration
 running_anim_duraction = 5
@@ -35,8 +19,102 @@ class Player (Entity) :
 		self.running_duration = 0
 		self.walking_duration = 0
 
+		#default physics coefficients
+		self.jump_acceleration = -15.0
+		self.walk_acceleration = 1.0
+		self.terminal_walk_velocity = 8.0
+		self.run_acceleration_factor = 2.0
+		self.run_terminal_velocity_factor = 2.0
+		self.jump_slow_fall_factor = 0.35
+
 		#can't call init before we know which image we're going to use
 		Entity.__init__ (self,x,y,width,height,**images)
+
+
+	###########################
+	#phyics config
+	###########################
+
+	#how much acceleration does a jump give the player?
+	def get_jump_acceleration (self) :
+		return self.jump_acceleration
+	def set_jump_acceleration (self, jump_acceleration) :
+		self.jump_acceleration = jump_acceleration
+
+	#maximum walking acceleration. decreases linearly as
+	#speed approaches terminal walking velocity
+	def get_walk_acceleration (self) :
+		return self.walk_acceleration
+	def set_walk_acceleration (self, walk_acceleration) :
+		self.set_walk_acceleration = walk_acceleration
+
+	#maximum speed at which the player can walk
+	def get_terminal_walk_velocity (self) :
+		return self.terminal_walk_velocity
+	def set_terminal_walk_velocity (self, terminal_walk_velocity) :
+		self.terminal_walk_velocity = terminal_walk_velocity
+
+	#how much faster does the player accelerate when running?
+	def get_run_acceleration_factor (self) :
+		return self.run_acceleration_factor
+	def set_run_acceleration_factor (self, run_acceleration_factor) :
+		self.run_acceleration_factor = run_acceleration_factor
+
+	#by how much does the terminal walking velocity increase when running?
+	def get_run_terminal_velocity_factor (self) :
+		return self.run_terminal_velocity_factor
+	def set_run_terminal_velocity_factor (self, run_terminal_velocity_factor) :
+		self.run_terminal_velocity_factor = run_terminal_velocity_factor
+
+	#when attemping to jump while falling, the slow fall factor
+	#	dampens acceleration due to gravity
+	def get_jump_slow_fall_factor (self) :
+		return self.jump_slow_fall_factor
+	def set_jump_slow_fall_factor (self, jump_slow_fall_factor) :
+		self.jump_slow_fall_factor = jump_slow_fall_factor
+
+	##############
+	#actions
+	##############
+
+	#make the player jump
+	def jump (self) :
+		self.jumping = True
+		if self.grounded:
+			self.velocity = self.velocity[0], self.velocity[1] + self.jump_acceleration
+		else :
+			self.velocity = self.velocity[0], self.velocity[1] - self.jump_slow_fall_factor*self.gravity
+
+	#player advances horizontally in the direction it is facing
+	def walk (self, running) :
+		self.sliding = False
+		self.running = running
+		self.walking = not running
+		accel = self.calculate_horizontal_acceleration ()
+		self.velocity = self.velocity[0] + accel, self.velocity[1]
+
+	#fire a weapon
+	def shoot (self) :
+		if self.weapon != None :
+			self.weapon.fire ()
+
+	#melee attack
+	def attack (self) :
+		entities = self.delegate.get_all_entities ()
+		for entity in entities :
+			touching = get_touching (self.rect, entity.rect)
+			if touching == Location.right and self.direction == Direction.right :
+				entity.was_attacked ((20,-10))
+			elif touching == Location.left and self.direction == Direction.left :
+				entity.was_attacked((-20,-10))
+
+	def was_attacked (self, knockback) :
+		self.velocity = self.velocity[0] + knockback[0], self.velocity[1] + knockback[1]
+
+	def found_weapon (self, weapon) :
+		if self.weapon == None :
+			self.weapon = weapon
+			weapon.owner = self
 
 	def update (self) :	
 		
@@ -101,58 +179,17 @@ class Player (Entity) :
 
 		Entity.update_image (self)
 
-
-
-	def look_right (self) :
-		self.direction = Direction.right
-	def look_left (self) :
-		self.direction = Direction.left
-
-	def jump (self) :
-		self.jumping = True
-		if self.grounded:
-			self.velocity = self.velocity[0], self.velocity[1] + jump_accel
-		else :
-			self.velocity = self.velocity[0], self.velocity[1] - 0.35*constants.gravity
-
-	def walk (self, running) :
-		self.sliding = False
-		self.running = running
-		self.walking = not running
-		accel = self.horizontal_acceleration ()
-		self.velocity = self.velocity[0] + accel, self.velocity[1]
-
-	def shoot (self) :
-		if self.weapon != None :
-			self.weapon.fire ()
-
-	def attack (self) :
-		entities = self.delegate.get_all_entities ()
-		for entity in entities :
-			touching = get_touching (self.rect, entity.rect)
-			if touching == Location.right and self.direction == Direction.right :
-				entity.was_attacked ((20,-10))
-			elif touching == Location.left and self.direction == Direction.left :
-				entity.was_attacked((-20,-10))
-
-	def was_attacked (self, knockback) :
-		self.velocity = self.velocity[0] + knockback[0], self.velocity[1] + knockback[1]
-
-	def found_weapon (self, weapon) :
-		if self.weapon == None :
-			self.weapon = weapon
-			weapon.owner = self
-
-	def horizontal_acceleration (self) :
+	#how much should we accelerate horizontally?
+	def calculate_horizontal_acceleration (self) :
 		assert (self.walking or self.running)
 
 		v_x = self.velocity[0]
-		accel = walk_accel
-		term_vel = terminal_walk_velocity
+		accel = self.walk_acceleration
+		term_vel = self.terminal_walk_velocity
 
 		if self.running :
-			accel *= run_accel_factor
-			term_vel *= run_velocity_factor
+			accel *= self.run_acceleration_factor
+			term_vel *= self.run_terminal_velocity_factor
 
 		if v_x > 0 :
 			if self.direction == Direction.right :
