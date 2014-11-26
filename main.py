@@ -12,28 +12,20 @@ camera = Camera (800, 400)
 game.set_camera (camera)
 
 player = Player (50,0,46,80,
-	default = 'images/mario_stand_right.png',
-	stand_left='images/mario_stand_left.png',
-	stand_right='images/mario_stand_right.png',
-	walk_left='images/mario_walk_left.png',
-	walk_right='images/mario_walk_right.png',
-	run_left='images/mario_run_left.png',
-	run_right='images/mario_run_right.png',
-	jump_left='images/mario_jump_left.png',
-	jump_right='images/mario_jump_right.png')
+	default = 'images/mario_stand.png',
+	stand='images/mario_stand.png',
+	walk='images/mario_walk.png',
+	run='images/mario_run.png',
+	jump='images/mario_jump.png',)
 player.set_delegate (game)
 player_controller = UserController (player)
 
 player_ai1 = Player (100,0,46,80,
-	default = 'images/mario_stand_right.png',
-	stand_left='images/mario_stand_left.png',
-	stand_right='images/mario_stand_right.png',
-	walk_left='images/mario_walk_left.png',
-	walk_right='images/mario_walk_right.png',
-	run_left='images/mario_run_left.png',
-	run_right='images/mario_run_right.png',
-	jump_left='images/mario_jump_left.png',
-	jump_right='images/mario_jump_right.png')
+	default = 'images/mario_stand.png',
+	stand='images/mario_stand.png',
+	walk='images/mario_walk.png',
+	run='images/mario_run.png',
+	jump='images/mario_jump.png',)
 player_ai1.set_delegate (game)
 player_ai_controller = AIController (player_ai1)
 player_ai_controller.set_target_entity (player)
@@ -41,15 +33,15 @@ player_ai_controller.set_target_entity (player)
 gun = Gun (150,250,40,5,default='images/platform.png')
 gun.set_delegate (game)
 
-platform = Entity (0,300,500,20,default='images/platform.png')
+platform = Entity (0,300,2000,20,default='images/platform.png')
 platform.set_gravity (0)
 platform.set_delegate (game)
 
-platform1 = Entity (600,280,500,20,default='images/platform.png')
+platform1 = Entity (600,150,500,20,default='images/platform.png')
 platform1.set_gravity (0)
 platform1.set_delegate (game)
 
-platform2 = Entity (450,200,20,100,default='images/platform.png')
+platform2 = Entity (450,120,20,100,default='images/platform.png')
 platform2.set_gravity (0)
 platform2.set_delegate (game)
 

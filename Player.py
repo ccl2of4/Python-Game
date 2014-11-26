@@ -23,8 +23,8 @@ class Player (Entity) :
 		self.jump_acceleration = -15.0
 		self.walk_acceleration = 1.0
 		self.terminal_walk_velocity = 8.0
-		self.run_acceleration_factor = 2.0
-		self.run_terminal_velocity_factor = 2.0
+		self.run_acceleration_factor = 1.5
+		self.run_terminal_velocity_factor = 1.5
 		self.jump_slow_fall_factor = 0.35
 
 		#can't call init before we know which image we're going to use
@@ -147,10 +147,9 @@ class Player (Entity) :
 		should_use_standing_anim = True
 
 		if self.jumping :
+			self.image = pygame.image.load (self.images['jump'])
 			if direction == Direction.left :
-				self.image = pygame.image.load (self.images['jump_left'])
-			else :
-				self.image = pygame.image.load (self.images['jump_right'])
+				self.image = pygame.transform.flip (self.image, True, False)
 			should_use_running_anim = False
 			should_use_walking_anim = False
 			should_use_standing_anim = False
@@ -158,27 +157,24 @@ class Player (Entity) :
 		if should_use_running_anim :
 			self.running_duration += 1
 			if (self.running_duration < running_anim_duraction) :
+				self.image = pygame.image.load (self.images['run'])
 				if direction == Direction.left :
-					self.image = pygame.image.load (self.images['run_left'])
-				else :
-					self.image = pygame.image.load (self.images['run_right'])
+					self.image = pygame.transform.flip (self.image, True, False)
 				should_use_walking_anim = False
 				should_use_standing_anim = False
 
 		if should_use_walking_anim :
 			self.walking_duration += 1
 			if (self.walking_duration < walking_anim_duration) :
+				self.image = pygame.image.load (self.images['walk'])
 				if direction == Direction.left :
-					self.image = pygame.image.load (self.images['walk_left'])
-				else :
-					self.image = pygame.image.load (self.images['walk_right'])
+					self.image = pygame.transform.flip (self.image, True, False)
 				should_use_standing_anim = False
 
 		if should_use_standing_anim :
+			self.image = pygame.image.load (self.images['stand'])
 			if self.direction == Direction.left :
-				self.image = pygame.image.load (self.images['stand_left'])
-			else :
-				self.image = pygame.image.load (self.images['stand_right'])
+				self.image = pygame.transform.flip (self.image, True, False)
 
 		if self.running_duration > 2*running_anim_duraction :
 			self.running_duration = 0
