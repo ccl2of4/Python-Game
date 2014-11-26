@@ -87,7 +87,7 @@ class Entity (pygame.sprite.Sprite) :
 
 	#called when the entity is attacked by another entity
 	#can be overriden in subclasses
-	def was_attacked (self, knockback) :
+	def was_attacked (self, knockback, damage) :
 		pass
 
 	#called when the entity touches an available weapon

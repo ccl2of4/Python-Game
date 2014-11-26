@@ -8,6 +8,7 @@ class Bomb (Weapon, Projectile) :
 		Projectile.__init__ (self,x,y,width,height,**images)
 		self.has_been_launched = False
 		self.set_knockback_factor (10)
+		self.damage = 40
 
 	def attack (self) :
 		v_x, v_y = 0, 0

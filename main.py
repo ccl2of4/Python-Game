@@ -7,6 +7,8 @@ from UserController import UserController
 from AIController import AIController
 from Gun import Gun
 from Bomb import Bomb
+from StatusDisplay import StatusDisplay
+from LifeController import LifeController
 
 game = Game (800, 400)
 camera = Camera (800, 400)
@@ -21,15 +23,21 @@ player = Player (50,0,46,80,
 player.set_delegate (game)
 player_controller = UserController (player)
 
-player_ai1 = Player (100,0,46,80,
+player_ai = Player (100,0,46,80,
 	default = 'images/mario_stand.png',
 	stand='images/mario_stand.png',
 	walk='images/mario_walk.png',
 	run='images/mario_run.png',
 	jump='images/mario_jump.png',)
-player_ai1.set_delegate (game)
-player_ai_controller = AIController (player_ai1)
+player_ai.set_delegate (game)
+player_ai_controller = AIController (player_ai)
 player_ai_controller.set_target_entity (player)
+
+player_ai.set_life_controller (LifeController ())
+player_ai_display = StatusDisplay (0,0,100,50)
+player_ai_display.set_delegate (game)
+player_ai.set_status_display (player_ai_display)
+game.add_entity (player_ai_display)
 
 gun = Gun (150,250,40,5,default='images/platform.png')
 gun.set_delegate (game)
@@ -55,8 +63,14 @@ for i in range (0, 10) :
 	p.set_delegate (game)
 	game.add_entity (p)
 
+player.set_life_controller (LifeController ())
+player_display = StatusDisplay (0,0,100,50)
+player_display.set_delegate (game)
+player.set_status_display (player_display)
+game.add_entity (player_display)
+
 game.add_entity (player)
-game.add_entity (player_ai1)
+game.add_entity (player_ai)
 game.add_entity (platform)
 #game.add_entity (platform1)
 game.add_entity (platform2)

@@ -6,6 +6,7 @@ class Projectile (Entity) :
 		Entity.__init__ (self,x,y,width,height,**images)
 		self.frames_to_live = 60
 		self.knockback_factor = 1.0
+		self.damage = 0
 
 	#launch the projectile
 	#in most cases, this should be called immediately after spawning into the game
@@ -19,6 +20,12 @@ class Projectile (Entity) :
 		return self.knockback_factor
 	def set_knockback_factor (self, knockback_factor) :
 		self.knockback_factor = knockback_factor
+
+	#how much damage does this projectile transfer to its target?
+	def get_damage (self) :
+		return self.damage
+	def set_damage (self, damage) :
+		self.damage = damage
 
 	#overriden by subclasses to calculate the knockback that this projectile should apply to
 	#	the given entity
@@ -49,7 +56,7 @@ class Projectile (Entity) :
 			v_x, v_y = self.calculate_knockback (entity)
 
 			if not (entity in self.friendly_entities) :
-				entity.was_attacked ((v_x,v_y))
+				entity.was_attacked ((v_x,v_y), self.damage)
 
 			self.delegate.despawn_entity (self)
 

@@ -1,7 +1,8 @@
 import pygame
 
 from Entity import *
-from Projectile import Projectile
+from StatusDisplay import *
+from LifeController import *
 
 global running_anim_duration
 running_anim_duraction = 5
@@ -9,7 +10,7 @@ running_anim_duraction = 5
 global walking_anim_duration
 walking_anim_duration = 10
 
-class Player (Entity) :
+class Player (Entity, StatusDisplayClient) :
 	def __init__(self,x=0,y=0,width=0,height=0, **images) :
 
 		#used for animation
@@ -27,8 +28,11 @@ class Player (Entity) :
 		self.run_terminal_velocity_factor = 1.5
 		self.jump_slow_fall_factor = 0.35
 
-		#players can carry weapons
+
+
 		self.weapon = None
+		self.life_controller = None
+		self.status_display = None
 
 		#can't call init before we know which image we're going to use
 		Entity.__init__ (self,x,y,width,height,**images)
@@ -77,9 +81,60 @@ class Player (Entity) :
 		self.jump_slow_fall_factor = jump_slow_fall_factor
 
 
+	############################
+	#StatusDisplayClient methods
+	############################
+
+	def get_health (self) :
+		return self.life_controller.get_health ()
+	def get_max_health (self) :
+		return self.life_controller.get_max_health ()
+	def get_name (self) :
+		return "Player"
+
+	def get_status_display (self) :
+		return self.status_display
+	def set_status_display (self, status_display) :
+		if self.status_display :
+			self.status_display.set_client (None)
+		if status_display :
+			status_display.set_client (self)
+		self.status_display = status_display
+
+	#update the location of the status display -- make it
+	#	follow the player
+	def update_status_display_rect (self) :
+		if self.status_display != None:
+			self.status_display.rect.centerx = self.rect.centerx
+			self.status_display.rect.bottom = self.rect.top - 5
+
+
+	#############################
+	#LifeControllerClient methods
+	#############################
+
+	def life_controller_client_died (self) :
+		if self.life_controller != None :
+			pass
+		if self.weapon != None :
+			self.delegate.despawn_entity (self.weapon)
+		if self.status_display != None :
+			self.delegate.despawn_entity (self.status_display)
+
+		self.delegate.despawn_entity (self)
+
+
 	##############
 	#actions
 	##############
+
+	#the life controller that monitors this player's life
+	#	players do not need life controllers to function properly
+	def get_life_controller (self) :
+		return self.life_controller
+	def set_life_controller (self, life_controller) :
+		self.life_controller = life_controller
+		self.life_controller.client = self
 
 	#the weapon the player is currently carrying
 	#swap weapons using pick_up/drop
@@ -127,24 +182,14 @@ class Player (Entity) :
 		for entity in entities :
 			touching = get_touching (self.rect, entity.rect)
 			if touching == Location.right and self.direction == Direction.right :
-				entity.was_attacked ((20,-10))
+				entity.was_attacked ((20,-10), 2)
 			elif touching == Location.left and self.direction == Direction.left :
-				entity.was_attacked((-20,-10))
+				entity.was_attacked((-20,-10), 2)
 
-	def was_attacked (self, knockback) :
+	def was_attacked (self, knockback, damage) :
 		self.velocity = self.velocity[0] + knockback[0], self.velocity[1] + knockback[1]
-
-	def update_weapon_rect (self) :
-		if self.weapon != None :
-
-			if self.direction == Direction.left :
-				x = self.rect.left
-			else :
-				x = self.rect.right
-			y = self.rect.center[1]
-
-			self.weapon.set_direction (self.direction)
-			self.weapon.rect.center = (x,y)
+		if self.life_controller != None :
+			self.life_controller.receive_damage (damage)
 
 	def found_weapon (self, weapon) :
 		if self.weapon == None :
@@ -169,6 +214,18 @@ class Player (Entity) :
 			else :
 				self.delegate.log ("Can't drop weapon here.")
 
+	def update_weapon_rect (self) :
+		if self.weapon != None :
+
+			if self.direction == Direction.left :
+				x = self.rect.left
+			else :
+				x = self.rect.right
+			y = self.rect.center[1]
+
+			self.weapon.set_direction (self.direction)
+			self.weapon.rect.center = (x,y)
+
 	def update (self) :	
 		#slow the character if not inputing anything
 		if not self.walking and not self.running :
@@ -178,6 +235,9 @@ class Player (Entity) :
 
 		#make the weapon follow the player around
 		self.update_weapon_rect ()
+
+		#make the status display follow the player around
+		self.update_status_display_rect ()
 
 		#reset all bools for the next update
 		self.sliding = True

@@ -6,6 +6,7 @@ class Bullet (Projectile) :
 		Projectile.__init__ (self,x,y,width,height,**images)
 		self.set_gravity (0)
 		self.set_knockback_factor (5)
+		self.damage = 5
 
 	def calculate_knockback (self, entity) :
 		touching = get_touching (self.rect, entity.rect)
