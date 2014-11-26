@@ -49,10 +49,16 @@ platform2 = Entity (450,250,20,100,default='images/platform.png')
 platform2.set_gravity (0)
 platform2.set_delegate (game)
 
+for i in range (0, 10) :
+	p = Entity (700 + 40*i, 290 - 10*i, 50, 10, default='images/platform.png')
+	p.set_gravity (0)
+	p.set_delegate (game)
+	game.add_entity (p)
+
 game.add_entity (player)
 game.add_entity (player_ai1)
 game.add_entity (platform)
-game.add_entity (platform1)
+#game.add_entity (platform1)
 game.add_entity (platform2)
 game.add_entity (gun)
 game.add_entity (bomb)

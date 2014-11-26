@@ -102,6 +102,20 @@ class Player (Entity) :
 		accel = self.calculate_horizontal_acceleration ()
 		self.velocity = self.velocity[0] + accel, self.velocity[1]
 
+
+		#if the player is walking against a very small wall, accelerate
+		#	him up a little so he can just walk over it
+		#this implementaion could be improved
+		for entity in self.delegate.get_all_entities () :
+			if not self.can_collide_with_entity (entity) :
+				continue
+
+			touching = get_touching (self.rect,entity.rect)
+			if Location.left == touching or Location.right == touching :
+				distance = self.rect.bottom - entity.rect.top
+				if 0 < distance < self.rect.height * .20 :
+					self.velocity = self.velocity[0], self.velocity[1] - 2 * self.gravity
+
 	#use a weapon
 	def attack_with_weapon (self) :
 		if self.weapon != None :
