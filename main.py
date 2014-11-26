@@ -37,6 +37,9 @@ for i in range (1000,3000,200) :
 		run='images/mario_run.png',
 		jump='images/mario_jump.png',)
 	player_ai.set_name ("AI")
+	player_ai_c = AIEntityController (player_ai)
+	player_ai_c.set_target_entity (player)
+	game.add_controller (player_ai_c)
 	game.spawn_entity (player_ai)
 	player_ai.set_life_controller (LifeController ())
 	player_ai.set_status_display (StatusDisplay (100,50))
