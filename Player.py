@@ -179,7 +179,8 @@ class Player (Entity, StatusDisplayClient) :
 				continue
 
 			touching = get_touching (self.rect,entity.rect)
-			if Location.left == touching or Location.right == touching :
+			if ((Location.left == touching and self.direction == Direction.left)
+				or (Location.right == touching and self.direction == Direction.right)):
 				distance = self.rect.bottom - entity.rect.top
 				if 0 < distance < self.rect.height * .20 :
 					self.velocity = self.velocity[0], self.velocity[1] - 2 * self.gravity

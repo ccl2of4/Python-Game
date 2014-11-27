@@ -109,7 +109,7 @@ class Entity (pygame.sprite.Sprite) :
 
 		if self.physical :
 
-			#apply friction and test for collisions
+			#apply friction
 			for entity in entities :
 				if not self.can_collide_with_entity (entity) :
 					continue
@@ -117,7 +117,6 @@ class Entity (pygame.sprite.Sprite) :
 				touching = get_touching (self.rect, entity.rect)
 
 				if Location.above == touching :
-					self.grounded = True
 					v_y = min (0, v_y)
 					if self.sliding : 
 						v_x *= .9
@@ -130,9 +129,10 @@ class Entity (pygame.sprite.Sprite) :
 				elif Location.right == touching :
 					v_x = min (0, v_x)
 
+
+			#look out for collisions
 			target_rect = self.rect.move (v_x, v_y)
 			union_rect = self.rect.union (target_rect)
-
 			for entity in entities :
 				if not self.can_collide_with_entity (entity) :
 					continue
@@ -146,18 +146,26 @@ class Entity (pygame.sprite.Sprite) :
 						v_x = min (v_x, entity.rect.left - self.rect.right)
 					elif location_before & Location.right :
 						v_x = max (v_x, entity.rect.right - self.rect.left)
-
-					if location_before & Location.above :
+					elif location_before & Location.above :
 						v_y = min (v_y, entity.rect.top - self.rect.bottom)
 					elif location_before & Location.below :
 						v_y = max (v_y, entity.rect.bottom - self.rect.top)
 
-		if self.grounded :
-			self.grounded = abs (v_y) == 0 #won't be grounded for next update if you're leaving the ground
-			#if you leave the ground horizontally that would also cause a problem, but meh
-
+		#update the actual rect
 		self.velocity = v_x, v_y
 		self.rect.move_ip (*self.velocity)
+
+		#update grounded
+		if self.physical :
+			for entity in entities :
+				if not self.can_collide_with_entity (entity) :
+					continue
+				touching = get_touching (self.rect, entity.rect)
+				if Location.above == touching :
+					self.grounded = True
+					break
+
+
 		self.update_image ()
 
 	#called after update
