@@ -1,14 +1,15 @@
 from Entity import *
 from Weapon import Weapon
 from Projectile import Projectile
+from Explosion import Explosion
 
 class Bomb (Weapon, Projectile) :
 	def __init__(self,x=0,y=0,width=0,height=0, **images) :
 		Weapon.__init__ (self,x,y,width,height,**images)
 		Projectile.__init__ (self,x,y,width,height,**images)
 		self.has_been_launched = False
-		self.set_knockback_factor (10)
-		self.damage = 40
+		self.set_knockback_factor (5)
+		self.damage = 5
 
 	def attack (self) :
 		v_x, v_y = 0, 0
@@ -29,6 +30,11 @@ class Bomb (Weapon, Projectile) :
 	def launch (self, velocity) :
 		Projectile.launch (self, velocity)
 		self.has_been_launched = True
+
+	def made_contact (self, entity) :
+		#spawn an explosion
+		explosion = Explosion (self.rect.centerx, self.rect.centery, 100, 100)
+		self.delegate.spawn_entity (explosion)
 
 	def update (self) :
 		if self.has_been_launched :

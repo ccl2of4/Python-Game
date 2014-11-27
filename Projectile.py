@@ -58,6 +58,14 @@ class Projectile (Entity) :
 			if not (entity in self.friendly_entities) :
 				entity.was_attacked ((v_x,v_y), self.damage)
 
+			self.made_contact (entity)
+
 			self.delegate.despawn_entity (self)
 
 		Entity.update (self)
+
+	#do anything else after making contact with an
+	#	entity. Projectile is despawned immediately after
+	#	this method returns
+	def made_contact (self, entity) :
+		pass
