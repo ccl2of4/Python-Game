@@ -29,11 +29,12 @@ class Gun (Weapon) :
 
 		#shoot a bullet
 		bullet = ExplosiveBullet (b_x, b_y, b_width, b_height, default='images/platform.png')
+		bullet.rect.x = b_x
+		bullet.rect.y = b_y
 		bullet.set_pass_through_entities ([self, self.owner])
 		bullet.set_friendly_entities ([self, self.owner])
 		self.delegate.spawn_entity (bullet)
 		bullet.launch ((v_x,v_y))
-
 
 	#how quickly does a bullet shot from this gun travel?
 	def get_firing_velocity (self) :
