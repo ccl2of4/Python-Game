@@ -10,6 +10,8 @@ from Bomb import Bomb
 from StatusDisplay import StatusDisplay
 from LifeController import LifeController
 from LevelReader import LevelReader
+from Bullet import Bullet
+from ExplosiveBullet import ExplosiveBullet
 
 def load_level (file_path) :
 	reader = LevelReader ()
@@ -33,10 +35,14 @@ def create_level () :
 	game.set_main_entity (player)
 
 	player_c = UserInputEntityController (player)
+	player.set_info_delegate (player_c)
+	player_c.set_delegate (game)
 	game.add_controller (player_c)
 	player.set_life_controller (LifeController ())
-	player.set_status_display (StatusDisplay (100,50))
-	'''
+	status_display = StatusDisplay (10,340,120,50)
+	status_display.set_client (player)
+	game.spawn_entity_absolute (status_display)
+	
 	for i in range (1000,3000,200) :
 		player_ai = Player (i,0,46,80,
 			default = 'images/mario_stand.png',
@@ -50,9 +56,14 @@ def create_level () :
 		game.add_controller (player_ai_c)
 		game.spawn_entity (player_ai)
 		player_ai.set_life_controller (LifeController ())
-		player_ai.set_status_display (StatusDisplay (100,50))
-	'''
+		player_ai.set_status_display (StatusDisplay (width=120,height=50))
+	
 	gun = Gun (150,250,40,5,default='images/platform.png')
+	magazine = []
+	for i in range (10) :
+		magazine.append (Bullet (height=5,width=5,default='images/platform.png'))
+	gun.set_magazine (magazine)
+
 	game.spawn_entity (gun)
 
 	bomb = Bomb (200,0,10,10,default='images/platform.png')

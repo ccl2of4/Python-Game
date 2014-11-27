@@ -17,6 +17,9 @@ class Weapon (Entity) :
 	def get_owner (self) :
 		return self.owner
 
+	def get_description (self) :
+		return "Weapon"
+
 	def drop (self, drop_rect) :
 
 		self.set_physical (True)

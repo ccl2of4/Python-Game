@@ -10,6 +10,16 @@ running_anim_duraction = 5
 global walking_anim_duration
 walking_anim_duration = 10
 
+class PlayerInfoDelegate :
+	def player_did_die (self, player) :
+		pass
+	def player_did_acquire_weapon (self, player, weapon) :
+		pass
+	def player_did_drop_weapon (self, player, weapon) :
+		pass
+	def player_cannot_drop_weapon (self, player, weapon) :
+		pass
+
 class Player (Entity, StatusDisplayClient) :
 	def __init__(self,x=0,y=0,width=0,height=0, **images) :
 
@@ -28,12 +38,14 @@ class Player (Entity, StatusDisplayClient) :
 		self.run_terminal_velocity_factor = 1.5
 		self.jump_slow_fall_factor = 0.35
 
-
+		#info delegate
+		self.info_delegate = None
 
 		self.weapon = None
 		self.name = "Player"
 		self.life_controller = None
 		self.status_display = None
+		self.status_display_rect = None
 
 		#can't call init before we know which image we're going to use
 		Entity.__init__ (self,x,y,width,height,**images)
@@ -94,6 +106,10 @@ class Player (Entity, StatusDisplayClient) :
 		return self.name
 	def set_name (self, name) :
 		self.name = name
+	def get_weapon_str (self) :
+		if self.weapon :
+			return self.weapon.get_description ()
+		return ""
 
 	#player cannot have a status display if it does not have a life controller
 	#	also must already be spawned in before adding status display
@@ -114,7 +130,7 @@ class Player (Entity, StatusDisplayClient) :
 	#update the location of the status display -- make it
 	#	follow the player
 	def update_status_display_rect (self) :
-		if self.status_display != None:
+		if self.status_display != None :
 			self.status_display.rect.centerx = self.rect.centerx
 			self.status_display.rect.bottom = self.rect.top - 5
 
@@ -124,6 +140,9 @@ class Player (Entity, StatusDisplayClient) :
 	#############################
 
 	def life_controller_client_died (self) :
+		if self.info_delegate != None :
+			self.info_delegate.player_did_die (self)
+
 		if self.life_controller != None :
 			pass
 		if self.weapon != None :
@@ -148,6 +167,11 @@ class Player (Entity, StatusDisplayClient) :
 	##############
 	#actions
 	##############
+
+	def get_info_delegate (self) :
+		return self.info_delegate
+	def set_info_delegate (self, info_delegate) :
+		self.info_delegate = info_delegate
 
 	#the weapon the player is currently carrying
 	#swap weapons using pick_up/drop
@@ -212,11 +236,17 @@ class Player (Entity, StatusDisplayClient) :
 	def pick_up_weapon (self, weapon) :
 		if weapon.pick_up (self) :
 			self.weapon = weapon
+			if self.info_delegate != None :
+				self.info_delegate.player_did_acquire_weapon (self, self.weapon)
 	def drop_weapon (self) :
 		if (self.weapon != None) :
-			if not self.do_drop_weapon () :
-				self.delegate.log ("Can't drop weapon here.")
-
+			weapon = self.weapon
+			result = self.do_drop_weapon ()
+			if self.info_delegate != None :
+				if result :
+					self.info_delegate.player_did_drop_weapon (self, weapon)
+				else :
+					self.info_delegate.player_cannot_drop_weapon (self, weapon)
 	def do_drop_weapon (self) :
 		assert (self.weapon != None)
 

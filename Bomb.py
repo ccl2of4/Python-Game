@@ -11,6 +11,9 @@ class Bomb (Weapon, Projectile) :
 		self.set_knockback_factor (5)
 		self.damage = 5
 
+	def get_description (self) :
+		return "Bomb"
+
 	def attack (self) :
 		v_x, v_y = 0, 0
 		if self.owner != None :

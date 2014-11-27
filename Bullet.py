@@ -8,6 +8,9 @@ class Bullet (Projectile) :
 		self.set_knockback_factor (5)
 		self.damage = 5
 
+	def get_description (self) :
+		return "Bullet"
+
 	def calculate_knockback (self, entity) :
 		touching = get_touching (self.rect, entity.rect)
 		assert (touching != Location.none)

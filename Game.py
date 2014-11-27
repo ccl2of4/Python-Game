@@ -1,8 +1,13 @@
 import pygame
 from Entity import EntityDelegate
 from Camera import Camera
+from UserInputEntityController import UserInputEntityControllerDelegate
 
-class Game (EntityDelegate) :
+class Positioning :
+	absolute = 0
+	relative = 1
+
+class Game (EntityDelegate, UserInputEntityControllerDelegate) :
 	def __init__(self, width, height, camera=None) :
 		pygame.init()
 		self.last_update_time = pygame.time.get_ticks ()
@@ -72,7 +77,8 @@ class Game (EntityDelegate) :
 			assert self.camera != None
 			self.camera.update ()
 			for entity in self.all_entities :
-				self.camera.apply (entity)
+				if entity.positioning == Positioning.relative :
+					self.camera.apply (entity)
 
 
 			#rendering
@@ -95,7 +101,6 @@ class Game (EntityDelegate) :
 			pygame.event.pump ()
 
 
-	
 	#######################
 	#EntityDelegate methods
 	#######################
@@ -106,9 +111,19 @@ class Game (EntityDelegate) :
 	def spawn_entity (self, entity) :
 		self.all_entities.add (entity)
 		entity.delegate = self
-
+		entity.positioning = Positioning.relative
+	def spawn_entity_absolute (self, entity) :
+		self.all_entities.add (entity)
+		entity.delegate = self	
+		entity.positioning = Positioning.absolute
 	def despawn_entity (self, entity) :
 		self.all_entities.remove (entity)
+
+
+
+	##########################################
+	#UserInputEntityControllerDelegate methods
+	##########################################
 
 	def log (self, message) :
 		self.log_message = message

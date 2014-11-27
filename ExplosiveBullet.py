@@ -5,6 +5,9 @@ class ExplosiveBullet (Bullet) :
 	def __init__(self,x=0,y=0,width=0,height=0, **images) :
 		Bullet.__init__ (self,x,y,width,height,**images)
 
+	def get_description (self) :
+		return "Explosive Bullet"
+
 	def made_contact (self, entity) :
 		#spawn an explosion
 		explosion = Explosion (self.rect.centerx, self.rect.centery, 40, 40)

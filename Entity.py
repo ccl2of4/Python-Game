@@ -35,6 +35,9 @@ class Entity (pygame.sprite.Sprite) :
 		self.pass_through_entities = []
 		self.friendly_entities = []
 
+	def get_description (self) :
+		return "Entity"
+
 	#default value None
 	def get_delegate (self) :
 		return self.delegate

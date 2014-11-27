@@ -1,8 +1,13 @@
 import pygame
 from EntityController import EntityController
 from Entity import *
+from Player import PlayerInfoDelegate
 
-class UserInputEntityController (EntityController) :
+class UserInputEntityControllerDelegate :
+	def log (self, message) :
+		pass
+
+class UserInputEntityController (EntityController, PlayerInfoDelegate) :
 	def __init__ (self, entity) :
 		EntityController.__init__ (self,entity)
 		
@@ -12,10 +17,17 @@ class UserInputEntityController (EntityController) :
 		self.w_attacking = False
 		self.attacking = False
 		self.dropping = False
+		self.delegate = None
 
+		self.drop_needs_reset = False
 		self.jump_needs_reset = False
 		self.w_attack_needs_reset = False
 		self.attack_needs_reset = False
+
+	def get_delegate (self) :
+		return self.delegate
+	def set_delegate (self, delegate) :
+		self.delegate = delegate
 
 	def update (self) :
 		keys = pygame.key.get_pressed ()
@@ -54,6 +66,8 @@ class UserInputEntityController (EntityController) :
 		#drop weapon
 		if keys[pygame.K_i] :
 			self.dropping = True
+		else :
+			self.drop_needs_reset = False
 
 		#attack
 		if keys[pygame.K_o] :
@@ -75,7 +89,9 @@ class UserInputEntityController (EntityController) :
 				self.entity.jump ()
 
 		if self.dropping :
-			self.entity.drop_weapon ()
+			if not self.drop_needs_reset :
+				self.entity.drop_weapon ()
+				self.drop_needs_reset = True
 
 		if self.w_attacking :
 			if not self.w_attack_needs_reset :
@@ -85,3 +101,17 @@ class UserInputEntityController (EntityController) :
 			if not self.attack_needs_reset :
 				self.entity.attack ()
 				self.attack_needs_reset = True
+
+
+	###########################
+	#PlayerInfoDelegate methods
+	###########################
+
+	def player_did_die (self, player) :
+		self.delegate.log ("You died!")
+	def player_did_acquire_weapon (self, player, weapon) :
+		self.delegate.log (weapon.get_description ())
+	def player_did_drop_weapon (self, player, weapon) :
+		pass
+	def player_cannot_drop_weapon (self, player, weapon) :
+		self.delegate.log ("Can't drop weapon here.")
