@@ -3,6 +3,7 @@ import pygame
 from Entity import *
 from Bullet import Bullet
 from Weapon import Weapon
+from ExplosiveBullet import ExplosiveBullet
 
 class Gun (Weapon) :
 	def __init__(self,x=0,y=0,width=0,height=0, **images) :
@@ -27,7 +28,7 @@ class Gun (Weapon) :
 			v_x = -self.firing_velocity
 
 		#shoot a bullet
-		bullet = Bullet (b_x, b_y, b_width, b_height, default='images/platform.png')
+		bullet = ExplosiveBullet (b_x, b_y, b_width, b_height, default='images/platform.png')
 		bullet.set_pass_through_entities ([self, self.owner])
 		bullet.set_friendly_entities ([self, self.owner])
 		self.delegate.spawn_entity (bullet)
