@@ -60,7 +60,7 @@ def create_level () :
 	
 	gun = Gun (150,250,40,5,default='images/platform.png')
 	magazine = []
-	for i in range (10) :
+	for i in range (50) :
 		magazine.append (Bullet (height=5,width=5,default='images/platform.png'))
 	gun.set_magazine (magazine)
 
