@@ -118,15 +118,17 @@ class Entity (pygame.sprite.Sprite) :
 
 				if Location.above == touching :
 					self.grounded = True
+					v_y = min (0, v_y)
 					if self.sliding : 
 						v_x *= .9
 				elif Location.below == touching :
+					v_y = max (0, v_y)
 					if self.sliding :
 						v_x *= .9
 				elif Location.left == touching :
-					pass
+					v_x = max (0, v_x)
 				elif Location.right == touching :
-					pass
+					v_x = min (0, v_x)
 
 			target_rect = self.rect.move (v_x, v_y)
 			union_rect = self.rect.union (target_rect)

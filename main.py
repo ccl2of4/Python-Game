@@ -58,6 +58,19 @@ platform = Entity (450,250,20,100,default='images/platform.png')
 platform.set_gravity (0)
 game.spawn_entity (platform)
 
+'''
+for i in range (0, 50) :
+	p = Entity (300 -i, 200, 1, 10, default='images/platform.png')
+	p.set_gravity (0)
+	game.spawn_entity (p)
+'''
+'''
+for i in range (0, 50) :
+	p = Entity (300, 200 - i, 50, 1, default='images/platform.png')
+	p.set_gravity (0)
+	game.spawn_entity (p)
+'''
+
 for i in range (0, 10) :
 	p = Entity (700 + 40*i, 290 - 10*i, 50, 10, default='images/platform.png')
 	p.set_gravity (0)
