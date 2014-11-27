@@ -5,8 +5,7 @@ class Explosion (Entity) :
 		self.knockback_factor = 10
 		self.damage_factor = 10
 		self.frames_to_live = 60
-		self.alive_frames = 0
-
+		self.max_frames = 60
 		Entity.__init__ (self,x,y,width,height,**images)
 
 		self.set_physical (False)
@@ -27,9 +26,14 @@ class Explosion (Entity) :
 	def set_frames_to_live (self, frames_to_live) :
 		self.frames_to_live = frames_to_live
 
+	def get_max_frames (self) :
+		return self.max_frames
+	def set_max_frames (self, max_frames) :
+		self.max_frames = max_frames
+
 	def update (self) :
-		self.alive_frames += 1
-		if self.alive_frames > self.frames_to_live :
+		self.frames_to_live -= 1
+		if self.frames_to_live < 0 :
 			self.delegate.despawn_entity (self)
 
 		center = self.rect.center
@@ -55,7 +59,9 @@ class Explosion (Entity) :
 			else :
 				k_y = self.knockback_factor
 
-			damage = self.damage_factor
+			damage = self.damage_factor * self.frames_to_live/self.max_frames
+			k_x = k_x * 1.0*self.frames_to_live/self.max_frames
+			k_y = k_y * 1.0*self.frames_to_live/self.max_frames
 
 			entity.was_attacked ((k_x, k_y), damage)
 
@@ -64,6 +70,6 @@ class Explosion (Entity) :
 	def update_image (self) :
 		self.image = pygame.Surface ((self.width, self.height))
 		self.image.fill ((255,0,0))
-		self.image.set_alpha (255 - 255*self.alive_frames/self.frames_to_live)
+		self.image.set_alpha (255.0*self.frames_to_live/self.max_frames)
 
 		Entity.update_image (self)
