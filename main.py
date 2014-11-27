@@ -9,71 +9,85 @@ from Gun import Gun
 from Bomb import Bomb
 from StatusDisplay import StatusDisplay
 from LifeController import LifeController
+from LevelReader import LevelReader
 
-game = Game (800, 400)
-camera = Camera (800, 400)
-game.set_camera (camera)
+def load_level (file_path) :
+	reader = LevelReader ()
+	game = reader.read (file_path)
+	game.run ()
 
-player = Player (50,0,46,80,
-	default = 'images/mario_stand.png',
-	stand='images/mario_stand.png',
-	walk='images/mario_walk.png',
-	run='images/mario_run.png',
-	jump='images/mario_jump.png',)
-player.set_name ("Main")
-game.spawn_entity (player)
-game.set_main_entity (player)
 
-player_c = UserInputEntityController (player)
-game.add_controller (player_c)
-player.set_life_controller (LifeController ())
-player.set_status_display (StatusDisplay (100,50))
+def create_level () :
+	game = Game (800, 400)
+	camera = Camera (800, 400)
+	game.set_camera (camera)
 
-for i in range (1000,3000,200) :
-	player_ai = Player (i,0,46,80,
+	player = Player (50,0,46,80,
 		default = 'images/mario_stand.png',
 		stand='images/mario_stand.png',
 		walk='images/mario_walk.png',
 		run='images/mario_run.png',
 		jump='images/mario_jump.png',)
-	player_ai.set_name ("AI")
-	player_ai_c = AIEntityController (player_ai)
-	player_ai_c.set_target_entity (player)
-	game.add_controller (player_ai_c)
-	game.spawn_entity (player_ai)
-	player_ai.set_life_controller (LifeController ())
-	player_ai.set_status_display (StatusDisplay (100,50))
+	player.set_name ("Main")
+	game.spawn_entity (player)
+	game.set_main_entity (player)
 
-gun = Gun (150,250,40,5,default='images/platform.png')
-game.spawn_entity (gun)
+	player_c = UserInputEntityController (player)
+	game.add_controller (player_c)
+	player.set_life_controller (LifeController ())
+	player.set_status_display (StatusDisplay (100,50))
 
-bomb = Bomb (200,0,10,10,default='images/platform.png')
-game.spawn_entity (bomb)
+	for i in range (1000,3000,200) :
+		player_ai = Player (i,0,46,80,
+			default = 'images/mario_stand.png',
+			stand='images/mario_stand.png',
+			walk='images/mario_walk.png',
+			run='images/mario_run.png',
+			jump='images/mario_jump.png',)
+		player_ai.set_name ("AI")
+		player_ai_c = AIEntityController (player_ai)
+		player_ai_c.set_target_entity (player)
+		game.add_controller (player_ai_c)
+		game.spawn_entity (player_ai)
+		player_ai.set_life_controller (LifeController ())
+		player_ai.set_status_display (StatusDisplay (100,50))
 
-platform = Entity (0,300,5000,20,default='images/platform.png')
-platform.set_gravity (0)
-game.spawn_entity (platform)
+	gun = Gun (150,250,40,5,default='images/platform.png')
+	game.spawn_entity (gun)
 
-platform = Entity (450,250,20,100,default='images/platform.png')
-platform.set_gravity (0)
-game.spawn_entity (platform)
+	bomb = Bomb (200,0,10,10,default='images/platform.png')
+	game.spawn_entity (bomb)
 
-'''
-for i in range (0, 50) :
-	p = Entity (300 -i, 200, 1, 10, default='images/platform.png')
-	p.set_gravity (0)
-	game.spawn_entity (p)
-'''
-'''
-for i in range (0, 50) :
-	p = Entity (300, 200 - i, 50, 1, default='images/platform.png')
-	p.set_gravity (0)
-	game.spawn_entity (p)
-'''
+	platform = Entity (0,300,5000,20,default='images/platform.png')
+	platform.set_gravity (0)
+	game.spawn_entity (platform)
 
-for i in range (0, 10) :
-	p = Entity (700 + 40*i, 290 - 10*i, 50, 10, default='images/platform.png')
-	p.set_gravity (0)
-	game.spawn_entity (p)
+	platform = Entity (450,250,20,100,default='images/platform.png')
+	platform.set_gravity (0)
+	game.spawn_entity (platform)
 
-game.run ()
+	'''
+	for i in range (0, 50) :
+		p = Entity (300 -i, 200, 1, 10, default='images/platform.png')
+		p.set_gravity (0)
+		game.spawn_entity (p)
+	'''
+	'''
+	for i in range (0, 50) :
+		p = Entity (300, 200 - i, 50, 1, default='images/platform.png')
+		p.set_gravity (0)
+		game.spawn_entity (p)
+	'''
+
+	for i in range (0, 10) :
+		p = Entity (700 + 40*i, 290 - 10*i, 50, 10, default='images/platform.png')
+		p.set_gravity (0)
+		game.spawn_entity (p)
+
+	game.run ()
+
+
+if (len (sys.argv) == 2) :
+	load_level (sys.argv[1])
+else :
+	create_level ()

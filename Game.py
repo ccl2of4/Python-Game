@@ -1,5 +1,4 @@
 import pygame
-import constants
 from Entity import EntityDelegate
 from Camera import Camera
 
@@ -15,6 +14,10 @@ class Game (EntityDelegate) :
 		self.camera = camera
 		self.log_message = None
 		self.log_message_duration = None
+		self.in_settings = False
+
+		#settings stuff
+		self.settings_button_needs_reset = False
 
 	def add_controller (self, controller) :
 		self.all_controllers.append (controller)
@@ -24,6 +27,8 @@ class Game (EntityDelegate) :
 	def set_camera (self, camera) :
 		self.camera = camera
 
+	def get_main_entity (self) :
+		return self.camera.get_target ()
 	def set_main_entity (self, entity) :
 		self.camera.set_target (entity)
 
@@ -32,17 +37,46 @@ class Game (EntityDelegate) :
 
 			#framerate stuff
 			self.clock.tick (60)
+
+			#user input
+			keys = pygame.key.get_pressed ()
+			if keys[pygame.K_1] :
+				if not self.settings_button_needs_reset :
+					self.in_settings = not self.in_settings
+					self.settings_button_needs_reset = True
+			else :
+				self.settings_button_needs_reset = False
 			
+			if self.in_settings :
+				self.update_settings ()
+			else :
+				self.update_game ()
+
+
+	def update_settings (self) :
+			#rendering
+			#self.screen.fill ((255,255,255))
+
+			#pygame.display.flip ()
+			pygame.event.pump ()
+
+
+	def update_game (self) :
+			#update controllers first, then entities
 			for controller in self.all_controllers :
 				controller.update ()
-
 			self.all_entities.update ()
 
+			
+			#camera
+			assert self.camera != None
 			self.camera.update ()
 			for entity in self.all_entities :
 				self.camera.apply (entity)
 
-			self.screen.fill (constants.background_color)
+
+			#rendering
+			self.screen.fill ((255,255,255))
 			self.all_entities.draw (self.screen)
 
 			if self.log_message != None :
@@ -59,6 +93,7 @@ class Game (EntityDelegate) :
 
 			pygame.display.flip ()
 			pygame.event.pump ()
+
 
 	
 	#######################
