@@ -9,7 +9,7 @@ class Game (EntityDelegate) :
 		self.time_since_last_update = 0
 		self.screen = pygame.display.set_mode((width, height))
 		self.clock = pygame.time.Clock ()
-		self.all_entities = pygame.sprite.Group ()
+		self.all_entities = pygame.sprite.OrderedUpdates ()
 		self.all_controllers = []
 		self.camera = camera
 		self.log_message = None

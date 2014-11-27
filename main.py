@@ -36,7 +36,7 @@ def create_level () :
 	game.add_controller (player_c)
 	player.set_life_controller (LifeController ())
 	player.set_status_display (StatusDisplay (100,50))
-
+	'''
 	for i in range (1000,3000,200) :
 		player_ai = Player (i,0,46,80,
 			default = 'images/mario_stand.png',
@@ -51,7 +51,7 @@ def create_level () :
 		game.spawn_entity (player_ai)
 		player_ai.set_life_controller (LifeController ())
 		player_ai.set_status_display (StatusDisplay (100,50))
-
+	'''
 	gun = Gun (150,250,40,5,default='images/platform.png')
 	game.spawn_entity (gun)
 
@@ -67,7 +67,7 @@ def create_level () :
 	game.spawn_entity (platform)
 
 	'''
-	for i in range (0, 50) :
+	for i in range (0, 1000) :
 		p = Entity (300 -i, 200, 1, 10, default='images/platform.png')
 		p.set_gravity (0)
 		game.spawn_entity (p)
