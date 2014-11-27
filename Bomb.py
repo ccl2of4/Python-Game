@@ -33,7 +33,7 @@ class Bomb (Weapon, Projectile) :
 
 	def made_contact (self, entity) :
 		#spawn an explosion
-		explosion = Explosion (self.rect.centerx, self.rect.centery, 40, 40)
+		explosion = Explosion (self.rect.centerx, self.rect.centery, 80, 80)
 		explosion.rect.center = self.rect.center
 		for entity in self.friendly_entities :
 			explosion.friendly_entities.append (entity)
