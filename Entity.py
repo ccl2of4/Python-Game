@@ -29,6 +29,7 @@ class Entity (pygame.sprite.Sprite) :
 		self.sliding = True
 		self.delegate = None
 		self.image = None
+		self.mass = 0
 		self.gravity = 1.0
 		self.update_image ()
 		self.rect = self.image.get_rect().move (x,y)
@@ -53,6 +54,14 @@ class Entity (pygame.sprite.Sprite) :
 		return self.physical
 	def set_physical (self, physical) :
 		self.physical = physical
+
+	#the mass of this entity, used for bouncing after collisions
+	#	setting mass to 0 implies infinite mass
+	#currently unused
+	def get_mass (self) :
+		return self.mass
+	def set_mass (self, mass) :
+		self.mass = mass
 
 	#control how fast an entity sinks when free falling
 	#setting to 0 effectively disables gravity on this entity
