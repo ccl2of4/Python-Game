@@ -11,6 +11,7 @@ from StatusDisplay import StatusDisplay
 from LifeController import LifeController
 from Bullet import Bullet
 from ExplosiveBullet import ExplosiveBullet
+from PointOfInterest import PointOfInterest
 
 def string_to_int (string) :
 	return int (string)
@@ -53,14 +54,13 @@ class LevelReader :
 					run='images/mario_run.png',
 					jump='images/mario_jump.png',)
 				player.set_name ("Main")
-				game.spawn_entity (player)
+				player_c = UserInputEntityController (player)
+				game.spawn_entity (player, player_c)
 				game.set_main_entity (player)
 				player.set_life_controller (LifeController ())
 				status_display = StatusDisplay (10,340)
 				status_display.set_client (player)
 				game.spawn_entity_absolute (status_display)
-				player_c = UserInputEntityController (player)
-				game.add_controller (player_c)
 
 				current_entity = player
 
@@ -79,10 +79,10 @@ class LevelReader :
 					run='images/mario_run.png',
 					jump='images/mario_jump.png',)
 				player_ai.set_name ("AI")
+				player_ai.set_hostile (True)
 				player_ai_c = AIEntityController (player_ai)
 				player_ai_c.set_target_entity (game.get_main_entity ())
-				game.add_controller (player_ai_c)
-				game.spawn_entity (player_ai)
+				game.spawn_entity (player_ai, player_ai_c)
 				player_ai.set_life_controller (LifeController ())
 				player_ai.set_status_display (StatusDisplay (100,50))
 
@@ -138,6 +138,15 @@ class LevelReader :
 				game.spawn_entity (bomb)
 
 				current_entity = bomb
+
+			#############
+			#defend point
+			#############
+			elif line[0] == 'defend_point' :
+				point_of_interest = PointOfInterest (default='images/platform.png')
+				game.spawn_entity (point_of_interest)
+
+				current_entity = point_of_interest
 
 
 			#######################################

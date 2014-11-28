@@ -5,6 +5,7 @@ from NotificationCenter import NotificationCenter
 import Character
 import NotificationCenter
 import Gun
+import PointOfInterest
 
 class Positioning :
 	absolute = 0
@@ -18,7 +19,6 @@ class Game (EntityDelegate) :
 		self.screen = pygame.display.set_mode((width, height))
 		self.clock = pygame.time.Clock ()
 		self.all_entities = pygame.sprite.OrderedUpdates ()
-		self.all_controllers = []
 		self.camera = camera
 		self.log_message = None
 		self.log_message_duration = None
@@ -32,6 +32,7 @@ class Game (EntityDelegate) :
 		for notification_name in notification_names :
 			NotificationCenter.shared_center().add_observer (self, notification_name)
 
+	#notification handling
 	def notify (self, poster, notification_name, **info) :
 		main_entity = self.get_main_entity ()
 		if Character.character_cannot_drop_weapon_notification == notification_name and poster == main_entity:
@@ -45,28 +46,32 @@ class Game (EntityDelegate) :
 			self.log (main_entity.get_weapon().get_description ())
 		elif Gun.gun_out_of_ammo_notification == notification_name and poster.owner == main_entity :
 			self.log ("Out of ammo!")
+		elif PointOfInterest.point_of_interest_reached_notification == notification_name :
+			pass
 
+	#notification names for which the game registers
 	def get_notification_names (self) :
 		return [
 			Character.character_cannot_drop_weapon_notification,
 			Character.character_died_notification,
 			Character.character_picked_up_weapon_notification,
-			Gun.gun_out_of_ammo_notification
+			Gun.gun_out_of_ammo_notification,
+			PointOfInterest.point_of_interest_reached_notification
 		]
 
-	def add_controller (self, controller) :
-		self.all_controllers.append (controller)
-
+	#the camera used to scroll the screen
 	def get_camera (self) :
 		return self.camera
 	def set_camera (self, camera) :
 		self.camera = camera
 
+	#the entity that the camera should follow
 	def get_main_entity (self) :
 		return self.camera.get_target ()
 	def set_main_entity (self, entity) :
 		self.camera.set_target (entity)
 
+	#log a message to the top of the game screen
 	def log (self, message) :
 		self.log_message = message
 		self.log_message_duration = 0
@@ -93,62 +98,66 @@ class Game (EntityDelegate) :
 
 
 	def update_settings (self) :
-			#rendering
-			#self.screen.fill ((255,255,255))
+		#rendering
+		#self.screen.fill ((255,255,255))
 
-			#pygame.display.flip ()
-			pygame.event.pump ()
+		#pygame.display.flip ()
+		pygame.event.pump ()
 
 
 	def update_game (self) :
-			#update controllers first, then entities
-			for controller in self.all_controllers :
-				controller.update ()
-			self.all_entities.update ()
+		for entity in self.all_entities :
+			if entity.controller != None :
+				entity.controller.update ()
+			entity.update ()
 
-			
-			#camera
-			assert self.camera != None
-			self.camera.update ()
-			for entity in self.all_entities :
-				if entity.positioning == Positioning.relative :
-					self.camera.apply (entity)
-
-
-			#rendering
-			self.screen.fill ((255,255,255))
-			self.all_entities.draw (self.screen)
-
-			if self.log_message != None :
-				percent = min (1.0, self.log_message_duration/60.0)
-				if percent < 1 :
-					font = pygame.font.Font (None, 36)
-					text = font.render (self.log_message, 1, (percent*255, percent*255, percent*255))
-					textpos = text.get_rect ()
-					textpos.centerx = self.screen.get_rect().centerx
-					self.screen.blit (text, textpos)
-					self.log_message_duration += 1
-				else :
-					log_message = None
-
-			pygame.display.flip ()
-			pygame.event.pump ()
+		
+		#camera
+		assert self.camera != None
+		self.camera.update ()
+		for entity in self.all_entities :
+			if entity.positioning == Positioning.relative :
+				self.camera.apply (entity)
 
 
-	#######################
-	#EntityDelegate methods
-	#######################
+		#rendering
+		self.screen.fill ((255,255,255))
+		self.all_entities.draw (self.screen)
+
+		if self.log_message != None :
+			percent = min (1.0, self.log_message_duration/60.0)
+			if percent < 1 :
+				font = pygame.font.Font (None, 36)
+				text = font.render (self.log_message, 1, (percent*255, percent*255, percent*255))
+				textpos = text.get_rect ()
+				textpos.centerx = self.screen.get_rect().centerx
+				self.screen.blit (text, textpos)
+				self.log_message_duration += 1
+			else :
+				log_message = None
+
+		pygame.display.flip ()
+		pygame.event.pump ()
+
+
+	###########################
+	#EntityDelegate methods /
+	#	entity spawning methods
+	###########################
 
 	def get_all_entities (self) :
 		return self.all_entities
 
-	def spawn_entity (self, entity) :
+	def spawn_entity (self, entity, controller=None) :
 		self.all_entities.add (entity)
+		entity.controller = controller
 		entity.delegate = self
 		entity.positioning = Positioning.relative
-	def spawn_entity_absolute (self, entity) :
-		self.all_entities.add (entity)
-		entity.delegate = self	
+	def spawn_entity_absolute (self, entity, controller=None) :
+		self.spawn_entity (entity, controller)
 		entity.positioning = Positioning.absolute
+
+	#if the entity was spawned with a controller,
+	#	the controller will be transitively released here
 	def despawn_entity (self, entity) :
 		self.all_entities.remove (entity)

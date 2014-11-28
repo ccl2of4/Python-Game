@@ -30,7 +30,7 @@ class Bomb (Weapon, Projectile) :
 
 			#this call creates a circular dependency between bomb and character, and I don't like it
 			#	also there's a bug if the owner cannot drop the weapon
-			self.owner.drop_weapon () :
+			self.owner.drop_weapon ()
 
 		self.launch ((v_x,v_y))
 

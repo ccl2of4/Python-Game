@@ -44,6 +44,7 @@ class Character (Entity, StatusDisplayClient) :
 		self.run_terminal_velocity_factor = 1.5
 		self.jump_slow_fall_factor = 0.35
 
+		self.hostile = False
 		self.weapon = None
 		self.name = "Character"
 		self.life_controller = None
@@ -169,6 +170,11 @@ class Character (Entity, StatusDisplayClient) :
 	##############
 	#actions
 	##############
+
+	def is_hostile (self) :
+		return self.hostile
+	def set_hostile (self, hostile) :
+		self.hostile = hostile
 
 	#the weapon the character is currently carrying
 	#swap weapons using pick_up/drop
