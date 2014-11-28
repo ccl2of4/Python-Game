@@ -31,3 +31,6 @@ class LifeController :
 		self.health -= damage
 		if self.health < 0:
 			self.client.life_controller_client_died ()
+
+	def kill (self) :
+		self.receive_damage (self.health)
