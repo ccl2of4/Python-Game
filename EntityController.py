@@ -4,6 +4,7 @@ class EntityController :
 	def __init__ (self, entity=None) :
 		self.entity = entity
 
+	#the entity we are controlling
 	def get_entity (self) :
 		return self.entity
 	def set_entity (self, entity) :

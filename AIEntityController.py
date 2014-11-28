@@ -1,5 +1,6 @@
 from EntityController import EntityController
 from Entity import *
+import random
 
 class AIEntityController (EntityController) :
 	def __init__ (self, entity) :
@@ -17,4 +18,9 @@ class AIEntityController (EntityController) :
 		else :
 			self.entity.set_direction (Direction.left)
 
-		self.entity.walk (False)
+		if random.randint (0,60) < 10 :
+			self.entity.walk (False)
+		if random.randint (0,60) == 1 :
+			self.entity.attack ()
+		if random.randint (0,1000) == 1 :
+			self.entity.jump ()

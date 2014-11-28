@@ -27,7 +27,10 @@ class Bomb (Weapon, Projectile) :
 			else :
 				v_x = -10.0
 			v_y = -10.0
+
+			#this call creates a circular dependency between bomb and character, and I don't like it
 			self.owner.drop_weapon ()
+
 		self.launch ((v_x,v_y))
 
 	def launch (self, velocity) :

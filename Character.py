@@ -143,6 +143,7 @@ class Character (Entity, StatusDisplayClient) :
 	#############################
 
 	def life_controller_client_died (self) :
+		NotificationCenter.shared_center().post_notification (self, character_died_notification)
 
 		if self.life_controller != None :
 			pass

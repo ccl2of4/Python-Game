@@ -8,6 +8,7 @@ class LifeController :
 		self.health = 100
 		self.client = None
 
+	#the client whose life we are monitoring
 	def get_client (self) :
 		return self.client
 	def set_client (self, client) :
