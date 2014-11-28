@@ -1,8 +1,54 @@
-main
-0 0 46 80
+################
+#ground platform
+################
+
 platform
-0 500 300 20
+0 500 2000 500
+
+###########
+#base
+###########
+
+#floor
 platform
-300 4000 300 20
+0 480 420 20
+
+#left wall
+platform
+0 200 20 300
+
+#right wall
+platform
+400 200 20 180
+
+#roof
+platform
+0 200 400 20
+
+#stairs
+platform
+420 490 40 10
+
+########
+#weapons
+########
+gun : 10 * explosive_bullet, 50 * bullet
+100 300 40 10
+
+##########
+#player
+##########
 player
-50 0 46 80
+20 400 46 80
+
+########
+#enemies
+########
+enemy
+1000 0 46 80
+
+enemy
+1100 0 46 80
+
+enemy
+1200 0 46 80

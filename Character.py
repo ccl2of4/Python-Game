@@ -271,7 +271,7 @@ class Character (Entity, StatusDisplayClient) :
 		#slow the character if not inputing anything
 		if not self.walking and not self.running :
 			self.velocity = self.velocity[0]*.99, self.velocity[1]
-		
+
 		Entity.update (self)
 
 		#make the weapon follow the character around

@@ -1,6 +1,6 @@
 import sys, pygame, time
 from Game import Game
-from Player import Player
+from Character import Character
 from Entity import Entity
 from Camera import Camera
 from UserInputEntityController import UserInputEntityController
@@ -9,9 +9,14 @@ from Gun import Gun
 from Bomb import Bomb
 from StatusDisplay import StatusDisplay
 from LifeController import LifeController
+from Bullet import Bullet
+from ExplosiveBullet import ExplosiveBullet
 
-def string_to_int (str) :
-	return int (str)
+def string_to_int (string) :
+	return int (string)
+
+def strip_string (string) :
+	return string.strip ()
 
 class LevelReader :
 	def __init__ (self) :
@@ -28,11 +33,20 @@ class LevelReader :
 		
 		for line in file :
 			line = line.strip ()
-			if line == 'main' :
+			line = line.split (':')
+			line = map (strip_string, line)
+
+			if line[0] == '' or line[0][0] == "#":
+				continue
+
+			###############
+			#player
+			###############
+			elif line[0] == 'player' :
 				assert game.get_main_entity () == None
 				assert current_entity == None
 
-				player = Player (
+				player = Character (
 					default = 'images/mario_stand.png',
 					stand='images/mario_stand.png',
 					walk='images/mario_walk.png',
@@ -41,26 +55,24 @@ class LevelReader :
 				player.set_name ("Main")
 				game.spawn_entity (player)
 				game.set_main_entity (player)
-
+				player.set_life_controller (LifeController ())
+				status_display = StatusDisplay (10,340)
+				status_display.set_client (player)
+				game.spawn_entity_absolute (status_display)
 				player_c = UserInputEntityController (player)
 				game.add_controller (player_c)
-				player.set_life_controller (LifeController ())
-				player.set_status_display (StatusDisplay (100,50))
 
 				current_entity = player
 
-			elif line == 'platform' :
-				assert current_entity == None
-				platform = Entity (default='images/platform.png')
-				platform.set_gravity (0)
-				game.spawn_entity (platform)
 
-				current_entity = platform
 
-			elif line == 'player' :
+			######
+			#enemy
+			######
+			elif line[0] == 'enemy' :
 				assert game.get_main_entity () != None
 				assert current_entity == None
-				player_ai = Player (
+				player_ai = Character (
 					default = 'images/mario_stand.png',
 					stand='images/mario_stand.png',
 					walk='images/mario_walk.png',
@@ -76,8 +88,54 @@ class LevelReader :
 
 				current_entity = player_ai
 
+
+			#########
+			#platform
+			#########
+			elif line[0] == 'platform' :
+				assert current_entity == None
+				platform = Entity (default='images/platform.png')
+				platform.set_gravity (0)
+				game.spawn_entity (platform)
+
+				current_entity = platform
+
+
+
+			#######
+			#gun
+			#######
+			elif line[0] == 'gun' :
+				gun = Gun (default='images/platform.png')
+				magazine = []
+
+				for ammo in line[1].split (',') :
+					info = ammo.split ('*')
+					info = map (strip_string, info)
+					count = int (info[0])
+					if info[1] == 'explosive_bullet' :
+						for i in range (count) :
+							projectile = ExplosiveBullet (default='images/platform.png')
+							magazine.append (projectile)
+					elif info[1] == 'bullet' :
+						for i in range (count) :
+							projectile = Bullet (default='images/platform.png')
+							magazine.append (projectile)
+					else :
+						assert (False)
+
+				gun.set_magazine (magazine)
+				game.spawn_entity (gun)
+
+				current_entity = gun
+
+
+
+			#######################################
+			#coordinates for entity location
+			#######################################
 			else :
-				coords = line.split ()
+				coords = line[0].split ()
 				assert (len (coords) == 4)
 				coords = map (string_to_int, coords)
 				x,y,width,height = coords

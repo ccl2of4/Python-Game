@@ -2,7 +2,7 @@ from Bullet import Bullet
 from Explosion import Explosion
 
 class ExplosiveBullet (Bullet) :
-	def __init__(self,x=0,y=0,width=0,height=0, **images) :
+	def __init__(self,x=0,y=0,width=5,height=5, **images) :
 		Bullet.__init__ (self,x,y,width,height,**images)
 
 	def get_description (self) :

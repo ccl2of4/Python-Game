@@ -36,8 +36,11 @@ class Game (EntityDelegate) :
 		main_entity = self.get_main_entity ()
 		if Character.character_cannot_drop_weapon_notification == notification_name and poster == main_entity:
 			self.log ("Cannot drop weapon here")
-		elif Character.character_died_notification == notification_name and poster == main_entity :
-			self.log ("You lost!")
+		elif Character.character_died_notification == notification_name :
+			if poster == self.get_main_entity () :
+				self.log ("You lost!")
+			else :
+				pass
 		elif Character.character_picked_up_weapon_notification == notification_name and poster == main_entity :
 			self.log (main_entity.get_weapon().get_description ())
 		elif Gun.gun_out_of_ammo_notification == notification_name and poster.owner == main_entity :

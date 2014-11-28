@@ -158,8 +158,7 @@ class Entity (pygame.sprite.Sprite) :
 							v_y = max (v_y, entity.rect.bottom - self.rect.top)
 
 			#update the actual rect
-			self.velocity = v_x, v_y
-			self.rect.move_ip (*self.velocity)
+			self.rect.move_ip (v_x, v_y)
 
 			#update grounded
 			if self.physical :
@@ -171,6 +170,10 @@ class Entity (pygame.sprite.Sprite) :
 						self.grounded = True
 						break
 
+		#finally update velocity
+		self.velocity = v_x, v_y
+
+		#update the image
 		self.update_image ()
 
 	#called after update
