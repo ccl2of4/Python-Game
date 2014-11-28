@@ -32,12 +32,14 @@ platform
 #############
 #defend point
 #############
+
 defend_point
 400 380 20 100
 
 ########
 #weapons
 ########
+
 gun : 10 * explosive_bullet, 50 * bullet
 100 300 40 10
 
@@ -53,12 +55,14 @@ bomb
 ##########
 #player
 ##########
+
 player
 20 400 46 80
 
 ########
 #enemies
 ########
+
 enemy
 1000 0 46 80
 
