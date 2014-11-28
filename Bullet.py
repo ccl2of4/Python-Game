@@ -2,7 +2,7 @@ from Entity import *
 from Projectile import Projectile
 
 class Bullet (Projectile) :
-	def __init__(self,x=0,y=0,width=0,height=0, **images) :
+	def __init__(self,x=0,y=0,width=5,height=5, **images) :
 		Projectile.__init__ (self,x,y,width,height,**images)
 		self.set_gravity (0)
 		self.set_knockback_factor (5)

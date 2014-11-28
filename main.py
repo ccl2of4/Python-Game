@@ -1,6 +1,6 @@
 import sys, pygame, time
 from Game import Game
-from Player import Player
+from Character import Character
 from Entity import Entity
 from Camera import Camera
 from UserInputEntityController import UserInputEntityController
@@ -20,11 +20,11 @@ def load_level (file_path) :
 
 
 def create_level () :
-	game = Game (800, 400)
-	camera = Camera (800, 400)
+	game = Game ()
+	camera = Camera ()
 	game.set_camera (camera)
 
-	player = Player (50,0,46,80,
+	player = Character (
 		default = 'images/mario_stand.png',
 		stand='images/mario_stand.png',
 		walk='images/mario_walk.png',
@@ -33,18 +33,15 @@ def create_level () :
 	player.set_name ("Main")
 	game.spawn_entity (player)
 	game.set_main_entity (player)
-
-	player_c = UserInputEntityController (player)
-	player.set_info_delegate (player_c)
-	player_c.set_delegate (game)
-	game.add_controller (player_c)
 	player.set_life_controller (LifeController ())
-	status_display = StatusDisplay (10,340,120,50)
+	status_display = StatusDisplay (10,340)
 	status_display.set_client (player)
 	game.spawn_entity_absolute (status_display)
+	player_c = UserInputEntityController (player)
+	game.add_controller (player_c)
 	
 	for i in range (1000,3000,200) :
-		player_ai = Player (i,0,46,80,
+		player_ai = Character (i,0,
 			default = 'images/mario_stand.png',
 			stand='images/mario_stand.png',
 			walk='images/mario_walk.png',
@@ -58,15 +55,15 @@ def create_level () :
 		player_ai.set_life_controller (LifeController ())
 		player_ai.set_status_display (StatusDisplay (width=120,height=50))
 	
-	gun = Gun (150,250,40,5,default='images/platform.png')
+	gun = Gun (150,250, default='images/platform.png')
 	magazine = []
 	for i in range (50) :
-		magazine.append (Bullet (height=5,width=5,default='images/platform.png'))
+		magazine.append (Bullet (default='images/platform.png'))
 	gun.set_magazine (magazine)
 
 	game.spawn_entity (gun)
 
-	bomb = Bomb (200,0,10,10,default='images/platform.png')
+	bomb = Bomb (200,0, default='images/platform.png')
 	game.spawn_entity (bomb)
 
 	platform = Entity (0,300,5000,20,default='images/platform.png')

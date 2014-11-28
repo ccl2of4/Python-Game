@@ -11,7 +11,7 @@ class StatusDisplayClient :
 		pass
 
 class StatusDisplay (Entity) :
-	def __init__(self, x=0, y=0, width=0, height=0) :
+	def __init__(self, x=0, y=0, width=120, height=50) :
 		self.client = None
 		Entity.__init__ (self,x,y,width,height)
 		self.set_physical (False)

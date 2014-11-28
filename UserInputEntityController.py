@@ -1,13 +1,8 @@
 import pygame
 from EntityController import EntityController
 from Entity import *
-from Player import PlayerInfoDelegate
 
-class UserInputEntityControllerDelegate :
-	def log (self, message) :
-		pass
-
-class UserInputEntityController (EntityController, PlayerInfoDelegate) :
+class UserInputEntityController (EntityController) :
 	def __init__ (self, entity) :
 		EntityController.__init__ (self,entity)
 		
@@ -101,17 +96,3 @@ class UserInputEntityController (EntityController, PlayerInfoDelegate) :
 			if not self.attack_needs_reset :
 				self.entity.attack ()
 				self.attack_needs_reset = True
-
-
-	###########################
-	#PlayerInfoDelegate methods
-	###########################
-
-	def player_did_die (self, player) :
-		self.delegate.log ("You died!")
-	def player_did_acquire_weapon (self, player, weapon) :
-		self.delegate.log (weapon.get_description ())
-	def player_did_drop_weapon (self, player, weapon) :
-		pass
-	def player_cannot_drop_weapon (self, player, weapon) :
-		self.delegate.log ("Can't drop weapon here.")

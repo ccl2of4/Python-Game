@@ -4,7 +4,7 @@ from Projectile import Projectile
 from Explosion import Explosion
 
 class Bomb (Weapon, Projectile) :
-	def __init__(self,x=0,y=0,width=0,height=0, **images) :
+	def __init__(self,x=0,y=0,width=10,height=10, **images) :
 		Weapon.__init__ (self,x,y,width,height,**images)
 		Projectile.__init__ (self,x,y,width,height,**images)
 		self.has_been_launched = False

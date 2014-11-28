@@ -3,6 +3,8 @@ import pygame
 from Entity import *
 from StatusDisplay import *
 from LifeController import *
+from NotificationCenter import NotificationCenter
+import NotificationCenter
 
 global running_anim_duration
 running_anim_duraction = 5
@@ -10,18 +12,22 @@ running_anim_duraction = 5
 global walking_anim_duration
 walking_anim_duration = 10
 
-class PlayerInfoDelegate :
-	def player_did_die (self, player) :
-		pass
-	def player_did_acquire_weapon (self, player, weapon) :
-		pass
-	def player_did_drop_weapon (self, player, weapon) :
-		pass
-	def player_cannot_drop_weapon (self, player, weapon) :
-		pass
 
-class Player (Entity, StatusDisplayClient) :
-	def __init__(self,x=0,y=0,width=0,height=0, **images) :
+##############
+#notifications
+##############
+
+global character_died_notification
+character_died_notification = 'character died notification'
+
+global character_cannot_drop_weapon_notification
+character_cannot_drop_weapon_notification = 'character cannot drop weapon notification'
+
+global character_picked_up_weapon_notification
+character_picked_up_weapon_notification = 'character picked up weapon notification'
+
+class Character (Entity, StatusDisplayClient) :
+	def __init__(self,x=0,y=0,width=46,height=80, **images) :
 
 		#used for animation
 		self.walking = False
@@ -38,11 +44,8 @@ class Player (Entity, StatusDisplayClient) :
 		self.run_terminal_velocity_factor = 1.5
 		self.jump_slow_fall_factor = 0.35
 
-		#info delegate
-		self.info_delegate = None
-
 		self.weapon = None
-		self.name = "Player"
+		self.name = "Character"
 		self.life_controller = None
 		self.status_display = None
 		self.status_display_rect = None
@@ -55,7 +58,7 @@ class Player (Entity, StatusDisplayClient) :
 	#phyics config
 	###########################
 
-	#how much acceleration does a jump give the player?
+	#how much acceleration does a jump give the character?
 	def get_jump_acceleration (self) :
 		return self.jump_acceleration
 	def set_jump_acceleration (self, jump_acceleration) :
@@ -68,13 +71,13 @@ class Player (Entity, StatusDisplayClient) :
 	def set_walk_acceleration (self, walk_acceleration) :
 		self.set_walk_acceleration = walk_acceleration
 
-	#maximum speed at which the player can walk
+	#maximum speed at which the character can walk
 	def get_terminal_walk_velocity (self) :
 		return self.terminal_walk_velocity
 	def set_terminal_walk_velocity (self, terminal_walk_velocity) :
 		self.terminal_walk_velocity = terminal_walk_velocity
 
-	#how much faster does the player accelerate when running?
+	#how much faster does the character accelerate when running?
 	def get_run_acceleration_factor (self) :
 		return self.run_acceleration_factor
 	def set_run_acceleration_factor (self, run_acceleration_factor) :
@@ -111,7 +114,7 @@ class Player (Entity, StatusDisplayClient) :
 			return self.weapon.get_description ()
 		return ""
 
-	#player cannot have a status display if it does not have a life controller
+	#character cannot have a status display if it does not have a life controller
 	#	also must already be spawned in before adding status display
 	def get_status_display (self) :
 		return self.status_display
@@ -128,7 +131,7 @@ class Player (Entity, StatusDisplayClient) :
 		self.status_display = status_display
 
 	#update the location of the status display -- make it
-	#	follow the player
+	#	follow the character
 	def update_status_display_rect (self) :
 		if self.status_display != None :
 			self.status_display.rect.centerx = self.rect.centerx
@@ -140,8 +143,6 @@ class Player (Entity, StatusDisplayClient) :
 	#############################
 
 	def life_controller_client_died (self) :
-		if self.info_delegate != None :
-			self.info_delegate.player_did_die (self)
 
 		if self.life_controller != None :
 			pass
@@ -153,8 +154,8 @@ class Player (Entity, StatusDisplayClient) :
 
 		self.delegate.despawn_entity (self)
 
-	#the life controller that monitors this player's life
-	#	players do not need life controllers to function properly
+	#the life controller that monitors this character's life
+	#	characters do not need life controllers to function properly
 	def get_life_controller (self) :
 		return self.life_controller
 	def set_life_controller (self, life_controller) :
@@ -168,17 +169,12 @@ class Player (Entity, StatusDisplayClient) :
 	#actions
 	##############
 
-	def get_info_delegate (self) :
-		return self.info_delegate
-	def set_info_delegate (self, info_delegate) :
-		self.info_delegate = info_delegate
-
-	#the weapon the player is currently carrying
+	#the weapon the character is currently carrying
 	#swap weapons using pick_up/drop
 	def get_weapon (self) :
 		return self.weapon
 
-	#make the player jump
+	#make the character jump
 	def jump (self) :
 		self.jumping = True
 		if self.grounded:
@@ -186,7 +182,7 @@ class Player (Entity, StatusDisplayClient) :
 		else :
 			self.velocity = self.velocity[0], self.velocity[1] - self.jump_slow_fall_factor*self.gravity
 
-	#player advances horizontally in the direction it is facing
+	#character advances horizontally in the direction it is facing
 	def walk (self, running) :
 		self.sliding = False
 		self.running = running
@@ -195,7 +191,7 @@ class Player (Entity, StatusDisplayClient) :
 		self.velocity = self.velocity[0] + accel, self.velocity[1]
 
 
-		#if the player is walking against a very small wall, accelerate
+		#if the character is walking against a very small wall, accelerate
 		#	him up a little so he can just walk over it
 		#this implementaion could be improved
 		for entity in self.delegate.get_all_entities () :
@@ -236,17 +232,12 @@ class Player (Entity, StatusDisplayClient) :
 	def pick_up_weapon (self, weapon) :
 		if weapon.pick_up (self) :
 			self.weapon = weapon
-			if self.info_delegate != None :
-				self.info_delegate.player_did_acquire_weapon (self, self.weapon)
+			NotificationCenter.shared_center().post_notification (self, character_picked_up_weapon_notification)
 	def drop_weapon (self) :
 		if (self.weapon != None) :
 			weapon = self.weapon
-			result = self.do_drop_weapon ()
-			if self.info_delegate != None :
-				if result :
-					self.info_delegate.player_did_drop_weapon (self, weapon)
-				else :
-					self.info_delegate.player_cannot_drop_weapon (self, weapon)
+			if not self.do_drop_weapon () :
+				NotificationCenter.shared_center().post_notification (self, character_cannot_drop_weapon_notification)
 	def do_drop_weapon (self) :
 		assert (self.weapon != None)
 
@@ -282,10 +273,10 @@ class Player (Entity, StatusDisplayClient) :
 		
 		Entity.update (self)
 
-		#make the weapon follow the player around
+		#make the weapon follow the character around
 		self.update_weapon_rect ()
 
-		#make the status display follow the player around
+		#make the status display follow the character around
 		self.update_status_display_rect ()
 
 		#reset all bools for the next update
