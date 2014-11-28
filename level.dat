@@ -35,6 +35,15 @@ platform
 gun : 10 * explosive_bullet, 50 * bullet
 100 300 40 10
 
+bomb
+150 300 10 10
+
+bomb
+170 300 10 10
+
+bomb
+190 300 10 10
+
 ##########
 #player
 ##########

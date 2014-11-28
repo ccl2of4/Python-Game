@@ -130,6 +130,15 @@ class LevelReader :
 				current_entity = gun
 
 
+			#####
+			#bomb
+			#####
+			elif line[0] == 'bomb' :
+				bomb = Bomb (default='images/platform.png')
+				game.spawn_entity (bomb)
+
+				current_entity = bomb
+
 
 			#######################################
 			#coordinates for entity location
