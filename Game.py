@@ -2,6 +2,7 @@ import pygame
 from Entity import EntityDelegate
 from Camera import Camera
 from NotificationCenter import NotificationCenter
+import PerishableEntity
 import Character
 import NotificationCenter
 import Gun
@@ -39,7 +40,7 @@ class Game (EntityDelegate) :
 		main_entity = self.get_main_entity ()
 		if Character.character_cannot_drop_weapon_notification == notification_name and poster == main_entity:
 			self.log ("Cannot drop weapon here")
-		elif Character.character_died_notification == notification_name :
+		elif PerishableEntity.perishable_entity_died_notification == notification_name :
 			if poster == self.get_main_entity () :
 				self.log ("You lost!")
 			else :
@@ -57,7 +58,7 @@ class Game (EntityDelegate) :
 	def get_notification_names (self) :
 		return [
 			Character.character_cannot_drop_weapon_notification,
-			Character.character_died_notification,
+			PerishableEntity.perishable_entity_died_notification,
 			Character.character_picked_up_weapon_notification,
 			Gun.gun_out_of_ammo_notification,
 			PointOfInterest.point_of_interest_reached_notification]

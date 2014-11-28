@@ -1,5 +1,7 @@
 import pygame
 
+from PerishableEntity import PerishableEntity
+from Weapon import Weapon
 from Entity import *
 from StatusDisplay import *
 from LifeController import *
@@ -17,16 +19,13 @@ walking_anim_duration = 10
 #notifications
 ##############
 
-global character_died_notification
-character_died_notification = 'character died notification'
-
 global character_cannot_drop_weapon_notification
 character_cannot_drop_weapon_notification = 'character cannot drop weapon notification'
 
 global character_picked_up_weapon_notification
 character_picked_up_weapon_notification = 'character picked up weapon notification'
 
-class Character (Entity, StatusDisplayClient) :
+class Character (PerishableEntity, StatusDisplayClient) :
 	def __init__(self,x=0,y=0,width=46,height=80, **images) :
 
 		#used for animation
@@ -47,12 +46,13 @@ class Character (Entity, StatusDisplayClient) :
 		self.hostile = False
 		self.weapon = None
 		self.name = "Character"
-		self.life_controller = None
 		self.status_display = None
 		self.status_display_rect = None
 
 		#can't call init before we know which image we're going to use
-		Entity.__init__ (self,x,y,width,height,**images)
+		PerishableEntity.__init__ (self,x,y,width,height,**images)
+
+		self.set_mass (1)
 
 
 	###########################
@@ -103,9 +103,9 @@ class Character (Entity, StatusDisplayClient) :
 	############################
 
 	def get_health (self) :
-		return self.life_controller.get_health ()
+		return self.get_life_controller().get_health ()
 	def get_max_health (self) :
-		return self.life_controller.get_max_health ()
+		return self.get_life_controller().get_max_health ()
 	def get_name (self) :
 		return self.name
 	def set_name (self, name) :
@@ -115,8 +115,6 @@ class Character (Entity, StatusDisplayClient) :
 			return self.weapon.get_description ()
 		return ""
 
-	#character cannot have a status display if it does not have a life controller
-	#	also must already be spawned in before adding status display
 	def get_status_display (self) :
 		return self.status_display
 	def set_status_display (self, status_display) :
@@ -138,14 +136,10 @@ class Character (Entity, StatusDisplayClient) :
 			self.status_display.rect.centerx = self.rect.centerx
 			self.status_display.rect.bottom = self.rect.top - 5
 
-
-	#############################
-	#LifeControllerClient methods
-	#############################
-
+	############################
+	#PerishableEntity refinement
+	############################
 	def life_controller_client_died (self) :
-		NotificationCenter.shared_center().post_notification (self, character_died_notification)
-
 		if self.life_controller != None :
 			pass
 		if self.weapon != None :
@@ -153,19 +147,7 @@ class Character (Entity, StatusDisplayClient) :
 				self.delegate.despawn_entity (self.weapon)
 		if self.status_display != None :
 			self.delegate.despawn_entity (self.status_display)
-
-		self.delegate.despawn_entity (self)
-
-	#the life controller that monitors this character's life
-	#	characters do not need life controllers to function properly
-	def get_life_controller (self) :
-		return self.life_controller
-	def set_life_controller (self, life_controller) :
-		if self.life_controller :
-			self.life_controller.set_client (None)
-		if life_controller :
-			life_controller.set_client (self)
-		self.life_controller = life_controller
+		PerishableEntity.life_controller_client_died (self)
 
 	##############
 	#actions
@@ -227,16 +209,8 @@ class Character (Entity, StatusDisplayClient) :
 			elif touching == Location.left and self.direction == Direction.left :
 				entity.was_attacked((-20,-10), 2)
 
-	def was_attacked (self, knockback, damage) :
-		self.velocity = self.velocity[0] + knockback[0], self.velocity[1] + knockback[1]
-		if self.life_controller != None :
-			self.life_controller.receive_damage (damage)
-
-	def found_weapon (self, weapon) :
-		if self.weapon == None :
-			self.pick_up_weapon (weapon)
-
 	def pick_up_weapon (self, weapon) :
+		assert (self.weapon == None)
 		if weapon.pick_up (self) :
 			self.weapon = weapon
 			NotificationCenter.shared_center().post_notification (self, character_picked_up_weapon_notification)
@@ -277,6 +251,13 @@ class Character (Entity, StatusDisplayClient) :
 		#slow the character if not inputing anything
 		if not self.walking and not self.running :
 			self.velocity = self.velocity[0]*.99, self.velocity[1]
+
+		#look for any weapons lying around
+		if self.weapon == None :
+			for entity in self.delegate.get_all_entities () :
+				if isinstance (entity, Weapon) and get_touching (self.rect, entity.rect) != Location.none :
+					self.pick_up_weapon (entity)
+					break
 
 		Entity.update (self)
 

@@ -98,13 +98,15 @@ class Entity (pygame.sprite.Sprite) :
 				and not (self in entity.pass_through_entities))
 
 	#called when the entity is attacked by another entity
-	#can be overriden in subclasses
+	#	can be refined in subclasses
+	#	default implementation only looks at knockback
 	def was_attacked (self, knockback, damage) :
-		pass
+		if self.mass > 0 :
+			self.velocity = self.velocity[0] + knockback[0], self.velocity[1] + knockback[1]
 
-	#called when the entity touches an available weapon
-	#can be overriden in subclass
-	def found_weapon (self, weapon) :
+	#another entity wants to interact with this entity.
+	#	do something interesting
+	def interact (self, entity) :
 		pass
 
 	#can be overriden in subclasses

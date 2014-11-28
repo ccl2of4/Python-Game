@@ -50,11 +50,4 @@ class Weapon (Entity) :
 		return True
 
 	def update (self) :
-		if self.owner == None :			
-			entities = self.delegate.get_all_entities ()
-			for entity in entities :
-				touching = get_touching (entity.rect, self.rect)
-				if touching :
-					entity.found_weapon (self)
-
 		Entity.update (self)

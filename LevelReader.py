@@ -8,10 +8,10 @@ from AIEntityController import AIEntityController
 from Gun import Gun
 from Bomb import Bomb
 from StatusDisplay import StatusDisplay
-from LifeController import LifeController
 from Bullet import Bullet
 from ExplosiveBullet import ExplosiveBullet
 from PointOfInterest import PointOfInterest
+from PerishableEntity import PerishableEntity
 
 def string_to_int (string) :
 	return int (string)
@@ -57,7 +57,6 @@ class LevelReader :
 				player_c = UserInputEntityController (player)
 				game.spawn_entity (player, player_c)
 				game.set_main_entity (player)
-				player.set_life_controller (LifeController ())
 				status_display = StatusDisplay (10,340)
 				status_display.set_client (player)
 				game.spawn_entity_absolute (status_display)
@@ -84,7 +83,6 @@ class LevelReader :
 				player_ai_c.set_target_entity (game.get_defend_points ()[0])
 				game.spawn_entity (player_ai, player_ai_c)
 				game.get_enemies().append (player_ai)
-				player_ai.set_life_controller (LifeController ())
 				player_ai.set_status_display (StatusDisplay (100,50))
 
 				current_entity = player_ai
@@ -101,6 +99,17 @@ class LevelReader :
 
 				current_entity = platform
 
+
+			##################
+			#destructible wall
+			##################
+			elif line[0] == 'destructible_wall' :
+				assert current_entity == None
+				wall = PerishableEntity (default='images/platform.png')
+				wall.set_gravity (0)
+				game.spawn_entity (wall)
+
+				current_entity = wall
 
 
 			#######

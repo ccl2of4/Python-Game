@@ -34,6 +34,16 @@ class Bomb (Weapon, Projectile) :
 
 		self.launch ((v_x,v_y))
 
+	def drop (self, drop_rect) :
+		if self.has_been_launched :
+			return False
+		return Weapon.drop (self, drop_rect)
+
+	def pick_up (self, owner) :
+		if self.has_been_launched :
+			return False
+		return Weapon.pick_up (self, owner)
+
 	def launch (self, velocity) :
 		Projectile.launch (self, velocity)
 		self.has_been_launched = True

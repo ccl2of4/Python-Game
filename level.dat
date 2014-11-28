@@ -18,8 +18,12 @@ platform
 0 200 20 300
 
 #right wall
+#platform
+#400 200 20 180
+
+#cannon platform
 platform
-400 200 20 180
+300 360 100 20
 
 #roof
 platform
@@ -29,12 +33,15 @@ platform
 platform
 420 490 40 10
 
+destructible_wall
+380 310 20 50
+
 #############
 #defend point
 #############
 
 defend_point
-400 380 20 100
+360 380 20 100
 
 ########
 #weapons
