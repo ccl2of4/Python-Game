@@ -70,7 +70,7 @@ class LevelReader :
 			#enemy
 			######
 			elif line[0] == 'enemy' :
-				assert game.get_main_entity () != None
+				assert len (game.get_defend_points ()) > 0
 				assert current_entity == None
 				player_ai = Character (
 					default = 'images/mario_stand.png',
@@ -81,8 +81,9 @@ class LevelReader :
 				player_ai.set_name ("AI")
 				player_ai.set_hostile (True)
 				player_ai_c = AIEntityController (player_ai)
-				player_ai_c.set_target_entity (game.get_main_entity ())
+				player_ai_c.set_target_entity (game.get_defend_points ()[0])
 				game.spawn_entity (player_ai, player_ai_c)
+				game.get_enemies().append (player_ai)
 				player_ai.set_life_controller (LifeController ())
 				player_ai.set_status_display (StatusDisplay (100,50))
 
@@ -143,9 +144,9 @@ class LevelReader :
 			#defend point
 			#############
 			elif line[0] == 'defend_point' :
-				point_of_interest = PointOfInterest (default='images/platform.png')
+				point_of_interest = PointOfInterest ()
 				game.spawn_entity (point_of_interest)
-
+				game.get_defend_points().append (point_of_interest)
 				current_entity = point_of_interest
 
 

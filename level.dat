@@ -29,6 +29,12 @@ platform
 platform
 420 490 40 10
 
+#############
+#defend point
+#############
+defend_point
+400 380 20 100
+
 ########
 #weapons
 ########
@@ -43,12 +49,6 @@ bomb
 
 bomb
 190 300 10 10
-
-#############
-#defend point
-#############
-defend_point
-400 470 20 10
 
 ##########
 #player

@@ -23,6 +23,8 @@ class Game (EntityDelegate) :
 		self.log_message = None
 		self.log_message_duration = None
 		self.in_settings = False
+		self.defend_points = []
+		self.enemies = []
 
 		#settings stuff
 		self.settings_button_needs_reset = False
@@ -47,7 +49,9 @@ class Game (EntityDelegate) :
 		elif Gun.gun_out_of_ammo_notification == notification_name and poster.owner == main_entity :
 			self.log ("Out of ammo!")
 		elif PointOfInterest.point_of_interest_reached_notification == notification_name :
-			pass
+			entity = info['entity']
+			if poster in self.get_defend_points () and entity in self.get_enemies () :
+				self.log ("You lose!")
 
 	#notification names for which the game registers
 	def get_notification_names (self) :
@@ -56,8 +60,7 @@ class Game (EntityDelegate) :
 			Character.character_died_notification,
 			Character.character_picked_up_weapon_notification,
 			Gun.gun_out_of_ammo_notification,
-			PointOfInterest.point_of_interest_reached_notification
-		]
+			PointOfInterest.point_of_interest_reached_notification]
 
 	#the camera used to scroll the screen
 	def get_camera (self) :
@@ -65,11 +68,24 @@ class Game (EntityDelegate) :
 	def set_camera (self, camera) :
 		self.camera = camera
 
-	#the entity that the camera should follow
+	#the main entity in the game. this is the entity that the camera follows.
 	def get_main_entity (self) :
 		return self.camera.get_target ()
 	def set_main_entity (self, entity) :
 		self.camera.set_target (entity)
+
+	#the enemies in the game. if the enemies reach the defend points,
+	#	the player loses
+	def get_enemies (self) :
+		return self.enemies
+	def set_enemeies (self, enemies) :
+		self.enemies = enemies
+
+	#if enemies reach these points, the player loses
+	def get_defend_points (self) :
+		return self.defend_points
+	def set_defend_points (self, defend_points) :
+		self.defend_points = defend_points
 
 	#log a message to the top of the game screen
 	def log (self, message) :
@@ -98,10 +114,6 @@ class Game (EntityDelegate) :
 
 
 	def update_settings (self) :
-		#rendering
-		#self.screen.fill ((255,255,255))
-
-		#pygame.display.flip ()
 		pygame.event.pump ()
 
 
