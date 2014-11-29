@@ -221,6 +221,7 @@ class LevelReader :
 							player_ai.set_hostile (True)
 							player_ai_c = AIEntityController ()
 							player_ai.set_controller (player_ai_c)
+							player_ai.set_status_display (StatusDisplay ())
 							player_ai_c.set_target_entity (game.get_defend_points ()[0])
 							game.get_enemies().append (player_ai)
 							entities_list.append (player_ai)

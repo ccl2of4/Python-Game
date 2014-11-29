@@ -13,7 +13,7 @@ class EntitySpawner (Entity) :
 		self.set_physical (False)
 
 		self.entities = []
-		self.cooldown = 120
+		self.cooldown = 600
 		self.data_source = None
 		self.frames_till_next_spawn = 0
 

@@ -22,7 +22,7 @@ class Game (EntityDelegate) :
 		self.time_since_last_update = 0
 		self.screen = pygame.display.set_mode((width, height))
 		self.clock = pygame.time.Clock ()
-		self.all_entities = pygame.sprite.OrderedUpdates ()
+		self.all_entities = pygame.sprite.LayeredUpdates ()
 		self.camera = camera
 		self.log_message = None
 		self.log_message_duration = None
@@ -126,7 +126,6 @@ class Game (EntityDelegate) :
 		#update entities
 		self.all_entities.update ()
 
-		
 		#camera
 		assert self.camera != None
 		self.camera.update ()

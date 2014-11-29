@@ -5,6 +5,9 @@ class Weapon (MoveableEntity) :
 
 	def __init__ (self,x=0,y=0,width=0,height=0, **images) :
 		MoveableEntity.__init__ (self,x,y,width,height,**images)
+
+		self._layer = 10
+
 		self.set_physical (True)
 		self.set_gravity (1.0)
 		self.owner = None
@@ -48,6 +51,7 @@ class Weapon (MoveableEntity) :
 	def pick_up (self, owner) :
 		if self.owner != None :
 			return False
+		self.velocity = (0,0)
 		self.set_physical (False)
 		self.set_gravity (0.0)
 		self.owner = owner

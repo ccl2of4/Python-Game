@@ -5,8 +5,8 @@ from explosion import Explosion
 
 class Bomb (Weapon, Projectile) :
 	def __init__(self,x=0,y=0,width=10,height=10, **images) :
-		Weapon.__init__ (self,x,y,width,height,**images)
 		Projectile.__init__ (self,x,y,width,height,**images)
+		Weapon.__init__ (self,x,y,width,height,**images)
 		self.has_been_launched = False
 		self.set_knockback_factor (5)
 		self.damage = 5

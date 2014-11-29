@@ -109,5 +109,5 @@ bomb
 #spawner
 ########
 
-#entity_spawner : 10 * enemy
-#1000 100 200 200
+entity_spawner : 10 * enemy
+1000 100 200 200

@@ -46,6 +46,9 @@ class Character (PerishableEntity, MoveableEntity, StatusDisplayClient) :
 		self.run_terminal_velocity_factor = 1.5
 		self.jump_slow_fall_factor = 0.25
 
+
+		self.status_display_needs_spawn = False
+
 		self.hostile = False
 		self.weapon = None
 		self.name = "Character"
@@ -123,20 +126,25 @@ class Character (PerishableEntity, MoveableEntity, StatusDisplayClient) :
 		return self.status_display
 	def set_status_display (self, status_display) :
 		assert (self.life_controller != None)
-		assert (self.delegate != None)
 
 		if self.status_display :
 			self.status_display.set_client (None)
+			assert (self.delegate != None)
 			self.delegate.despawn_entity (self.status_display)
 		if status_display :
 			status_display.set_client (self)
-			self.delegate.spawn_entity (status_display)
+			if self.delegate != None :
+				self.delegate.spawn_entity (status_display)
+			else :
+				self.status_display_needs_spawn = True
 		self.status_display = status_display
 
 	#update the location of the status display -- make it
 	#	follow the character
 	def update_status_display_rect (self) :
 		if self.status_display != None :
+			if self.status_display_needs_spawn :
+				self.delegate.spawn_entity (self.status_display)
 			self.status_display.rect.centerx = self.rect.centerx
 			self.status_display.rect.bottom = self.rect.top - 5
 

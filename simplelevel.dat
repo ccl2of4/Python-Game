@@ -1,0 +1,59 @@
+################
+#ground platform
+################
+
+platform
+0 500 2000 500
+
+###########
+#base
+###########
+
+#floor
+platform
+0 480 420 20
+
+#left wall
+platform
+0 200 20 300
+
+#right wall
+#platform
+#400 200 20 180
+
+#cannon platform
+platform
+300 360 100 20
+
+#roof
+platform
+0 200 400 20
+
+#stairs
+platform
+420 490 40 10
+
+destructible_wall
+380 310 20 50
+
+#############
+#defend point
+#############
+
+defend_point
+360 380 20 100
+
+##########
+#player
+##########
+
+player
+20 400 46 80
+
+
+########
+#weapons
+########
+
+autofirearm : 10 * shotgun_shell
+100 270 70 21

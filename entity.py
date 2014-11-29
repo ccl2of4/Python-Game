@@ -22,6 +22,8 @@ class Entity (pygame.sprite.Sprite) :
 	def __init__ (self,x=0, y=0,width=0,height=0,**images) :
 		pygame.sprite.Sprite.__init__ (self)
 
+		self._layer = 0
+
 		#instance variables
 		self.direction = Direction.right
 		self.images = images
