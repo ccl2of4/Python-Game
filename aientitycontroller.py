@@ -22,6 +22,9 @@ class AIEntityController (EntityController) :
 		else :
 			self.entity.set_direction (Direction.left)
 
+		if self.entity.get_weapon () == None :
+			self.entity.find_weapon ()
+
 		if random.randint (0,60) < 10 :
 			self.entity.walk (False)
 		if random.randint (0,60) == 1 :

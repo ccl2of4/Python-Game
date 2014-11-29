@@ -236,6 +236,14 @@ class Character (PerishableEntity, MoveableEntity, StatusDisplayClient) :
 		MoveableEntity.was_attacked (self, knockback, damage)
 		PerishableEntity.was_attacked (self, knockback, damage)
 
+	#look for any weapons lying around
+	def find_weapon (self) :
+		if self.weapon == None :
+			for entity in self.delegate.get_all_entities () :
+				if isinstance (entity, Weapon) and get_touching (self.rect, entity.rect) != Location.none :
+					self.pick_up_weapon (entity)
+					break
+
 	def pick_up_weapon (self, weapon) :
 		assert (self.weapon == None)
 		if weapon.pick_up (self) :
@@ -278,13 +286,6 @@ class Character (PerishableEntity, MoveableEntity, StatusDisplayClient) :
 		#slow the character if not inputing anything
 		if not self.walking and not self.running :
 			self.velocity = self.velocity[0]*.99, self.velocity[1]
-
-		#look for any weapons lying around
-		if self.weapon == None :
-			for entity in self.delegate.get_all_entities () :
-				if isinstance (entity, Weapon) and get_touching (self.rect, entity.rect) != Location.none :
-					self.pick_up_weapon (entity)
-					break
 
 		PerishableEntity.update (self)
 		MoveableEntity.update (self)

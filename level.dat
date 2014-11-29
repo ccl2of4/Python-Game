@@ -1,9 +1,18 @@
 ################
-#ground platform
+#bounding box
 ################
 
 platform
-0 500 2000 500
+-500 500 3000 500
+
+platform
+-500 -500 3000 500
+
+platform
+2000 0 500 500
+
+platform
+-500 0 500 500
 
 ###########
 #base

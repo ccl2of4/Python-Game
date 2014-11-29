@@ -113,7 +113,15 @@ class Entity (pygame.sprite.Sprite) :
 				self.image = pygame.transform.flip (self.image, True, False).convert ()
 				resource.set_image (key, self.image)
 		self.image.set_colorkey ((255,255,255))
-		self.scale_image ()
+		
+		if self.width != 0 or self.height != 0 :
+			key = key + str (self.width) + str(self.height)
+			if resource.has_image (key) :
+				self.image = resource.get_image (key)
+			else :
+				self.scale_image ()
+				resource.set_image (key, self.image)
+
 	def scale_image (self) :
 		if self.width != 0 or self.height != 0 :
 			self.image = pygame.transform.scale (self.image, (self.width,self.height))
