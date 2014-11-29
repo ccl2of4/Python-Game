@@ -30,7 +30,7 @@ platform
 #platform
 #400 200 20 180
 
-#cannon platform
+#above platform
 platform
 300 360 100 20
 
@@ -43,7 +43,7 @@ platform
 420 490 40 10
 
 destructible_wall
-380 310 20 50
+480 450 20 50
 
 #############
 #defend point

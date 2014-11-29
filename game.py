@@ -142,7 +142,9 @@ class Game (EntityDelegate) :
 			percent = min (1.0, self.log_message_duration/60.0)
 			if percent < 1 :
 				font = pygame.font.Font (None, 36)
-				text = font.render (self.log_message, 1, (percent*255, percent*255, percent*255))
+				color = (100, 100, 100)
+				text = font.render (self.log_message, False, color, (255,255,255)).convert ()
+				text.set_colorkey ((255,255,255))
 				textpos = text.get_rect ()
 				textpos.centerx = self.screen.get_rect().centerx
 				self.screen.blit (text, textpos)

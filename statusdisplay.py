@@ -15,6 +15,7 @@ class StatusDisplay (Entity) :
 		self.client = None
 		Entity.__init__ (self,x,y,width,height)
 		self.set_physical (False)
+		self._layer = 10
 
 	def get_client (self) :
 		return self.client
@@ -52,7 +53,7 @@ class StatusDisplay (Entity) :
 
 	def add_name (self) :
 		font = pygame.font.Font (None, 20)
-		text = font.render (self.client.get_name (), 1, (0,0,0))
+		text = font.render (self.client.get_name (), False, (100,100,100), (255,255,255)).convert ()
 		textpos = text.get_rect ()
 		textpos.centerx = self.image.get_rect().centerx
 		textpos.top = self.image.get_rect().top
@@ -60,7 +61,7 @@ class StatusDisplay (Entity) :
 
 	def add_weapon (self) :
 		font = pygame.font.Font (None, 20)
-		text = font.render (self.client.get_weapon_str (), 1, (0,0,0))
+		text = font.render (self.client.get_weapon_str (), False, (100,100,100), (255,255,255)).convert ()
 		textpos = text.get_rect ()
 		textpos.centerx = self.image.get_rect().centerx
 		textpos.centery = self.image.get_rect().centery

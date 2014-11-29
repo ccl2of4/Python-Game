@@ -17,12 +17,6 @@ from moveableentity import MoveableEntity
 from automaticfirearm import AutomaticFirearm
 from entityspawner import EntitySpawner
 
-def string_to_int (string) :
-	return int (string)
-
-def strip_string (string) :
-	return string.strip ()
-
 class LevelReader :
 	def __init__ (self) :
 		self.current_platform = None
@@ -39,7 +33,7 @@ class LevelReader :
 		for line in file :
 			line = line.strip ()
 			line = line.split (':')
-			line = map (strip_string, line)
+			line = map (lambda string : string.strip (), line)
 
 			if line[0] == '' or line[0][0] == "#":
 				continue
@@ -124,7 +118,7 @@ class LevelReader :
 
 				for ammo in line[1].split (',') :
 					info = ammo.split ('*')
-					info = map (strip_string, info)
+					info = map (lambda string : string.strip (), info)
 					count = int (info[0])
 					if info[1] == 'explosive_bullet' :
 						for i in range (count) :
@@ -155,7 +149,7 @@ class LevelReader :
 
 				for ammo in line[1].split (',') :
 					info = ammo.split ('*')
-					info = map (strip_string, info)
+					info = map (lambda string : string.strip (), info)
 					count = int (info[0])
 					if info[1] == 'explosive_bullet' :
 						for i in range (count) :
@@ -206,7 +200,7 @@ class LevelReader :
 
 				for entities in line[1].split (',') :
 					info = entities.split ('*')
-					info = map (strip_string, info)
+					info = map (lambda string : string.strip (), info)
 					count = int (info[0])
 					if info[1] == 'enemy' :
 						for i in range (count) :
@@ -239,7 +233,7 @@ class LevelReader :
 			else :
 				coords = line[0].split ()
 				assert (len (coords) == 4)
-				coords = map (string_to_int, coords)
+				coords = map (lambda string : int (string), coords)
 				x,y,width,height = coords
 				current_entity.rect = pygame.Rect (*coords)
 				current_entity.width, current_entity.height = width, height
