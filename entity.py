@@ -92,9 +92,15 @@ class Entity (pygame.sprite.Sprite) :
 	#can be overridden. if the a subclass wishes to allow image scaling,
 	#	it should call scale_image afterward
 	def update_image (self) :
-		self.image = resource.get_image (self.images['default'])
+		key = self.images['default']
+		self.image = resource.get_image (key)
 		if self.direction == Direction.left :
-			self.image = pygame.transform.flip (self.image, True, False)
+			key += 'flip'
+			if resource.has_image (key) :
+				self.image = resource.get_image (key)
+			else :
+				self.image = pygame.transform.flip (self.image, True, False)
+				resource.set_image (key, self.image)
 		self.image.set_colorkey ((255,255,255))
 		self.scale_image ()
 	def scale_image (self) :

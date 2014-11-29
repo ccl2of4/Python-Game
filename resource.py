@@ -55,6 +55,14 @@ def get_image(filename, force_reload = 0):
     else:
         return __images[filename]
 
+def set_image (filename, surface):
+    '''
+    '''
+    if not __images_path:
+        raise ValueError, "resources.set_images_path() not called yet."
+    assert (filename not in __images.keys ())
+    __images[filename] = surface
+
 def has_image(filename):
     """
     has_image(filename) --&gt; Boolean
