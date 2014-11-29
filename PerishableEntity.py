@@ -1,7 +1,7 @@
-from Entity import Entity
-from LifeController import LifeControllerClient
-from LifeController import LifeController
-import NotificationCenter
+from entity import Entity
+from lifecontroller import LifeControllerClient
+from lifecontroller import LifeController
+from notificationcenter import NotificationCenter
 
 global perishable_entity_died_notification
 perishable_entity_died_notification = 'perishable entity died notification'

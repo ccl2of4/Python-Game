@@ -195,6 +195,7 @@ class Entity (pygame.sprite.Sprite) :
 		self.image = resource.get_image (self.images['default'])
 		if self.direction == Direction.left :
 			self.image = pygame.transform.flip (self.image, True, False)
+		self.image.set_colorkey ((255,255,255))
 		self.scale_image ()
 	def scale_image (self) :
 		if self.width != 0 or self.height != 0 :

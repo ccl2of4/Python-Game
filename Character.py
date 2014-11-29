@@ -2,13 +2,13 @@ import pygame
 
 import resource
 
-from PerishableEntity import PerishableEntity
-from Weapon import Weapon
-from Entity import *
-from StatusDisplay import *
-from LifeController import *
-from NotificationCenter import NotificationCenter
-import NotificationCenter
+from perishableentity import PerishableEntity
+from weapon import Weapon
+from entity import *
+from statusdisplay import *
+from lifecontroller import *
+from notificationcenter import NotificationCenter
+import notificationcenter
 
 global running_anim_duration
 running_anim_duraction = 5

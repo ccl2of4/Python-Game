@@ -1,12 +1,11 @@
 import pygame
-from Entity import EntityDelegate
-from Camera import Camera
-from NotificationCenter import NotificationCenter
-import PerishableEntity
-import Character
-import NotificationCenter
-import Gun
-import PointOfInterest
+from entity import EntityDelegate
+from camera import Camera
+from notificationcenter import NotificationCenter
+import perishableentity
+import character
+import gun
+import pointofinterest
 import resource
 
 class Positioning :
@@ -40,18 +39,18 @@ class Game (EntityDelegate) :
 	#notification handling
 	def notify (self, poster, notification_name, **info) :
 		main_entity = self.get_main_entity ()
-		if Character.character_cannot_drop_weapon_notification == notification_name and poster == main_entity:
+		if character.character_cannot_drop_weapon_notification == notification_name and poster == main_entity:
 			self.log ("Cannot drop weapon here")
-		elif PerishableEntity.perishable_entity_died_notification == notification_name :
+		elif perishableentity.perishable_entity_died_notification == notification_name :
 			if poster == self.get_main_entity () :
 				self.log ("You lost!")
 			else :
 				pass
-		elif Character.character_picked_up_weapon_notification == notification_name and poster == main_entity :
+		elif character.character_picked_up_weapon_notification == notification_name and poster == main_entity :
 			self.log (main_entity.get_weapon().get_description ())
-		elif Gun.gun_out_of_ammo_notification == notification_name and poster.owner == main_entity :
+		elif gun.gun_out_of_ammo_notification == notification_name and poster.owner == main_entity :
 			self.log ("Out of ammo!")
-		elif PointOfInterest.point_of_interest_reached_notification == notification_name :
+		elif pointofinterest.point_of_interest_reached_notification == notification_name :
 			entity = info['entity']
 			if poster in self.get_defend_points () and entity in self.get_enemies () :
 				self.log ("You lose!")
@@ -59,11 +58,11 @@ class Game (EntityDelegate) :
 	#notification names for which the game registers
 	def get_notification_names (self) :
 		return [
-			Character.character_cannot_drop_weapon_notification,
-			PerishableEntity.perishable_entity_died_notification,
-			Character.character_picked_up_weapon_notification,
-			Gun.gun_out_of_ammo_notification,
-			PointOfInterest.point_of_interest_reached_notification]
+			character.character_cannot_drop_weapon_notification,
+			perishableentity.perishable_entity_died_notification,
+			character.character_picked_up_weapon_notification,
+			gun.gun_out_of_ammo_notification,
+			pointofinterest.point_of_interest_reached_notification]
 
 	#the camera used to scroll the screen
 	def get_camera (self) :

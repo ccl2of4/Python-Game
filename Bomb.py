@@ -1,7 +1,7 @@
-from Entity import *
-from Weapon import Weapon
-from Projectile import Projectile
-from Explosion import Explosion
+from entity import *
+from weapon import Weapon
+from projectile import Projectile
+from explosion import Explosion
 
 class Bomb (Weapon, Projectile) :
 	def __init__(self,x=0,y=0,width=10,height=10, **images) :

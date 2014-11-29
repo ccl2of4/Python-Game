@@ -1,5 +1,5 @@
-from Projectile import Projectile
-from Bullet import Bullet
+from projectile import Projectile
+from bullet import Bullet
 
 class ShotgunShell (Projectile) :
 	def __init__ (self,x=0,y=0,width=10,height=10, **images) :

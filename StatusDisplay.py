@@ -1,4 +1,4 @@
-from Entity import *
+from entity import *
 
 class StatusDisplayClient :
 	def get_health (self) :

@@ -1,6 +1,6 @@
 import pygame
-import NotificationCenter
-from Entity import *
+from notificationcenter import NotificationCenter
+from entity import *
 
 global point_of_interest_reached_notification
 point_of_interest_reached_notification = 'point of interest reached notification'

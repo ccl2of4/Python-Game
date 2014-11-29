@@ -1,5 +1,5 @@
-from EntityController import EntityController
-from Entity import *
+from entitycontroller import EntityController
+from entity import *
 import random
 
 class AIEntityController (EntityController) :

@@ -1,5 +1,5 @@
-from Bullet import Bullet
-from Explosion import Explosion
+from bullet import Bullet
+from explosion import Explosion
 
 class ExplosiveBullet (Bullet) :
 	def __init__(self,x=0,y=0,width=5,height=5, **images) :

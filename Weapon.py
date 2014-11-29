@@ -1,4 +1,4 @@
-from Entity import *
+from entity import *
 
 class Weapon (Entity) :
 

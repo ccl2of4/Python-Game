@@ -1,11 +1,11 @@
 import pygame
 
-from Entity import *
-from Bullet import Bullet
-from Weapon import Weapon
-from ExplosiveBullet import ExplosiveBullet
-from NotificationCenter import NotificationCenter
-import NotificationCenter
+from entity import *
+from bullet import Bullet
+from weapon import Weapon
+from explosivebullet import ExplosiveBullet
+from notificationcenter import NotificationCenter
+import notificationcenter
 
 global gun_out_of_ammo_notification
 gun_out_of_ammo_notification = 'gun out of ammo notification'

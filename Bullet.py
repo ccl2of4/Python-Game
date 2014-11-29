@@ -1,5 +1,5 @@
-from Entity import *
-from Projectile import Projectile
+from entity import *
+from projectile import Projectile
 
 class Bullet (Projectile) :
 	def __init__(self,x=0,y=0,width=5,height=5, **images) :

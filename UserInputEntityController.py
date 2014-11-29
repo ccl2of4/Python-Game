@@ -1,6 +1,6 @@
 import pygame
-from EntityController import EntityController
-from Entity import *
+from entitycontroller import EntityController
+from entity import *
 
 class UserInputEntityController (EntityController) :
 	def __init__ (self, entity) :

@@ -1,18 +1,18 @@
 import sys, pygame, time
-from Game import Game
-from Character import Character
-from Entity import Entity
-from Camera import Camera
-from UserInputEntityController import UserInputEntityController
-from AIEntityController import AIEntityController
-from Gun import Gun
-from Bomb import Bomb
-from StatusDisplay import StatusDisplay
-from Bullet import Bullet
-from ExplosiveBullet import ExplosiveBullet
-from PointOfInterest import PointOfInterest
-from PerishableEntity import PerishableEntity
-from ShotgunShell import ShotgunShell
+from game import Game
+from character import Character
+from entity import Entity
+from camera import Camera
+from userinputentitycontroller import UserInputEntityController
+from aientitycontroller import AIEntityController
+from gun import Gun
+from bomb import Bomb
+from statusdisplay import StatusDisplay
+from bullet import Bullet
+from explosivebullet import ExplosiveBullet
+from pointofinterest import PointOfInterest
+from perishableentity import PerishableEntity
+from shotgunshell import ShotgunShell
 
 def string_to_int (string) :
 	return int (string)
@@ -117,7 +117,7 @@ class LevelReader :
 			#gun
 			#######
 			elif line[0] == 'gun' :
-				gun = Gun (0,0,70,21,default='images/Spas - 12.png')
+				gun = Gun (default='images/platform.png')
 				magazine = []
 
 				for ammo in line[1].split (',') :
