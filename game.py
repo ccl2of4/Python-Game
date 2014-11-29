@@ -1,7 +1,9 @@
 import pygame
+
 from entity import EntityDelegate
 from camera import Camera
 from notificationcenter import NotificationCenter
+
 import perishableentity
 import character
 import gun
