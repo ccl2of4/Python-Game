@@ -99,7 +99,7 @@ class Entity (pygame.sprite.Sprite) :
 			if resource.has_image (key) :
 				self.image = resource.get_image (key)
 			else :
-				self.image = pygame.transform.flip (self.image, True, False)
+				self.image = pygame.transform.flip (self.image, True, False).convert ()
 				resource.set_image (key, self.image)
 		self.image.set_colorkey ((255,255,255))
 		self.scale_image ()
