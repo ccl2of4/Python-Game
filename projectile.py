@@ -1,9 +1,10 @@
 import pygame
 from entity import *
+from moveableentity import MoveableEntity
 
-class Projectile (Entity) :
+class Projectile (MoveableEntity) :
 	def __init__(self,x=0,y=0,width=0,height=0, **images) :
-		Entity.__init__ (self,x,y,width,height,**images)
+		MoveableEntity.__init__ (self,x,y,width,height,**images)
 		self.frames_to_live = 60
 		self.knockback_factor = 1.0
 		self.damage = 0
@@ -43,7 +44,7 @@ class Projectile (Entity) :
 		if self.frames_to_live < 0 :
 			self.delegate.despawn_entity (self)
 
-		Entity.update (self)
+		MoveableEntity.update (self)
 
 		#check if projectile made contact after the update
 		entities = self.delegate.get_all_entities ()

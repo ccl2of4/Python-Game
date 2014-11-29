@@ -23,13 +23,8 @@ class Entity (pygame.sprite.Sprite) :
 		self.width = width
 		self.height = height
 		self.physical = True
-		self.velocity = (0,0)
-		self.grounded = False
-		self.sliding = True
 		self.delegate = None
 		self.image = None
-		self.mass = 0
-		self.gravity = 1.0
 		self.update_image ()
 		self.rect = self.image.get_rect().move (x,y)
 		self.pass_through_entities = []
@@ -44,30 +39,11 @@ class Entity (pygame.sprite.Sprite) :
 	def set_delegate (self, delegate) :
 		self.delegate = delegate
 
-	#is the entity on top of another entity?
-	def is_grounded (self) :
-		return self.grounded
-
 	#does the entity collide with other entities?
 	def is_physical (self) :
 		return self.physical
 	def set_physical (self, physical) :
 		self.physical = physical
-
-	#the mass of this entity, used for bouncing after collisions
-	#	setting mass to 0 implies infinite mass
-	#currently unused
-	def get_mass (self) :
-		return self.mass
-	def set_mass (self, mass) :
-		self.mass = mass
-
-	#control how fast an entity sinks when free falling
-	#setting to 0 effectively disables gravity on this entity
-	def get_gravity (self) :
-		return self.gravity
-	def set_gravity (self, gravity) :
-		self.gravity = gravity
 
 	#which direction is the entity facing?
 	#irrelevant for some entities, but probably useful for most
@@ -100,8 +76,7 @@ class Entity (pygame.sprite.Sprite) :
 	#	can be refined in subclasses
 	#	default implementation only looks at knockback
 	def was_attacked (self, knockback, damage) :
-		if self.mass > 0 :
-			self.velocity = self.velocity[0] + knockback[0], self.velocity[1] + knockback[1]
+		pass
 
 	#another entity wants to interact with this entity.
 	#	do something interesting
@@ -111,79 +86,6 @@ class Entity (pygame.sprite.Sprite) :
 	#can be overriden in subclasses
 	#this code should be called anyway though
 	def update (self) :
-
-		v_x = self.velocity[0]
-		v_y = self.velocity[1]
-		self.grounded = False
-		
-		v_y += self.gravity
-
-		#an optimization
-		if v_y != 0 or v_x != 0 :
-
-			entities = self.delegate.get_all_entities ()
-
-			if self.physical :
-
-				#apply friction
-				for entity in entities :
-					if not self.can_collide_with_entity (entity) :
-						continue
-
-					touching = get_touching (self.rect, entity.rect)
-
-					if Location.above == touching :
-						v_y = min (0, v_y)
-						if self.sliding : 
-							v_x *= .9
-					elif Location.below == touching :
-						v_y = max (0, v_y)
-						if self.sliding :
-							v_x *= .9
-					elif Location.left == touching :
-						v_x = max (0, v_x)
-					elif Location.right == touching :
-						v_x = min (0, v_x)
-
-
-				#look out for collisions
-				target_rect = self.rect.move (v_x, v_y)
-				union_rect = self.rect.union (target_rect)
-				for entity in entities :
-					if not self.can_collide_with_entity (entity) :
-						continue
-
-					#this works well enough for now
-					if union_rect.colliderect (entity.rect) :
-						location_before = get_location (self.rect, entity.rect)
-						location_after = get_location (target_rect, entity.rect)
-
-						if location_before & Location.left :
-							v_x = min (v_x, entity.rect.left - self.rect.right)
-						elif location_before & Location.right :
-							v_x = max (v_x, entity.rect.right - self.rect.left)
-						elif location_before & Location.above :
-							v_y = min (v_y, entity.rect.top - self.rect.bottom)
-						elif location_before & Location.below :
-							v_y = max (v_y, entity.rect.bottom - self.rect.top)
-
-			#update the actual rect
-			self.rect.move_ip (v_x, v_y)
-
-			#update grounded
-			if self.physical :
-				for entity in entities :
-					if not self.can_collide_with_entity (entity) :
-						continue
-					touching = get_touching (self.rect, entity.rect)
-					if Location.above == touching :
-						self.grounded = True
-						break
-
-		#finally update velocity
-		self.velocity = v_x, v_y
-
-		#update the image
 		self.update_image ()
 
 	#called after update

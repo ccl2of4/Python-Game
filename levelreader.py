@@ -13,6 +13,7 @@ from explosivebullet import ExplosiveBullet
 from pointofinterest import PointOfInterest
 from perishableentity import PerishableEntity
 from shotgunshell import ShotgunShell
+from moveableentity import MoveableEntity
 
 def string_to_int (string) :
 	return int (string)
@@ -95,7 +96,6 @@ class LevelReader :
 			elif line[0] == 'platform' :
 				assert current_entity == None
 				platform = Entity (default='images/platform.png')
-				platform.set_gravity (0)
 				game.spawn_entity (platform)
 
 				current_entity = platform
@@ -107,7 +107,6 @@ class LevelReader :
 			elif line[0] == 'destructible_wall' :
 				assert current_entity == None
 				wall = PerishableEntity (default='images/platform.png')
-				wall.set_gravity (0)
 				game.spawn_entity (wall)
 
 				current_entity = wall

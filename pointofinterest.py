@@ -9,7 +9,6 @@ class PointOfInterest (Entity) :
 	def __init__ (self,x=0, y=0,width=0,height=0) :
 		Entity.__init__ (self,x,y,width,height)
 		self.set_physical (False)
-		self.set_gravity (0)
 
 	#post notification if any other entity touches this entity
 	def update (self) :

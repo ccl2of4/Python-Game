@@ -9,7 +9,6 @@ class Explosion (Entity) :
 		Entity.__init__ (self,x,y,width,height,**images)
 
 		self.set_physical (False)
-		self.set_gravity (0)
 
 	def get_knockback_factor (self) :
 		return self.get_knockback_factor

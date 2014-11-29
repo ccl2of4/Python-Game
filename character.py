@@ -5,6 +5,7 @@ import resource
 from perishableentity import PerishableEntity
 from weapon import Weapon
 from entity import *
+from moveableentity import MoveableEntity
 from statusdisplay import *
 from lifecontroller import *
 from notificationcenter import NotificationCenter
@@ -27,7 +28,7 @@ character_cannot_drop_weapon_notification = 'character cannot drop weapon notifi
 global character_picked_up_weapon_notification
 character_picked_up_weapon_notification = 'character picked up weapon notification'
 
-class Character (PerishableEntity, StatusDisplayClient) :
+class Character (PerishableEntity, MoveableEntity, StatusDisplayClient) :
 	def __init__(self,x=0,y=0,width=46,height=80, **images) :
 
 		#used for animation
@@ -53,6 +54,7 @@ class Character (PerishableEntity, StatusDisplayClient) :
 
 		#can't call init before we know which image we're going to use
 		PerishableEntity.__init__ (self,x,y,width,height,**images)
+		MoveableEntity.__init__ (self,x,y,width,height,**images)
 
 		self.set_mass (1)
 
@@ -214,6 +216,10 @@ class Character (PerishableEntity, StatusDisplayClient) :
 			elif touching == Location.left and self.direction == Direction.left :
 				entity.was_attacked((-20,-10), 2)
 
+	def was_attacked (self, knockback, damage) :
+		MoveableEntity.was_attacked (self, knockback, damage)
+		PerishableEntity.was_attacked (self, knockback, damage)
+
 	def pick_up_weapon (self, weapon) :
 		assert (self.weapon == None)
 		if weapon.pick_up (self) :
@@ -264,7 +270,8 @@ class Character (PerishableEntity, StatusDisplayClient) :
 					self.pick_up_weapon (entity)
 					break
 
-		Entity.update (self)
+		PerishableEntity.update (self)
+		MoveableEntity.update (self)
 
 		#make the weapon follow the character around
 		self.update_weapon_rect ()

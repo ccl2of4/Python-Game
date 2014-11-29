@@ -15,7 +15,6 @@ class StatusDisplay (Entity) :
 		self.client = None
 		Entity.__init__ (self,x,y,width,height)
 		self.set_physical (False)
-		self.set_gravity (0)
 
 	def get_client (self) :
 		return self.client

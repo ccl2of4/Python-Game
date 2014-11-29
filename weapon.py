@@ -1,9 +1,10 @@
 from entity import *
+from moveableentity import MoveableEntity
 
-class Weapon (Entity) :
+class Weapon (MoveableEntity) :
 
 	def __init__ (self,x=0,y=0,width=0,height=0, **images) :
-		Entity.__init__ (self,x,y,width,height,**images)
+		MoveableEntity.__init__ (self,x,y,width,height,**images)
 		self.set_physical (True)
 		self.set_gravity (1.0)
 		self.owner = None
@@ -50,4 +51,4 @@ class Weapon (Entity) :
 		return True
 
 	def update (self) :
-		Entity.update (self)
+		MoveableEntity.update (self)
