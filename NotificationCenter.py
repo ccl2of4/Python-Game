@@ -5,12 +5,6 @@ class NotificationCenter :
 	def __init__ (self) :
 		self.notifications = {}
 
-	@classmethod
-	def shared_center (cls) :
-		if cls.singleton == None :
-			cls.singleton = NotificationCenter ()
-		return cls.singleton
-
 	def add_observer (self, observer, notification_name) :
 		if notification_name in self.notifications :
 			observers = self.notifications[notification_name]
@@ -27,3 +21,9 @@ class NotificationCenter :
 			observers = self.notifications[notification_name]
 			for observer in observers :
 				observer.notify (poster, notification_name, **info)
+	
+	@classmethod
+	def shared_center (cls) :
+		if cls.singleton == None :
+			cls.singleton = NotificationCenter ()
+		return cls.singleton
