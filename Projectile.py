@@ -43,6 +43,9 @@ class Projectile (Entity) :
 		if self.frames_to_live < 0 :
 			self.delegate.despawn_entity (self)
 
+		Entity.update (self)
+
+		#check if projectile made contact after the update
 		entities = self.delegate.get_all_entities ()
 		for entity in entities :
 			if not self.can_collide_with_entity (entity) :
@@ -61,8 +64,6 @@ class Projectile (Entity) :
 			self.made_contact (entity)
 
 			self.delegate.despawn_entity (self)
-
-		Entity.update (self)
 
 	#do anything else after making contact with an
 	#	entity. Projectile is despawned immediately after

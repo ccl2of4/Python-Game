@@ -22,5 +22,4 @@ class PointOfInterest (Entity) :
 	def update_image (self) :
 		self.image = pygame.Surface ((self.width, self.height))
 		self.image.fill ((0,255,0))
-
-		Entity.update_image (self)
+		self.scale_image ()

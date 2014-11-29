@@ -35,7 +35,7 @@ class StatusDisplay (Entity) :
 			self.add_name ()
 			self.add_weapon ()
 
-		Entity.update_image (self)
+		self.scale_image ()
 
 	def add_health_bar (self) :
 		#max health

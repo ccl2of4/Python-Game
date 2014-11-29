@@ -7,6 +7,7 @@ import Character
 import NotificationCenter
 import Gun
 import PointOfInterest
+import resource
 
 class Positioning :
 	absolute = 0
@@ -15,6 +16,7 @@ class Positioning :
 class Game (EntityDelegate) :
 	def __init__(self, width=800, height=400, camera=None) :
 		pygame.init()
+		resource.set_images_path (".")
 		self.last_update_time = pygame.time.get_ticks ()
 		self.time_since_last_update = 0
 		self.screen = pygame.display.set_mode((width, height))

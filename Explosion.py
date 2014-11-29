@@ -72,4 +72,4 @@ class Explosion (Entity) :
 		self.image.fill ((255,0,0))
 		self.image.set_alpha (255.0*self.frames_to_live/self.max_frames)
 
-		Entity.update_image (self)
+		self.scale_image ()

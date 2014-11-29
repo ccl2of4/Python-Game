@@ -1,4 +1,5 @@
 import pygame
+import resource
 
 class Direction :
 	left = 0
@@ -188,10 +189,14 @@ class Entity (pygame.sprite.Sprite) :
 		self.update_image ()
 
 	#called after update
-	#can be overriden. this code should be called at the end of the overriding class's code
+	#can be overridden. if the a subclass wishes to allow image scaling,
+	#	it should call scale_image afterward
 	def update_image (self) :
-		if self.image == None :
-			self.image = pygame.image.load (self.images['default'])
+		self.image = resource.get_image (self.images['default'])
+		if self.direction == Direction.left :
+			self.image = pygame.transform.flip (self.image, True, False)
+		self.scale_image ()
+	def scale_image (self) :
 		if self.width != 0 or self.height != 0 :
 			self.image = pygame.transform.scale (self.image, (self.width,self.height))
 

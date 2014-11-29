@@ -1,5 +1,7 @@
 import pygame
 
+import resource
+
 from PerishableEntity import PerishableEntity
 from Weapon import Weapon
 from Entity import *
@@ -281,7 +283,7 @@ class Character (PerishableEntity, StatusDisplayClient) :
 		should_use_standing_anim = True
 
 		if self.jumping :
-			self.image = pygame.image.load (self.images['jump'])
+			self.image = resource.get_image (self.images['jump'])
 			if direction == Direction.left :
 				self.image = pygame.transform.flip (self.image, True, False)
 			should_use_running_anim = False
@@ -291,7 +293,7 @@ class Character (PerishableEntity, StatusDisplayClient) :
 		if should_use_running_anim :
 			self.running_duration += 1
 			if (self.running_duration < running_anim_duraction) :
-				self.image = pygame.image.load (self.images['run'])
+				self.image = resource.get_image (self.images['run'])
 				if direction == Direction.left :
 					self.image = pygame.transform.flip (self.image, True, False)
 				should_use_walking_anim = False
@@ -300,13 +302,13 @@ class Character (PerishableEntity, StatusDisplayClient) :
 		if should_use_walking_anim :
 			self.walking_duration += 1
 			if (self.walking_duration < walking_anim_duration) :
-				self.image = pygame.image.load (self.images['walk'])
+				self.image = resource.get_image (self.images['walk'])
 				if direction == Direction.left :
 					self.image = pygame.transform.flip (self.image, True, False)
 				should_use_standing_anim = False
 
 		if should_use_standing_anim :
-			self.image = pygame.image.load (self.images['stand'])
+			self.image = resource.get_image (self.images['stand'])
 			if self.direction == Direction.left :
 				self.image = pygame.transform.flip (self.image, True, False)
 
@@ -316,7 +318,7 @@ class Character (PerishableEntity, StatusDisplayClient) :
 		if self.walking_duration > 2*walking_anim_duration :
 			self.walking_duration = 0
 
-		Entity.update_image (self)
+		self.scale_image ()
 
 	#how much should we accelerate horizontally?
 	def calculate_horizontal_acceleration (self) :
