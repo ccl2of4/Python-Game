@@ -336,7 +336,7 @@ class Character (PerishableEntity, MoveableEntity, StatusDisplayClient) :
 			if resource.has_image (key) :
 				self.image = resource.get_image (key)
 			else :
-				self.image = pygame.transform.flip (self.image, True, False)
+				self.image = pygame.transform.flip (self.image, True, False).convert()
 				resource.set_image (key, self.image)
 
 		self.scale_image ()
