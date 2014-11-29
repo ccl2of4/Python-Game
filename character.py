@@ -155,6 +155,9 @@ class Character (PerishableEntity, StatusDisplayClient) :
 	#actions
 	##############
 
+	def get_description (self) :
+		return self.get_name ()
+
 	def is_hostile (self) :
 		return self.hostile
 	def set_hostile (self, hostile) :
