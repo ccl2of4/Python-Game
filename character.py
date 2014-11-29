@@ -300,10 +300,10 @@ class Character (PerishableEntity, MoveableEntity, StatusDisplayClient) :
 		should_use_walking_anim = self.walking
 		should_use_standing_anim = True
 
+		key = None
+
 		if self.jumping :
-			self.image = resource.get_image (self.images['jump'])
-			if direction == Direction.left :
-				self.image = pygame.transform.flip (self.image, True, False)
+			key = self.images['jump']
 			should_use_running_anim = False
 			should_use_walking_anim = False
 			should_use_standing_anim = False
@@ -311,30 +311,33 @@ class Character (PerishableEntity, MoveableEntity, StatusDisplayClient) :
 		if should_use_running_anim :
 			self.running_duration += 1
 			if (self.running_duration < running_anim_duraction) :
-				self.image = resource.get_image (self.images['run'])
-				if direction == Direction.left :
-					self.image = pygame.transform.flip (self.image, True, False)
+				key = self.images['run']
 				should_use_walking_anim = False
 				should_use_standing_anim = False
 
 		if should_use_walking_anim :
 			self.walking_duration += 1
 			if (self.walking_duration < walking_anim_duration) :
-				self.image = resource.get_image (self.images['walk'])
-				if direction == Direction.left :
-					self.image = pygame.transform.flip (self.image, True, False)
+				key = self.images['walk']
 				should_use_standing_anim = False
 
 		if should_use_standing_anim :
-			self.image = resource.get_image (self.images['stand'])
-			if self.direction == Direction.left :
-				self.image = pygame.transform.flip (self.image, True, False)
+			key = self.images['stand']
 
 		if self.running_duration > 2*running_anim_duraction :
 			self.running_duration = 0
 
 		if self.walking_duration > 2*walking_anim_duration :
 			self.walking_duration = 0
+
+		self.image = resource.get_image (key)
+		if self.direction == Direction.left :
+			key += 'flip'
+			if resource.has_image (key) :
+				self.image = resource.get_image (key)
+			else :
+				self.image = pygame.transform.flip (self.image, True, False)
+				resource.set_image (key, self.image)
 
 		self.scale_image ()
 
