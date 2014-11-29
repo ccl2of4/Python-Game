@@ -15,6 +15,7 @@ from perishableentity import PerishableEntity
 from shotgunshell import ShotgunShell
 from moveableentity import MoveableEntity
 from automaticfirearm import AutomaticFirearm
+from entityspawner import EntitySpawner
 
 def string_to_int (string) :
 	return int (string)
@@ -193,6 +194,40 @@ class LevelReader :
 				game.spawn_entity (point_of_interest)
 				game.get_defend_points().append (point_of_interest)
 				current_entity = point_of_interest
+
+
+			###############
+			#entity spawner
+			###############
+			elif line[0] == 'entity_spawner' :
+				entity_spawner = EntitySpawner ()
+				entities_list = []
+
+				for entities in line[1].split (',') :
+					info = entities.split ('*')
+					info = map (strip_string, info)
+					count = int (info[0])
+					if info[1] == 'enemy' :
+						for i in range (count) :
+
+							player_ai = Character (
+								default = 'images/mario_stand.png',
+								stand='images/mario_stand.png',
+								walk='images/mario_walk.png',
+								run='images/mario_run.png',
+								jump='images/mario_jump.png',)
+							player_ai.set_name ("AI")
+							player_ai.set_hostile (True)
+							player_ai_c = AIEntityController (player_ai)
+							player_ai_c.set_target_entity (game.get_defend_points ()[0])
+							game.get_enemies().append (player_ai)
+							entities_list.append (player_ai)
+					else :
+						assert (False)
+
+				entity_spawner.set_entities (entities_list)
+				game.spawn_entity (entity_spawner)
+				current_entity = entity_spawner
 
 
 			#######################################
