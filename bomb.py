@@ -14,7 +14,7 @@ class Bomb (Weapon, Projectile) :
 	def get_description (self) :
 		return "Bomb"
 
-	def attack (self) :
+	def begin_attacking (self) :
 		v_x, v_y = 0, 0
 		if self.owner != None :
 
@@ -33,6 +33,9 @@ class Bomb (Weapon, Projectile) :
 			self.owner.drop_weapon ()
 
 		self.launch ((v_x,v_y))
+
+	def end_attacking (self) :
+		pass
 
 	def drop (self, drop_rect) :
 		if self.has_been_launched :

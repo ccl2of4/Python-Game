@@ -55,13 +55,13 @@ player
 #weapons
 ########
 
-gun : 10 * shotgun_shell
+autofirearm : 10 * shotgun_shell
 100 270 70 21
 
-gun : 10 * explosive_bullet
+firearm : 10 * explosive_bullet
 100 300 40 14
 
-gun : 10 * bullet
+autofirearm : 50 * bullet
 100 330 40 7
 
 bomb
@@ -77,23 +77,23 @@ bomb
 #enemies
 ########
 
-enemy
-1000 0 46 80
+#enemy
+#1000 0 46 80
 
-enemy
-1100 0 46 80
+#enemy
+#1100 0 46 80
 
-enemy
-1200 0 46 80
+#enemy
+#1200 0 46 80
 
 ####################
 #weapons for enemies
 ####################
 
-gun : 20 * shotgun_shell
+firearm : 20 * shotgun_shell
 1000 0 70 21
 
-gun : 20 * explosive_bullet
+firearm : 20 * explosive_bullet
 1100 0 70 21
 
 bomb

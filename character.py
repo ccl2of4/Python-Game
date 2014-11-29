@@ -201,6 +201,14 @@ class Character (PerishableEntity, MoveableEntity, StatusDisplayClient) :
 				if 0 < distance < self.rect.height * .20 :
 					self.velocity = self.velocity[0], self.velocity[1] - 2 * self.gravity
 
+	def begin_attacking_with_weapon (self) :
+		if self.weapon != None :
+			self.weapon.begin_attacking ()
+	def end_attacking_with_weapon (self) :
+		#assert (self.weapon != None)
+		if self.weapon != None :
+			self.weapon.end_attacking ()
+
 	#use a weapon
 	def attack_with_weapon (self) :
 		if self.weapon != None :

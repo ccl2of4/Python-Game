@@ -6,7 +6,7 @@ from notificationcenter import NotificationCenter
 
 import perishableentity
 import character
-import gun
+import firearm
 import pointofinterest
 import resource
 
@@ -50,7 +50,7 @@ class Game (EntityDelegate) :
 				pass
 		elif character.character_picked_up_weapon_notification == notification_name and poster == main_entity :
 			self.log (main_entity.get_weapon().get_description ())
-		elif gun.gun_out_of_ammo_notification == notification_name and poster.owner == main_entity :
+		elif firearm.firearm_out_of_ammo_notification == notification_name and poster.owner == main_entity :
 			self.log ("Out of ammo!")
 		elif pointofinterest.point_of_interest_reached_notification == notification_name :
 			entity = info['entity']
@@ -63,7 +63,7 @@ class Game (EntityDelegate) :
 			character.character_cannot_drop_weapon_notification,
 			perishableentity.perishable_entity_died_notification,
 			character.character_picked_up_weapon_notification,
-			gun.gun_out_of_ammo_notification,
+			firearm.firearm_out_of_ammo_notification,
 			pointofinterest.point_of_interest_reached_notification]
 
 	#the camera used to scroll the screen

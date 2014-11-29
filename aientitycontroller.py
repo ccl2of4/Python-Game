@@ -25,4 +25,5 @@ class AIEntityController (EntityController) :
 		if random.randint (0,1000) == 1 :
 			self.entity.jump ()
 		if random.randint (0,120) == 1 :
-			self.entity.attack_with_weapon ()
+			self.entity.begin_attacking_with_weapon ()
+			self.entity.end_attacking_with_weapon ()

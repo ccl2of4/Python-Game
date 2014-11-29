@@ -55,8 +55,6 @@ class UserInputEntityController (EntityController) :
 		#attack with weapon
 		if keys[pygame.K_p] :
 			self.w_attacking = True
-		else :
-			self.w_attack_needs_reset = False
 
 		#drop weapon
 		if keys[pygame.K_i] :
@@ -90,9 +88,13 @@ class UserInputEntityController (EntityController) :
 
 		if self.w_attacking :
 			if not self.w_attack_needs_reset :
-				self.entity.attack_with_weapon ()
+				self.entity.begin_attacking_with_weapon ()
 				self.w_attack_needs_reset = True
-		elif self.attacking : #can't attack and shoot at the same time
-			if not self.attack_needs_reset :
-				self.entity.attack ()
-				self.attack_needs_reset = True
+		else :
+			if self.w_attack_needs_reset :
+				self.entity.end_attacking_with_weapon ()
+				self.w_attack_needs_reset = False
+			if self.attacking :
+				if not self.attack_needs_reset :
+					self.entity.attack ()
+					self.attack_needs_reset = True

@@ -5,7 +5,7 @@ from entity import Entity
 from camera import Camera
 from userinputentitycontroller import UserInputEntityController
 from aientitycontroller import AIEntityController
-from gun import Gun
+from firearm import Firearm
 from bomb import Bomb
 from statusdisplay import StatusDisplay
 from bullet import Bullet
@@ -14,6 +14,7 @@ from pointofinterest import PointOfInterest
 from perishableentity import PerishableEntity
 from shotgunshell import ShotgunShell
 from moveableentity import MoveableEntity
+from automaticfirearm import AutomaticFirearm
 
 def string_to_int (string) :
 	return int (string)
@@ -113,10 +114,10 @@ class LevelReader :
 
 
 			#######
-			#gun
+			#firearm
 			#######
-			elif line[0] == 'gun' :
-				gun = Gun (default='images/platform.png')
+			elif line[0] == 'firearm' :
+				gun = Firearm (default='images/platform.png')
 				magazine = []
 
 				for ammo in line[1].split (',') :
@@ -142,6 +143,37 @@ class LevelReader :
 				game.spawn_entity (gun)
 
 				current_entity = gun
+
+			#################
+			#automaticfirearm
+			#################
+			elif line[0] == 'autofirearm' :
+				autogun = AutomaticFirearm (default='images/platform.png')
+				magazine = []
+
+				for ammo in line[1].split (',') :
+					info = ammo.split ('*')
+					info = map (strip_string, info)
+					count = int (info[0])
+					if info[1] == 'explosive_bullet' :
+						for i in range (count) :
+							projectile = ExplosiveBullet (default='images/platform.png')
+							magazine.append (projectile)
+					elif info[1] == 'bullet' :
+						for i in range (count) :
+							projectile = Bullet (default='images/platform.png')
+							magazine.append (projectile)
+					elif info[1] == 'shotgun_shell' :
+						for i in range (count) :
+							projectile = ShotgunShell (default='images/platform.png')
+							magazine.append (projectile)
+					else :
+						assert (False)
+
+				autogun.set_magazine (magazine)
+				game.spawn_entity (autogun)
+
+				current_entity = autogun
 
 
 			#####

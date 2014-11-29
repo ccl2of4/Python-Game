@@ -9,8 +9,11 @@ class Weapon (MoveableEntity) :
 		self.set_gravity (1.0)
 		self.owner = None
 
-	#override in subclasses
-	def attack (self) :
+	#attacking has begin/end state instead of just being called so that things
+	#	like automatic gunfine can be implemented
+	def begin_attacking (self) :
+		pass
+	def end_attacking (self) :
 		pass
 
 	#the owner should be invulnerable to any entities
