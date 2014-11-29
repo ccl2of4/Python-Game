@@ -50,24 +50,12 @@ defend_point
 player
 20 400 46 80
 
-########
-#enemies
-########
-
-enemy
-1000 0 46 80
-
-enemy
-1100 0 46 80
-
-enemy
-1200 0 46 80
 
 ########
 #weapons
 ########
 
-gun : 50 * shotgun_shell
+gun : 10 * shotgun_shell
 100 270 70 21
 
 gun : 10 * explosive_bullet
@@ -84,3 +72,35 @@ bomb
 
 bomb
 190 300 10 10
+
+########
+#enemies
+########
+
+enemy
+1000 0 46 80
+
+enemy
+1100 0 46 80
+
+enemy
+1200 0 46 80
+
+####################
+#weapons for enemies
+####################
+
+gun : 20 * shotgun_shell
+1000 0 70 21
+
+gun : 20 * explosive_bullet
+1100 0 70 21
+
+bomb
+1200 0 10 10
+
+bomb
+800 0 10 10 
+
+bomb
+750 0 10 10
