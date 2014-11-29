@@ -12,6 +12,7 @@ from Bullet import Bullet
 from ExplosiveBullet import ExplosiveBullet
 from PointOfInterest import PointOfInterest
 from PerishableEntity import PerishableEntity
+from ShotgunShell import ShotgunShell
 
 def string_to_int (string) :
 	return int (string)
@@ -116,7 +117,7 @@ class LevelReader :
 			#gun
 			#######
 			elif line[0] == 'gun' :
-				gun = Gun (default='images/platform.png')
+				gun = Gun (0,0,70,21,default='images/Spas - 12.png')
 				magazine = []
 
 				for ammo in line[1].split (',') :
@@ -130,6 +131,10 @@ class LevelReader :
 					elif info[1] == 'bullet' :
 						for i in range (count) :
 							projectile = Bullet (default='images/platform.png')
+							magazine.append (projectile)
+					elif info[1] == 'shotgun_shell' :
+						for i in range (count) :
+							projectile = ShotgunShell (default='images/platform.png')
 							magazine.append (projectile)
 					else :
 						assert (False)

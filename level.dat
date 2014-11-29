@@ -47,8 +47,14 @@ defend_point
 #weapons
 ########
 
-gun : 10 * explosive_bullet, 50 * bullet
-100 300 40 10
+gun : 10 * shotgun_shell
+100 270 70 21
+
+gun : 10 * explosive_bullet
+100 300 40 14
+
+gun : 10 * bullet
+100 330 40 7
 
 bomb
 150 300 10 10
