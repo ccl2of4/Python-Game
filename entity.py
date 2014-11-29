@@ -1,6 +1,7 @@
 import pygame
 import resource
 
+
 class Direction :
 	left = 0
 	right = 1
@@ -13,6 +14,10 @@ class EntityDelegate :
 	def despawn_entity (self, entity) :
 		pass
 
+class EntityController :
+	def update (self, entity) :
+		pass
+
 class Entity (pygame.sprite.Sprite) :
 	def __init__ (self,x=0, y=0,width=0,height=0,**images) :
 		pygame.sprite.Sprite.__init__ (self)
@@ -23,6 +28,7 @@ class Entity (pygame.sprite.Sprite) :
 		self.width = width
 		self.height = height
 		self.physical = True
+		self.controller = None
 		self.delegate = None
 		self.image = None
 		self.update_image ()
@@ -32,6 +38,12 @@ class Entity (pygame.sprite.Sprite) :
 
 	def get_description (self) :
 		return "Entity"
+
+	#default value None
+	def get_controller (self) :
+		return self.controller
+	def set_controller (self, controller) :
+		self.controller = controller
 
 	#default value None
 	def get_delegate (self) :
@@ -78,14 +90,11 @@ class Entity (pygame.sprite.Sprite) :
 	def was_attacked (self, knockback, damage) :
 		pass
 
-	#another entity wants to interact with this entity.
-	#	do something interesting
-	def interact (self, entity) :
-		pass
-
 	#can be overriden in subclasses
 	#this code should be called anyway though
 	def update (self) :
+		if self.controller != None :
+			self.controller.update (self)
 		self.update_image ()
 
 	#called after update

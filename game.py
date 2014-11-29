@@ -122,10 +122,9 @@ class Game (EntityDelegate) :
 
 
 	def update_game (self) :
-		for entity in self.all_entities :
-			if entity.controller != None :
-				entity.controller.update ()
-			entity.update ()
+
+		#update entities
+		self.all_entities.update ()
 
 		
 		#camera
@@ -164,16 +163,12 @@ class Game (EntityDelegate) :
 	def get_all_entities (self) :
 		return self.all_entities
 
-	def spawn_entity (self, entity, controller=None) :
+	def spawn_entity (self, entity) :
 		self.all_entities.add (entity)
-		entity.controller = controller
 		entity.delegate = self
 		entity.positioning = Positioning.relative
-	def spawn_entity_absolute (self, entity, controller=None) :
-		self.spawn_entity (entity, controller)
+	def spawn_entity_absolute (self, entity) :
+		self.spawn_entity (entity)
 		entity.positioning = Positioning.absolute
-
-	#if the entity was spawned with a controller,
-	#	the controller will be transitively released here
 	def despawn_entity (self, entity) :
 		self.all_entities.remove (entity)

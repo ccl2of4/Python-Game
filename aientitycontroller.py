@@ -1,18 +1,22 @@
-from entitycontroller import EntityController
 from entity import *
 import random
 
 class AIEntityController (EntityController) :
-	def __init__ (self, entity) :
-		EntityController.__init__ (self, entity)
+	def __init__ (self) :
 		self.target_entity = None
+		self.entity = None
 
 	def get_target_entity (self) :
 		return self.target_entity
 	def set_target_entity (self, target_entity) :
 		self.target_entity = target_entity
 
-	def update (self) :
+	def update (self, entity) :
+		if self.entity == None :
+			self.entity = entity
+		else :
+			assert (entity == self.entity)
+
 		if self.target_entity.rect.center > self.entity.rect.center :
 			self.entity.set_direction (Direction.right)
 		else :

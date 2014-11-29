@@ -44,7 +44,7 @@ class Character (PerishableEntity, MoveableEntity, StatusDisplayClient) :
 		self.terminal_walk_velocity = 8.0
 		self.run_acceleration_factor = 1.5
 		self.run_terminal_velocity_factor = 1.5
-		self.jump_slow_fall_factor = 0.35
+		self.jump_slow_fall_factor = 0.25
 
 		self.hostile = False
 		self.weapon = None
@@ -199,7 +199,7 @@ class Character (PerishableEntity, MoveableEntity, StatusDisplayClient) :
 				or (Location.right == touching and self.direction == Direction.right)):
 				distance = self.rect.bottom - entity.rect.top
 				if 0 < distance < self.rect.height * .20 :
-					self.velocity = self.velocity[0], self.velocity[1] - 2 * self.gravity
+					self.velocity = self.velocity[0], self.velocity[1] - 1.1 * self.gravity
 
 	def begin_attacking_with_weapon (self) :
 		if self.weapon != None :

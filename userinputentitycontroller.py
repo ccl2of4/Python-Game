@@ -1,10 +1,8 @@
 import pygame
-from entitycontroller import EntityController
 from entity import *
 
 class UserInputEntityController (EntityController) :
-	def __init__ (self, entity) :
-		EntityController.__init__ (self,entity)
+	def __init__ (self) :
 		
 		self.walking = False
 		self.running = False
@@ -12,19 +10,19 @@ class UserInputEntityController (EntityController) :
 		self.w_attacking = False
 		self.attacking = False
 		self.dropping = False
-		self.delegate = None
+		self.entity = None
 
 		self.drop_needs_reset = False
 		self.jump_needs_reset = False
 		self.w_attack_needs_reset = False
 		self.attack_needs_reset = False
 
-	def get_delegate (self) :
-		return self.delegate
-	def set_delegate (self, delegate) :
-		self.delegate = delegate
+	def update (self, entity) :
+		if self.entity == None :
+			self.entity = entity
+		else :
+			assert (entity == self.entity)
 
-	def update (self) :
 		keys = pygame.key.get_pressed ()
 
 		self.walking = False
@@ -49,7 +47,7 @@ class UserInputEntityController (EntityController) :
 		#jump
 		if keys[pygame.K_SPACE] :
 			self.jumping = True
-		else :
+		elif self.entity.is_grounded ():
 			self.jump_needs_reset = False
 
 		#attack with weapon
