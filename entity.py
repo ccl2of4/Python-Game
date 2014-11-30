@@ -37,6 +37,13 @@ class Entity (pygame.sprite.Sprite) :
 		self.rect = self.image.get_rect().move (x,y)
 		self.pass_through_entities = []
 		self.friendly_entities = []
+		self.anchor_points = {}
+
+	#anchor points for animation, etc.
+	def get_anchor_points (self) :
+		return self.anchor_points
+	def set_anchor_points (self, **anchor_points) :
+		self.anchor_points = anchor_points
 
 	def get_description (self) :
 		return "Entity"

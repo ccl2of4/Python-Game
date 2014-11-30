@@ -64,14 +64,15 @@ player
 #weapons
 ########
 
-autofirearm : 10 * shotgun_shell
-100 270 70 21
-
-firearm : 10 * explosive_bullet
-100 300 40 14
-
+#m60
 autofirearm : 50 * bullet
-100 330 40 7
+100 270 175 45
+
+#firearm : 10 * explosive_bullet
+#100 300 40 14
+
+#autofirearm : 50 * bullet
+#100 330 40 7
 
 bomb
 150 300 10 10
@@ -99,11 +100,11 @@ bomb
 #weapons for enemies
 ####################
 
-firearm : 20 * shotgun_shell
-1000 0 70 21
+#firearm : 20 * shotgun_shell
+#1000 0 70 21
 
-firearm : 20 * explosive_bullet
-1100 0 70 21
+#firearm : 20 * explosive_bullet
+#1100 0 70 21
 
 bomb
 1200 0 10 10
@@ -115,7 +116,7 @@ bomb
 750 0 10 10
 
 ########
-#spawner
+#spawners
 ########
 
 entity_spawner : 10 * enemy

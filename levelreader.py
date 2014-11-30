@@ -17,6 +17,15 @@ from moveableentity import MoveableEntity
 from automaticfirearm import AutomaticFirearm
 from entityspawner import EntitySpawner
 
+
+##
+#
+#	GUN SPRITES
+#
+#	http://dustination.deviantart.com/gallery/33496765/Gun-Sprites
+#
+##
+
 class LevelReader :
 	def __init__ (self) :
 		self.current_platform = None
@@ -24,8 +33,8 @@ class LevelReader :
 	def read (self, file_path) :
 		file = open (file_path, 'r')
 		
-		game = Game (800,400)
-		game.set_camera (Camera (800,400))
+		game = Game (800,450)
+		game.set_camera (Camera (800,450))
 
 
 		current_entity = None
@@ -114,6 +123,7 @@ class LevelReader :
 			#######
 			elif line[0] == 'firearm' :
 				gun = Firearm (default='images/platform.png')
+				gun.set_anchor_points (muzzle=(0,0))
 				magazine = []
 
 				for ammo in line[1].split (',') :
@@ -144,7 +154,8 @@ class LevelReader :
 			#automaticfirearm
 			#################
 			elif line[0] == 'autofirearm' :
-				autogun = AutomaticFirearm (default='images/platform.png')
+				autogun = AutomaticFirearm (default='images/m60.png')
+				autogun.set_anchor_points (muzzle=(175,17))
 				magazine = []
 
 				for ammo in line[1].split (',') :

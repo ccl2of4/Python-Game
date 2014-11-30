@@ -57,6 +57,14 @@ class Firearm (Weapon) :
 
 	def fire (self) :
 
+		assert ('muzzle' in self.anchor_points)
+
+		point = self.anchor_points['muzzle']
+		if self.direction == Direction.left :
+			point = (self.rect.width - point[0], point[1])
+		
+		point = self.rect.x + point[0], self.rect.y + point[1]
+
 		#unload a projectile from the magazine (if there are any) and fire
 		if len (self.magazine) == 0 :
 			NotificationCenter.shared_center().post_notification (self, firearm_out_of_ammo_notification)
@@ -64,23 +72,13 @@ class Firearm (Weapon) :
 
 		projectile = self.magazine.pop(0)
 
-		p_width = projectile.rect.width
-		p_height = projectile.rect.height
-
-		if self.direction == Direction.right :
-			p_x = self.rect.right
-		else :
-			p_x = self.rect.left - p_width
-		p_y = self.rect.center[1]
-
 		v_y = 0
 		if (self.direction == Direction.right) :
 			v_x = self.firing_velocity
 		else :
 			v_x = -self.firing_velocity
 
-		projectile.rect.x = p_x
-		projectile.rect.y = p_y
+		projectile.rect.center = point
 		projectile.set_pass_through_entities ([self, self.owner])
 		projectile.set_friendly_entities ([self, self.owner])
 		self.delegate.spawn_entity (projectile)
