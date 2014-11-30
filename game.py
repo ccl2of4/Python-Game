@@ -103,13 +103,13 @@ class Game (EntityDelegate) :
 
 			#quit or resize screen
 			pygame.event.pump ()
-			event = pygame.event.poll ()
-			if event.type == pygame.QUIT :
-				pygame.quit ()
-				break;
-			elif event.type==pygame.VIDEORESIZE:
-				screen=pygame.display.set_mode(event.dict['size'],pygame.HWSURFACE|pygame.DOUBLEBUF|pygame.RESIZABLE)
-			pygame.event.clear ()
+			events = pygame.event.get ()
+			for event in events :
+				if event.type == pygame.QUIT :
+					pygame.quit ()
+					break;
+				elif event.type==pygame.VIDEORESIZE:
+					screen=pygame.display.set_mode(event.dict['size'],pygame.HWSURFACE|pygame.DOUBLEBUF|pygame.RESIZABLE)
 
 			#user input
 			keys = pygame.key.get_pressed ()
