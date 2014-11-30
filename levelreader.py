@@ -33,7 +33,7 @@ class LevelReader :
 	def read (self, file_path) :
 		file = open (file_path, 'r')
 		
-		game = Game (800,450)
+		game = Game (800, 450)
 		game.set_camera (Camera (800,450))
 
 

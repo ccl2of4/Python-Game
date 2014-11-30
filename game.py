@@ -20,7 +20,7 @@ class Game (EntityDelegate) :
 		resource.set_images_path (".")
 		self.last_update_time = pygame.time.get_ticks ()
 		self.time_since_last_update = 0
-		self.screen = pygame.display.set_mode((width, height))
+		self.screen = pygame.display.set_mode((width, height), pygame.HWSURFACE | pygame.DOUBLEBUF | pygame.RESIZABLE)
 		self.clock = pygame.time.Clock ()
 		self.all_entities = pygame.sprite.LayeredUpdates ()
 		self.camera = camera
@@ -98,9 +98,18 @@ class Game (EntityDelegate) :
 
 	def run (self) :
 		while 1:
-
 			#framerate stuff
 			self.clock.tick (60)
+
+			#quit or resize screen
+			pygame.event.pump ()
+			event = pygame.event.poll ()
+			if event.type == pygame.QUIT :
+				pygame.quit ()
+				break;
+			elif event.type==pygame.VIDEORESIZE:
+				screen=pygame.display.set_mode(event.dict['size'],pygame.HWSURFACE|pygame.DOUBLEBUF|pygame.RESIZABLE)
+			pygame.event.clear ()
 
 			#user input
 			keys = pygame.key.get_pressed ()
@@ -118,8 +127,7 @@ class Game (EntityDelegate) :
 
 
 	def update_settings (self) :
-		pygame.event.pump ()
-
+		pass
 
 	def update_game (self) :
 
@@ -153,7 +161,6 @@ class Game (EntityDelegate) :
 				log_message = None
 
 		pygame.display.flip ()
-		pygame.event.pump ()
 
 
 	###########################
