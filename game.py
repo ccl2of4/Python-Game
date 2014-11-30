@@ -50,7 +50,7 @@ class Game (EntityDelegate) :
 				pass
 		elif character.character_picked_up_weapon_notification == notification_name and poster == main_entity :
 			self.log (main_entity.get_weapon().get_description ())
-		elif firearm.firearm_out_of_ammo_notification == notification_name and poster.owner == main_entity :
+		elif firearm.firearm_out_of_ammo_notification == notification_name and poster.get_owner () == main_entity :
 			self.log ("Out of ammo!")
 		elif pointofinterest.point_of_interest_reached_notification == notification_name :
 			entity = info['entity']
@@ -173,7 +173,7 @@ class Game (EntityDelegate) :
 
 	def spawn_entity (self, entity) :
 		self.all_entities.add (entity)
-		entity.delegate = self
+		entity.set_delegate (self)
 		entity.positioning = Positioning.relative
 	def spawn_entity_absolute (self, entity) :
 		self.spawn_entity (entity)

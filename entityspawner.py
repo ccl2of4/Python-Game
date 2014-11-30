@@ -8,49 +8,54 @@ class EntitySpawnerDataSource :
 		pass
 
 class EntitySpawner (Entity) :
-	def __init__ (self,x=0,y=0,width=100,height=100) :
-		Entity.__init__(self,x,y,width,height)
+	def __init__ (self,pos = (0,0),height=100, size = (200,200)) :
+		Entity.__init__(self,pos)
 		self.set_physical (False)
 
-		self.entities = []
-		self.cooldown = 600
-		self.data_source = None
-		self.frames_till_next_spawn = 0
+		self._layer = -1
+		self._size = size
+		self._entities = []
+		self._cooldown = 60
+		self._data_source = None
+		self._frames_till_next_spawn = 0
+		self._should_update_image = True
 
 	#the entities queued up to spawn
 	def get_entities (self) :
-		return self.entities
+		return self._entities
 	def set_entities (self, entities) :
-		self.entities = entities
+		self._entities = entities
 
 	#how fast the entities spawn
 	def get_cooldown (self) :
-		return self.cooldown
+		return self._cooldown
 	def set_cooldown (self, cooldown) :
-		self.cooldown = cooldown
+		self._cooldown = cooldown
 
 	#the above properties are ignored if data_source != None
-	def get_delegate (self) :
-		return self.data_source
-	def set_delegate (self, delegate) :
-		self.data_source = data_source
+	def get_data_source (self) :
+		return self._data_source
+	def set_data_source (self, delegate) :
+		self._data_source = data_source
 
 	def update (self) :
 
-		if self.data_source == None :
+		if self._data_source == None :
 
-			self.frames_till_next_spawn -= 1
-			if (self.frames_till_next_spawn) < 0 and len (self.entities) > 0:
-				entity = self.entities.pop(0)
+			self._frames_till_next_spawn -= 1
+			if (self._frames_till_next_spawn) < 0 and len (self._entities) > 0:
+				entity = self._entities.pop(0)
 				entity.rect.center = self.rect.center
-				self.delegate.spawn_entity (entity)
-				self.frames_till_next_spawn = self.get_cooldown ()
+				self._delegate.spawn_entity (entity)
+				self._frames_till_next_spawn = self.get_cooldown ()
 		else :
 			pass
 
 		Entity.update (self)
 
 	def update_image (self) :
-		self.image = pygame.Surface ((self.width, self.height))
-		self.image.fill ((60,60,60))
-		self.scale_image ()
+		if self._should_update_image :
+			self.image = pygame.Surface (self._size)
+			self.image.fill ((60,60,60))
+			self._should_update_image = False
+		assert (self.image != None)

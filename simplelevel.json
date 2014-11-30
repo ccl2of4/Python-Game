@@ -1,0 +1,70 @@
+[
+	{
+		"category" : "platform",
+		"x" : 0,
+		"y" : 500
+	},
+
+	{
+		"category" : "player",
+		"x" : 0,
+		"y" : 0
+	},
+
+	{
+		"category" : "m60",
+		"x" : 100,
+		"y" : 0,
+		"magazine" : [
+			{
+				"category" : "group",
+				"count" : 10,
+				"entity" : {
+					"category" : ".30 cal"
+				}
+			}
+		]
+	},
+
+	{
+		"category" : "defend point",
+		"x" : 100,
+		"y" : 400
+	},
+
+	{
+		"category" : "enemy",
+		"x" : 200,
+		"y" : 0
+	},
+
+	{
+		"category" : "entity spawner",
+		"x" : 400,
+		"y" : 100,
+		"contents" : [
+			{
+				"category" : "enemy"
+			},
+			{
+				"category" : "m60",
+				"magazine" : [
+					{
+						"category" : "group",
+						"count" : 10,
+						"entity" : {
+							"category" : ".30 cal"
+						}
+					}
+				]
+			},
+			{
+				"category" : "group",
+				"count" : 10,
+				"entity" : {
+					"category" : "enemy"
+				}
+			}
+		]
+	}
+]

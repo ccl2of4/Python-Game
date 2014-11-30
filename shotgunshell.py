@@ -4,7 +4,7 @@ from bullet import Bullet
 class ShotgunShell (Projectile) :
 	def __init__ (self,x=0,y=0,width=10,height=10, **images) :
 		Projectile.__init__ (self,x,y,width,height,**images)
-		self.spread = .10
+		self._spread = .10
 
 	def get_description (self) :
 		return "Shotgun Shell"
@@ -35,27 +35,27 @@ class ShotgunShell (Projectile) :
 		b3.set_pass_through_entities (entities_list)
 		b3.set_friendly_entities (entities_list)
 
-		self.delegate.spawn_entity (b1)
+		self._delegate.spawn_entity (b1)
 		b1.launch ( (velocity[0], -1) )
 
-		self.delegate.spawn_entity (b2)
+		self._delegate.spawn_entity (b2)
 		b2.launch ( (velocity[0], 0) )
 
-		self.delegate.spawn_entity (b3)
+		self._delegate.spawn_entity (b3)
 		b3.launch ( (velocity[0], 1) )
 
-		self.delegate.despawn_entity (self)
+		self._delegate.despawn_entity (self)
 
 	def get_spread (self) :
-		return self.spread
+		return self._spread
 	def set_spread (self, spread) :
-		self.spread = spread
+		self._spread = spread
 
-	def made_contact (self, entity) :
+	def _made_contact (self, entity) :
 		assert (False)
 
 	def update (self) :
 		Projectile.update (self)
 
-	def calculate_knockback (self, entity) :
+	def _calculate_knockback (self, entity) :
 		return (0,0)

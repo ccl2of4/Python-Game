@@ -1,10 +1,9 @@
 import sys
 from game import Game
-from levelreader import LevelReader
+import levelreader
 
 def load_level (file_path) :
-	reader = LevelReader ()
-	game = reader.read (file_path)
+	game = levelreader.read (file_path)
 	game.run ()
 
 def main () :

@@ -7,20 +7,20 @@ class Bomb (Weapon, Projectile) :
 	def __init__(self,x=0,y=0,width=10,height=10, **images) :
 		Projectile.__init__ (self,x,y,width,height,**images)
 		Weapon.__init__ (self,x,y,width,height,**images)
-		self.has_been_launched = False
-		self.set_knockback_factor (5)
-		self.damage = 5
+		self._has_been_launched = False
+		self._set_knockback_factor (5)
+		self._damage = 5
 
 	def get_description (self) :
 		return "Bomb"
 
 	def begin_attacking (self) :
 		v_x, v_y = 0, 0
-		if self.owner != None :
+		if self._owner != None :
 
 			#make sure bomb doesn't hurt its owner
-			self.friendly_entities.append (self.owner)
-			self.pass_through_entities.append (self.owner)
+			self.friendly_entities.append (self._owner)
+			self.pass_through_entities.append (self._owner)
 
 			if self.owner.direction == Direction.right :
 				v_x = 10.0
@@ -30,7 +30,7 @@ class Bomb (Weapon, Projectile) :
 
 			#this call creates a circular dependency between bomb and character, and I don't like it
 			#	also there's a bug if the owner cannot drop the weapon
-			self.owner.drop_weapon ()
+			self._owner.drop_weapon ()
 
 		self.launch ((v_x,v_y))
 
@@ -38,31 +38,31 @@ class Bomb (Weapon, Projectile) :
 		pass
 
 	def drop (self, drop_rect) :
-		if self.has_been_launched :
+		if self._has_been_launched :
 			return False
 		return Weapon.drop (self, drop_rect)
 
 	def pick_up (self, owner) :
-		if self.has_been_launched :
+		if self._has_been_launched :
 			return False
 		return Weapon.pick_up (self, owner)
 
 	def launch (self, velocity) :
 		Projectile.launch (self, velocity)
-		self.has_been_launched = True
+		self._has_been_launched = True
 
 	def made_contact (self, entity) :
 		#spawn an explosion
 		explosion = Explosion (self.rect.centerx, self.rect.centery, 80, 80)
 		explosion.rect.center = self.rect.center
-		for entity in self.friendly_entities :
-			explosion.friendly_entities.append (entity)
-		for entity in self.pass_through_entities :
-			explosion.pass_through_entities.append (entity)
-		self.delegate.spawn_entity (explosion)
+		for entity in self._friendly_entities :
+			explosion._friendly_entities.append (entity)
+		for entity in self._pass_through_entities :
+			explosion._pass_through_entities.append (entity)
+		self._delegate.spawn_entity (explosion)
 
 	def update (self) :
-		if self.has_been_launched :
+		if self._has_been_launched :
 			Projectile.update (self)
 		else :
 			Weapon.update (self)

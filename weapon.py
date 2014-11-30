@@ -3,14 +3,14 @@ from moveableentity import MoveableEntity
 
 class Weapon (MoveableEntity) :
 
-	def __init__ (self,x=0,y=0,width=0,height=0, **images) :
-		MoveableEntity.__init__ (self,x,y,width,height,**images)
+	def __init__ (self, pos = (0,0), **images) :
+		MoveableEntity.__init__ (self, pos,**images)
 
 		self._layer = 10
 
 		self.set_physical (True)
 		self.set_gravity (1.0)
-		self.owner = None
+		self._owner = None
 
 	#attacking has begin/end state instead of just being called so that things
 	#	like automatic gunfine can be implemented
@@ -22,7 +22,7 @@ class Weapon (MoveableEntity) :
 	#the owner should be invulnerable to any entities
 	#created by the weapon
 	def get_owner (self) :
-		return self.owner
+		return self._owner
 
 	def get_description (self) :
 		return "Weapon"
@@ -32,8 +32,8 @@ class Weapon (MoveableEntity) :
 		self.set_physical (True)
 
 		can_be_dropped = True
-		for entity in self.delegate.get_all_entities () :
-			if self.can_collide_with_entity (entity) :
+		for entity in self._delegate.get_all_entities () :
+			if self._can_collide_with_entity (entity) :
 				touching = get_touching (drop_rect, entity.rect)
 				if touching != Location.none :
 					can_be_dropped = False
@@ -45,16 +45,16 @@ class Weapon (MoveableEntity) :
 
 		self.rect = drop_rect
 		self.set_gravity (1.0)
-		self.owner = None
+		self._owner = None
 		return True
 
 	def pick_up (self, owner) :
-		if self.owner != None :
+		if self._owner != None :
 			return False
-		self.velocity = (0,0)
+		self._velocity = (0,0)
 		self.set_physical (False)
 		self.set_gravity (0.0)
-		self.owner = owner
+		self._owner = owner
 		return True
 
 	def update (self) :

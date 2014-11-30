@@ -7,10 +7,10 @@ global perishable_entity_died_notification
 perishable_entity_died_notification = 'perishable entity died notification'
 
 class PerishableEntity (Entity, LifeControllerClient) :
-	def __init__ (self,x=0,y=0,width=46,height=80, **images) :
-		self.life_controller = None
+	def __init__ (self, pos=(0,0), **images) :
+		Entity.__init__ (self, pos,**images)
+		self._life_controller = None
 		self.set_life_controller (LifeController ())
-		Entity.__init__ (self,x,y,width,height,**images)
 
 
 	def life_controller_client_died (self) :
@@ -19,15 +19,15 @@ class PerishableEntity (Entity, LifeControllerClient) :
 
 	#the life controller that monitors this entity's life
 	def get_life_controller (self) :
-		return self.life_controller
+		return self._life_controller
 	def set_life_controller (self, life_controller) :
-		if self.life_controller :
-			self.life_controller.set_client (None)
+		if self._life_controller :
+			self._life_controller.set_client (None)
 		if life_controller :
 			life_controller.set_client (self)
-		self.life_controller = life_controller
+		self._life_controller = life_controller
 
 	def was_attacked (self, knockback, damage) :
 		Entity.was_attacked (self, knockback, damage)
-		if self.life_controller != None :
-			self.life_controller.receive_damage (damage)
+		if self._life_controller != None :
+			self._life_controller.receive_damage (damage)

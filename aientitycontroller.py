@@ -3,34 +3,34 @@ import random
 
 class AIEntityController (EntityController) :
 	def __init__ (self) :
-		self.target_entity = None
-		self.entity = None
+		self._target_entity = None
+		self._entity = None
 
 	def get_target_entity (self) :
-		return self.target_entity
+		return self._target_entity
 	def set_target_entity (self, target_entity) :
-		self.target_entity = target_entity
+		self._target_entity = target_entity
 
 	def update (self, entity) :
-		if self.entity == None :
-			self.entity = entity
+		if self._entity == None :
+			self._entity = entity
 		else :
-			assert (entity == self.entity)
+			assert (entity == self._entity)
 
-		if self.target_entity.rect.center > self.entity.rect.center :
-			self.entity.set_direction (Direction.right)
+		if self._target_entity.rect.center > self._entity.rect.center :
+			self._entity.set_direction (Direction.right)
 		else :
-			self.entity.set_direction (Direction.left)
+			self._entity.set_direction (Direction.left)
 
-		if self.entity.get_weapon () == None :
-			self.entity.find_weapon ()
+		if self._entity.get_weapon () == None :
+			self._entity.find_weapon ()
 
 		if random.randint (0,60) < 10 :
-			self.entity.walk (False)
+			self._entity.walk (False)
 		if random.randint (0,60) == 1 :
-			self.entity.attack ()
+			self._entity.attack ()
 		if random.randint (0,1000) == 1 :
-			self.entity.jump ()
+			self._entity.jump ()
 		if random.randint (0,120) == 1 :
-			self.entity.begin_attacking_with_weapon ()
-			self.entity.end_attacking_with_weapon ()
+			self._entity.begin_attacking_with_weapon ()
+			self._entity.end_attacking_with_weapon ()

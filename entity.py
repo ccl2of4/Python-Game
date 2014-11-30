@@ -19,79 +19,84 @@ class EntityController :
 		pass
 
 class Entity (pygame.sprite.Sprite) :
-	def __init__ (self,x=0, y=0,width=0,height=0,**images) :
+	def __init__ (self, pos=(0,0), **images) :
 		pygame.sprite.Sprite.__init__ (self)
 
 		self._layer = 0
 
 		#instance variables
-		self.direction = Direction.right
-		self.images = images
-		self.width = width
-		self.height = height
-		self.physical = True
-		self.controller = None
-		self.delegate = None
-		self.image = None
-		self.update_image ()
-		self.rect = self.image.get_rect().move (x,y)
-		self.pass_through_entities = []
-		self.friendly_entities = []
-		self.anchor_points = {}
+		self._direction = Direction.right
+		self._physical = True
+
+		self._controller = None
+		self._delegate = None
+
+		self._images = images
+		self.image = pygame.Surface ((0,0))
+		self.rect = pygame.Rect ( pos, (0,0) )
+		self._anchor_points = {}
+
+		self._pass_through_entities = []
+		self._friendly_entities = []
+
+	def get_pos (self) :
+		return self.rect.x, self.rect.y
+	def set_pos (self, pos) :
+		self.rect.x, self.rect.y = pos
 
 	#anchor points for animation, etc.
 	def get_anchor_points (self) :
-		return self.anchor_points
+		return self._anchor_points
 	def set_anchor_points (self, **anchor_points) :
-		self.anchor_points = anchor_points
+		self._anchor_points = anchor_points
 
 	def get_description (self) :
 		return "Entity"
 
 	#default value None
 	def get_controller (self) :
-		return self.controller
+		return self._controller
 	def set_controller (self, controller) :
-		self.controller = controller
+		self._controller = controller
 
 	#default value None
 	def get_delegate (self) :
-		return self.delegate
+		return self._delegate
 	def set_delegate (self, delegate) :
-		self.delegate = delegate
+		self._delegate = delegate
 
 	#does the entity collide with other entities?
 	def is_physical (self) :
-		return self.physical
+		return self._physical
 	def set_physical (self, physical) :
-		self.physical = physical
+		self._physical = physical
 
 	#which direction is the entity facing?
 	#irrelevant for some entities, but probably useful for most
 	def get_direction (self) :
-		return self.direction
+		return self._direction
 	def set_direction (self, direction) :
-		self.direction = direction
+		self._direction = direction
 
 	#entities that this entity should pass through without touching
 	def get_pass_through_entities (self) :
-		return self.pass_through_entities
+		return self._pass_through_entities
 	def set_pass_through_entities (self, pass_through_entities) :
-		self.pass_through_entities = pass_through_entities
+		self._pass_through_entities = pass_through_entities
 
 	#entities that this entity should not harm
 	def get_friendly_entities (self) :
-		return self.friendly_entities
+		return self._friendly_entities
 	def set_friendly_entities (self, friendly_entities) :
-		self.friendly_entities = friendly_entities
+		self._friendly_entities = friendly_entities
 
 	#is this entity able to collide with the given entity?
-	def can_collide_with_entity (self, entity) :
+	def _can_collide_with_entity (self, entity) :
 		return (entity is not self 
 				and self.is_physical ()
 				and entity.is_physical ()
-				and not (entity in self.pass_through_entities) 
-				and not (self in entity.pass_through_entities))
+				and not (entity in self._pass_through_entities) 
+				and not (self in entity._pass_through_entities))
 
 	#called when the entity is attacked by another entity
 	#	can be refined in subclasses
@@ -102,17 +107,19 @@ class Entity (pygame.sprite.Sprite) :
 	#can be overriden in subclasses
 	#this code should be called anyway though
 	def update (self) :
-		if self.controller != None :
-			self.controller.update (self)
+		if self._controller != None :
+			self._controller.update (self)
 		self.update_image ()
+		rect = self.image.get_rect ()
+		self.rect.width, self.rect.height = rect.width, rect.height
 
 	#called after update
 	#can be overridden. if the a subclass wishes to allow image scaling,
 	#	it should call scale_image afterward
 	def update_image (self) :
-		key = self.images['default']
+		key = self._images['default']
 		self.image = resource.get_image (key)
-		if self.direction == Direction.left :
+		if self._direction == Direction.left :
 			key += 'flip'
 			if resource.has_image (key) :
 				self.image = resource.get_image (key)
@@ -120,19 +127,6 @@ class Entity (pygame.sprite.Sprite) :
 				self.image = pygame.transform.flip (self.image, True, False).convert ()
 				resource.set_image (key, self.image)
 		self.image.set_colorkey ((255,255,255))
-		
-		if self.width != 0 or self.height != 0 :
-			key = key + str (self.width) + str(self.height)
-			if resource.has_image (key) :
-				self.image = resource.get_image (key)
-			else :
-				self.scale_image ()
-				resource.set_image (key, self.image)
-
-	def scale_image (self) :
-		if self.width != 0 or self.height != 0 :
-			self.image = pygame.transform.scale (self.image, (self.width,self.height))
-
 
 #############################################
 #additional utility functions for pygame.Rect

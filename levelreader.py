@@ -16,7 +16,7 @@ from shotgunshell import ShotgunShell
 from moveableentity import MoveableEntity
 from automaticfirearm import AutomaticFirearm
 from entityspawner import EntitySpawner
-
+import json
 
 ##
 #
@@ -26,229 +26,163 @@ from entityspawner import EntitySpawner
 #
 ##
 
-class LevelReader :
-	def __init__ (self) :
-		self.current_platform = None
+global function_mappings
 
-	def read (self, file_path) :
-		file = open (file_path, 'r')
-		
-		game = Game (800, 450)
-		game.set_camera (Camera (800,450))
+def read (file_path) :
+	game = None
 
+	with open (file_path, 'r') as f :
+		data = json.load (f)
+		game = _create_game (data)
 
-		current_entity = None
-		
-		for line in file :
-			line = line.strip ()
-			line = line.split (':')
-			line = map (lambda string : string.strip (), line)
+	return game
 
-			if line[0] == '' or line[0][0] == "#":
-				continue
+def _create_group (game, data) :
+	entities = []
+	count = data['count']
+	entity = data['entity']
+	category = entity['category']
 
-			###############
-			#player
-			###############
-			elif line[0] == 'player' :
-				assert game.get_main_entity () == None
-				assert current_entity == None
+	func = function_mappings[category]
+	for i in range (count) :
+		entities.append (func (game, entity))
 
-				player = Character (
-					default = 'images/mario_stand.png',
-					stand='images/mario_stand.png',
-					walk='images/mario_walk.png',
-					run='images/mario_run.png',
-					jump='images/mario_jump.png',)
-				player.set_name ("Main")
-				player.set_controller (UserInputEntityController ())
-				game.spawn_entity (player)
-				game.set_main_entity (player)
-				status_display = StatusDisplay (10,340)
-				status_display.set_client (player)
-				game.spawn_entity_absolute (status_display)
+	return entities
 
-				current_entity = player
+def _create_player (game, data) :
+	assert game.get_main_entity () == None
+	player = Character (
+		default = 'images/mario_stand.png',
+		stand='images/mario_stand.png',
+		walk='images/mario_walk.png',
+		run='images/mario_run.png',
+		jump='images/mario_jump.png',)
+	player.set_name ("Main")
+	player.set_controller (UserInputEntityController ())
+	game.set_main_entity (player)
 
+	status_display = StatusDisplay ()
+	status_display.set_client (player)
+	game.spawn_entity_absolute (status_display)
 
+	try :
+		player.rect.x, player.rect.y = data['x'], data['y']
+	except :
+		pass
 
-			######
-			#enemy
-			######
-			elif line[0] == 'enemy' :
-				assert len (game.get_defend_points ()) > 0
-				assert current_entity == None
-				player_ai = Character (
-					default = 'images/mario_stand.png',
-					stand='images/mario_stand.png',
-					walk='images/mario_walk.png',
-					run='images/mario_run.png',
-					jump='images/mario_jump.png',)
-				player_ai.set_name ("AI")
-				player_ai.set_hostile (True)
-				player_ai_c = AIEntityController ()
-				player_ai.set_controller (player_ai_c)
-				player_ai_c.set_target_entity (game.get_defend_points ()[0])
-				game.spawn_entity (player_ai)
-				game.get_enemies().append (player_ai)
-				player_ai.set_status_display (StatusDisplay (100,50))
+	return player
 
-				current_entity = player_ai
+def _create_platform (game, data) :
+	platform = Entity (default='images/platform.png')
+
+	try :
+		platform.rect.x, platform.rect.y = data['x'], data['y']
+	except :
+		pass
+
+	return platform
 
 
-			#########
-			#platform
-			#########
-			elif line[0] == 'platform' :
-				assert current_entity == None
-				platform = Entity (default='images/platform.png')
-				game.spawn_entity (platform)
+def _create_30_cal (game, data) :
+	p30_cal = Bullet (default='images/bullet.png')
+	return p30_cal
 
-				current_entity = platform
+def _create_m60 (game, data) :
+	m60 = AutomaticFirearm (default='images/m60.png')
+	m60.set_anchor_points (muzzle=(175,15))
+	magazine = []
 
+	try :
+		m60.rect.x, m60.rect.y = data['x'], data['y']
+	except :
+		pass
 
-			##################
-			#destructible wall
-			##################
-			elif line[0] == 'destructible_wall' :
-				assert current_entity == None
-				wall = PerishableEntity (default='images/platform.png')
-				game.spawn_entity (wall)
+	for projectile in data['magazine'] :
+		category = projectile['category']
+		res = function_mappings[category] (game, projectile)
+		try :
+			magazine.extend (res)
+		except :
+			magazine.append (res)
 
-				current_entity = wall
+	m60.set_magazine (magazine)
+	return m60
 
+def _create_entity_spawner (game, data) :
+	entity_spawner = EntitySpawner ()
+	entities = []
 
-			#######
-			#firearm
-			#######
-			elif line[0] == 'firearm' :
-				gun = Firearm (default='images/platform.png')
-				gun.set_anchor_points (muzzle=(0,0))
-				magazine = []
+	try :
+		entity_spawner.rect.x, entity_spawner.rect.y = data['x'], data['y']
+	except :
+		pass
+	
+	for entity in data['contents'] :
+		category = entity['category']
+		res = function_mappings[category] (game, entity)
+		try :
+			entities.extend (res)
+		except :
+			entities.append (res)
 
-				for ammo in line[1].split (',') :
-					info = ammo.split ('*')
-					info = map (lambda string : string.strip (), info)
-					count = int (info[0])
-					if info[1] == 'explosive_bullet' :
-						for i in range (count) :
-							projectile = ExplosiveBullet (default='images/platform.png')
-							magazine.append (projectile)
-					elif info[1] == 'bullet' :
-						for i in range (count) :
-							projectile = Bullet (default='images/platform.png')
-							magazine.append (projectile)
-					elif info[1] == 'shotgun_shell' :
-						for i in range (count) :
-							projectile = ShotgunShell (default='images/platform.png')
-							magazine.append (projectile)
-					else :
-						assert (False)
+	entity_spawner.set_entities (entities)
+	
+	return entity_spawner
 
-				gun.set_magazine (magazine)
-				game.spawn_entity (gun)
+def _create_enemy (game, data) :
+	assert len (game.get_defend_points ()) > 0
+	enemy = Character (
+		default = 'images/mario_stand.png',
+		stand='images/mario_stand.png',
+		walk='images/mario_walk.png',
+		run='images/mario_run.png',
+		jump='images/mario_jump.png',)
+	enemy.set_name ("AI")
+	enemy.set_hostile (True)
+	enemy_c = AIEntityController ()
+	enemy.set_controller (enemy_c)
+	enemy_c.set_target_entity (game.get_defend_points ()[0])
+	game.get_enemies().append (enemy)
+	enemy.set_status_display (StatusDisplay ())
 
-				current_entity = gun
+	try :
+		enemy.rect.x, enemy.rect.y = data['x'], data['y']
+	except :
+		pass
 
-			#################
-			#automaticfirearm
-			#################
-			elif line[0] == 'autofirearm' :
-				autogun = AutomaticFirearm (default='images/m60.png')
-				autogun.set_anchor_points (muzzle=(175,17))
-				magazine = []
+	return enemy
 
-				for ammo in line[1].split (',') :
-					info = ammo.split ('*')
-					info = map (lambda string : string.strip (), info)
-					count = int (info[0])
-					if info[1] == 'explosive_bullet' :
-						for i in range (count) :
-							projectile = ExplosiveBullet (default='images/platform.png')
-							magazine.append (projectile)
-					elif info[1] == 'bullet' :
-						for i in range (count) :
-							projectile = Bullet (default='images/platform.png')
-							magazine.append (projectile)
-					elif info[1] == 'shotgun_shell' :
-						for i in range (count) :
-							projectile = ShotgunShell (default='images/platform.png')
-							magazine.append (projectile)
-					else :
-						assert (False)
+def _create_defend_point (game, data) :
+	defend_point = PointOfInterest ()
+	game.get_defend_points().append (defend_point)
+	
+	try :
+		defend_point.rect.x, defend_point.rect.y = data['x'], data['y']
+	except :
+		pass
 
-				autogun.set_magazine (magazine)
-				game.spawn_entity (autogun)
+	return defend_point
 
-				current_entity = autogun
+def _create_game (data) :
+	game = Game (800, 450)
+	game.set_camera (Camera (800,450))
 
 
-			#####
-			#bomb
-			#####
-			elif line[0] == 'bomb' :
-				bomb = Bomb (default='images/platform.png')
-				game.spawn_entity (bomb)
+	for entity in data :
+		category = entity['category']
 
-				current_entity = bomb
+		game_entity = function_mappings[category](game, entity)
+		game.spawn_entity (game_entity)
 
-			#############
-			#defend point
-			#############
-			elif line[0] == 'defend_point' :
-				point_of_interest = PointOfInterest ()
-				game.spawn_entity (point_of_interest)
-				game.get_defend_points().append (point_of_interest)
-				current_entity = point_of_interest
+	return game
 
-
-			###############
-			#entity spawner
-			###############
-			elif line[0] == 'entity_spawner' :
-				entity_spawner = EntitySpawner ()
-				entities_list = []
-
-				for entities in line[1].split (',') :
-					info = entities.split ('*')
-					info = map (lambda string : string.strip (), info)
-					count = int (info[0])
-					if info[1] == 'enemy' :
-						for i in range (count) :
-
-							player_ai = Character (
-								default = 'images/mario_stand.png',
-								stand='images/mario_stand.png',
-								walk='images/mario_walk.png',
-								run='images/mario_run.png',
-								jump='images/mario_jump.png',)
-							player_ai.set_name ("AI")
-							player_ai.set_hostile (True)
-							player_ai_c = AIEntityController ()
-							player_ai.set_controller (player_ai_c)
-							player_ai.set_status_display (StatusDisplay ())
-							player_ai_c.set_target_entity (game.get_defend_points ()[0])
-							game.get_enemies().append (player_ai)
-							entities_list.append (player_ai)
-					else :
-						assert (False)
-
-				entity_spawner.set_entities (entities_list)
-				game.spawn_entity (entity_spawner)
-				current_entity = entity_spawner
-
-
-			#######################################
-			#coordinates for entity location
-			#######################################
-			else :
-				coords = line[0].split ()
-				assert (len (coords) == 4)
-				coords = map (lambda string : int (string), coords)
-				x,y,width,height = coords
-				current_entity.rect = pygame.Rect (*coords)
-				current_entity.width, current_entity.height = width, height
-				current_entity = None
-
-
-		return game
+function_mappings = {
+	'group' : _create_group,
+	'player' : _create_player,
+	'platform' : _create_platform,
+	'm60' : _create_m60,
+	'enemy' : _create_enemy,
+	'defend point' : _create_defend_point,
+	'entity spawner' : _create_entity_spawner,
+	'.30 cal' : _create_30_cal
+}

@@ -4,33 +4,33 @@ class LifeControllerClient :
 
 class LifeController :
 	def __init__ (self) :
-		self.max_health = 100
-		self.health = 100
-		self.client = None
+		self._max_health = 100
+		self._health = 100
+		self._client = None
 
 	#the client whose life we are monitoring
 	def get_client (self) :
-		return self.client
+		return self._client
 	def set_client (self, client) :
-		self.client = client
+		self._client = client
 
 	#the maximum health that the client can have
 	def get_max_health (self) :
-		return self.max_health
+		return self._max_health
 	def set_max_health (self, max_health) :
-		self.max_health = max_health
+		self._max_health = max_health
 
 	#client's current health
 	def get_health (self) :
-		return self.health
+		return self._health
 	def set_health (self, health) :
-		self.health = health
+		self._health = health
 
 	#add logic to process input damage
 	def receive_damage (self, damage) :
-		self.health -= damage
-		if self.health < 0:
-			self.client.life_controller_client_died ()
+		self._health -= damage
+		if self._health < 0:
+			self._client.life_controller_client_died ()
 
 	def kill (self) :
-		self.receive_damage (self.health)
+		self._receive_damage (self.health)

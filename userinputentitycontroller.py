@@ -4,103 +4,103 @@ from entity import *
 class UserInputEntityController (EntityController) :
 	def __init__ (self) :
 		
-		self.walking = False
-		self.running = False
-		self.jumping = False
-		self.w_attacking = False
-		self.attacking = False
-		self.dropping = False
-		self.entity = None
+		self._walking = False
+		self._running = False
+		self._jumping = False
+		self._w_attacking = False
+		self._attacking = False
+		self._dropping = False
+		self._entity = None
 
-		self.drop_needs_reset = False
-		self.jump_needs_reset = False
-		self.w_attack_needs_reset = False
-		self.attack_needs_reset = False
+		self._drop_needs_reset = False
+		self._jump_needs_reset = False
+		self._w_attack_needs_reset = False
+		self._attack_needs_reset = False
 
 	def update (self, entity) :
-		if self.entity == None :
-			self.entity = entity
+		if self._entity == None :
+			self._entity = entity
 		else :
-			assert (entity == self.entity)
+			assert (entity == self._entity)
 
 		keys = pygame.key.get_pressed ()
 
-		self.walking = False
-		self.running = False
-		self.jumping = False
-		self.w_attacking = False
-		self.attacking = False
-		self.dropping = False
-		self.picking_up = False
+		self._walking = False
+		self._running = False
+		self._jumping = False
+		self._w_attacking = False
+		self._attacking = False
+		self._dropping = False
+		self._picking_up = False
 
 		#walk
 		if keys[pygame.K_a] :
-			self.entity.set_direction (Direction.left)
-			self.walking = True
+			self._entity.set_direction (Direction.left)
+			self._walking = True
 		elif keys[pygame.K_d] :
-			self.entity.set_direction (Direction.right)
-			self.walking = True
+			self._entity.set_direction (Direction.right)
+			self._walking = True
 		
 		#run
 		if keys[pygame.K_s] :
-			self.running = True
+			self._running = True
 
 		#jump
 		if keys[pygame.K_SPACE] :
-			self.jumping = True
-		elif self.entity.is_grounded ():
-			self.jump_needs_reset = False
+			self._jumping = True
+		elif self._entity.is_grounded ():
+			self._jump_needs_reset = False
 
 		#attack with weapon
 		if keys[pygame.K_o] :
-			self.w_attacking = True
+			self._w_attacking = True
 
 		#pick up weapon
 		if keys[pygame.K_p] :
-			self.picking_up = True
+			self._picking_up = True
 
 		#drop weapon
 		if keys[pygame.K_l] :
-			self.dropping = True
+			self._dropping = True
 		else :
-			self.drop_needs_reset = False
+			self._drop_needs_reset = False
 
 		#attack
 		if keys[pygame.K_i] :
-			self.attacking = True
+			self._attacking = True
 		else :
-			self.attack_needs_reset = False
+			self._attack_needs_reset = False
 
 
 
 		#do the actions
-		if self.walking :
-			self.entity.walk (self.running)
+		if self._walking :
+			self._entity.walk (self._running)
 
-		if self.jumping :
-			if self.entity.is_grounded () and not self.jump_needs_reset :
-				self.entity.jump ()
-				self.jump_needs_reset = True
-			elif not self.entity.is_grounded () :
-				self.entity.jump ()
+		if self._jumping :
+			if self._entity.is_grounded () and not self._jump_needs_reset :
+				self._entity.jump ()
+				self._jump_needs_reset = True
+			elif not self._entity.is_grounded () :
+				self._entity.jump ()
 
-		if self.picking_up :
-			self.entity.find_weapon ()
+		if self._picking_up :
+			self._entity.find_weapon ()
 
-		if self.dropping :
-			if not self.drop_needs_reset :
-				self.entity.drop_weapon ()
-				self.drop_needs_reset = True
+		if self._dropping :
+			if not self._drop_needs_reset :
+				self._entity.drop_weapon ()
+				self._drop_needs_reset = True
 
-		if self.w_attacking :
-			if not self.w_attack_needs_reset :
-				self.entity.begin_attacking_with_weapon ()
-				self.w_attack_needs_reset = True
+		if self._w_attacking :
+			if not self._w_attack_needs_reset :
+				self._entity.begin_attacking_with_weapon ()
+				self._w_attack_needs_reset = True
 		else :
-			if self.w_attack_needs_reset :
-				self.entity.end_attacking_with_weapon ()
-				self.w_attack_needs_reset = False
-			if self.attacking :
-				if not self.attack_needs_reset :
-					self.entity.attack ()
-					self.attack_needs_reset = True
+			if self._w_attack_needs_reset :
+				self._entity.end_attacking_with_weapon ()
+				self._w_attack_needs_reset = False
+			if self._attacking :
+				if not self._attack_needs_reset :
+					self._entity.attack ()
+					self._attack_needs_reset = True
