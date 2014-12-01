@@ -26,7 +26,6 @@ import json
 #	http://dustination.deviantart.com/gallery/33496765/Gun-Sprites
 #
 ##
-
 global function_mappings
 
 def read (file_path) :
@@ -92,6 +91,7 @@ def _create_player (game, data) :
 		walk='images/player_walk.png',
 		run='images/player_run.png',
 		jump='images/player_jump.png',)
+	player.set_anchor_points (hand=(37,152))
 	player.set_name ("Main")
 	player.set_controller (UserInputEntityController ())
 	game.set_main_entity (player)
@@ -148,12 +148,38 @@ def _create_roof (game, data) :
 	return block
 
 def _create_30_cal (game, data) :
-	p30_cal = Bullet (default='images/bullet.png')
+	p30_cal = Bullet (default='images/30_cal.png')
 	return p30_cal
+
+def _create_buckshot (game, data) :
+	buckshot = ShotgunShell (default='images/bullet.png')
+	return buckshot
+
+def _create_870 (game, data) :
+	r870 = Firearm (default='images/870.png')
+	r870.set_anchor_points (muzzle=(147,4), grip=(54,14))
+	magazine = []
+
+	try :
+		r870.rect.x, r870.rect.y = data['x'], data['y']
+	except :
+		pass
+
+	for projectile in data['magazine'] :
+		category = projectile['category']
+		res = function_mappings[category] (game, projectile)
+		try :
+			magazine.extend (res)
+		except :
+			magazine.append (res)
+
+	r870.set_magazine (magazine)
+
+	return r870
 
 def _create_m60 (game, data) :
 	m60 = AutomaticFirearm (default='images/m60.png')
-	m60.set_anchor_points (muzzle=(175,15))
+	m60.set_anchor_points (muzzle=(175,15), grip=(62,30))
 	magazine = []
 
 	try :
@@ -202,6 +228,7 @@ def _create_zombie (game, data) :
 		walk='images/zombie_walk.png',
 		run='images/zombie_run.png',
 		jump='images/zombie_jump.png',)
+	zombie.set_anchor_points (hand=(37,152))
 	zombie.set_name ("AI")
 	zombie.set_hostile (True)
 	zombie_c = AIEntityController ()
@@ -254,8 +281,10 @@ function_mappings = {
 	'ground' : _create_ground,
 	'wood' : _create_wood,
 	'm60' : _create_m60,
+	'870' : _create_870,
 	'zombie' : _create_zombie,
 	'defend point' : _create_defend_point,
 	'entity spawner' : _create_entity_spawner,
-	'.30 cal' : _create_30_cal
+	'.30 cal' : _create_30_cal,
+	'buckshot' : _create_buckshot
 }

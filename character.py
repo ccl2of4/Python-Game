@@ -265,15 +265,20 @@ class Character (PerishableEntity, MoveableEntity, StatusDisplayClient) :
 
 	def _update_weapon_rect (self) :
 		if self._weapon != None :
-
-			if self._direction == Direction.left :
-				x = self.rect.left
-			else :
-				x = self.rect.right
-			y = self.rect.center[1]
-
 			self._weapon.set_direction (self._direction)
-			self._weapon.rect.center = (x,y)
+
+			point = self._anchor_points['hand']
+			if self._direction == Direction.left :
+				point = (self.rect.width - point[0], point[1])
+			point = self.rect.x + point[0], self.rect.y + point[1]
+
+			grip_point = self._weapon._anchor_points['grip']
+			if self._weapon._direction == Direction.left :
+				grip_point = (self._weapon.rect.width - grip_point[0], grip_point[1])
+			
+			point = point[0] - grip_point[0], point[1] - grip_point[1]
+
+			self._weapon.rect.topleft = point
 
 	def update (self) :	
 		#slow the character if not inputing anything

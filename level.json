@@ -54,7 +54,7 @@
 	{
 		"category" : "player",
 		"x" : 128,
-		"y" : 200
+		"y" : 100
 	},
 
 	{
@@ -81,6 +81,22 @@
 			}
 		]
 	},
+
+	{
+		"category" : "870",
+		"x" : 64,
+		"y" : 390,
+		"magazine" : [
+			{
+				"category" : "group",
+				"count" : 10,
+				"entity" : {
+					"category" : "buckshot"
+				}
+			}
+		]
+	},
+
 	{
 		"category" : "entity spawner",
 		"x" : 1000,
