@@ -1,7 +1,7 @@
 [
 	{
 		"category" : "group",
-		"count" : 50,
+		"count" : 70,
 		"coords" : ["64*i", "500"],
 		"entity" : {
 			"category" : "ground"
@@ -17,11 +17,10 @@
 		}
 	},
 
-
 	{
 		"category" : "group",
 		"count" : 2,
-		"coords" : ["500", "436 - 256 - 64*i"],
+		"coords" : ["700", "436 - 256 - 64*i"],
 		"entity" : {
 			"category" : "wood"
 		}
@@ -30,7 +29,7 @@
 
 	{
 		"category" : "group",
-		"count" : 11,
+		"count" : 14,
 		"coords" : ["-64 + 32*i", "180 - 64 - 10*i"],
 		"entity" : {
 			"category" : "roof"
@@ -39,10 +38,10 @@
 
 	{
 		"category" : "group",
-		"count" : 10,
-		"coords" : ["564 - 32*i", "180 - 64 - 10*i"],
+		"count" : 6,
+		"coords" : ["0", "436 - 64*i"],
 		"entity" : {
-			"category" : "roof"
+			"category" : "wood"
 		}
 	},
 
@@ -54,7 +53,7 @@
 	{
 		"category" : "group",
 		"count" : 4,
-		"coords" : ["500", "436 - 64*i"],
+		"coords" : ["700", "436 - 64*i"],
 		"entity" : {
 			"category" : "defend point"
 		}
@@ -109,7 +108,7 @@
 
 	{
 		"category" : "entity spawner",
-		"coords" : [1000,100],
+		"coords" : [3000,100],
 		"contents" : [
 			{
 				"category" : "group",

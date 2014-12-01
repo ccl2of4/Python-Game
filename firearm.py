@@ -13,7 +13,7 @@ firearm_out_of_ammo_notification = 'firearm out of ammo notification'
 class Firearm (Weapon) :
 	def __init__(self, pos = (0,0), **images) :
 		Weapon.__init__ (self, pos,**images)
-		self._firing_velocity = 10
+		self._firing_velocity = 50
 		self._magazine = []
 		self._cooldown = 30
 
@@ -79,6 +79,7 @@ class Firearm (Weapon) :
 			v_x = -self._firing_velocity
 
 		projectile.rect.center = point
+		projectile.set_direction (self._direction)
 		projectile.set_pass_through_entities ([self, self._owner])
 		projectile.set_friendly_entities ([self, self._owner])
 		self._delegate.spawn_entity (projectile)

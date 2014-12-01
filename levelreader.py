@@ -85,6 +85,7 @@ def _create_player (game, data) :
 	player.set_anchor_points (hand=(37,152))
 	player.set_name ("Main")
 	player.set_controller (UserInputEntityController ())
+	player.set_jump_acceleration (-20.0)
 	game.set_main_entity (player)
 
 	status_display = StatusDisplay ()
@@ -103,7 +104,8 @@ def _create_platform (game, data) :
 	return platform
 
 def _create_wood (game, data) :
-	wood = Entity (default='images/wood.png')
+	wood = PerishableEntity (default='images/wood.png')
+
 	wood.rect.topleft = _get_coords (data)
 
 	return wood

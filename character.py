@@ -46,7 +46,7 @@ class Character (PerishableEntity, MoveableEntity, StatusDisplayClient) :
 		self._terminal_walk_velocity = 8.0
 		self._run_acceleration_factor = 1.5
 		self._run_terminal_velocity_factor = 1.5
-		self._jump_slow_fall_factor = 0.25
+		self._jump_slow_fall_factor = 0.15
 
 
 		self._status_display_needs_spawn = False
