@@ -1,13 +1,13 @@
 from entity import *
 
 class Explosion (Entity) :
-	def __init__(self,x=0,y=0,width=0,height=0, **images) :
+	def __init__(self, pos = (0,0), **images) :
+		Entity.__init__ (self,pos,**images)
+
 		self._knockback_factor = 10
 		self._damage_factor = 10
 		self._frames_to_live = 60
 		self._max_frames = 60
-		Entity.__init__ (self,x,y,width,height,**images)
-
 		self.set_physical (False)
 
 	def get_knockback_factor (self) :
@@ -67,8 +67,5 @@ class Explosion (Entity) :
 		Entity.update (self)
 
 	def update_image (self) :
-		self.image = pygame.Surface ((self.width, self.height))
-		self.image.fill ((255,0,0))
+		Entity.update_image (self)
 		self.image.set_alpha (255.0*self._frames_to_live/self._max_frames)
-
-		self._scale_image ()

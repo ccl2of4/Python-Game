@@ -113,6 +113,12 @@
 	},
 
 	{
+		"category" : "m67",
+		"x" : 100,
+		"y" : 370
+	},
+
+	{
 		"category" : "entity spawner",
 		"x" : 1000,
 		"y" : 100,

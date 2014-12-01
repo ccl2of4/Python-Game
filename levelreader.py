@@ -221,6 +221,15 @@ def _create_m60 (game, data) :
 
 	return m60
 
+def _create_m67 (game, data) :
+	m67 = Bomb (default='images/m67.png')
+	m67.set_anchor_points (grip=(7,7))
+	try :
+		m67.rect.x, m67.rect.y = data['x'], data['y']
+	except :
+		pass
+	return m67
+
 def _create_entity_spawner (game, data) :
 	entity_spawner = EntitySpawner ()
 	entities = []
@@ -305,6 +314,7 @@ function_mappings = {
 	'm60' : _create_m60,
 	'870' : _create_870,
 	'm1911' : _create_m1911,
+	'm67' : _create_m67,
 	'zombie' : _create_zombie,
 	'defend point' : _create_defend_point,
 	'entity spawner' : _create_entity_spawner,

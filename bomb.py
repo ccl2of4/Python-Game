@@ -4,11 +4,11 @@ from projectile import Projectile
 from explosion import Explosion
 
 class Bomb (Weapon, Projectile) :
-	def __init__(self,x=0,y=0,width=10,height=10, **images) :
-		Projectile.__init__ (self,x,y,width,height,**images)
-		Weapon.__init__ (self,x,y,width,height,**images)
+	def __init__(self, pos = (0,0), **images) :
+		Projectile.__init__ (self, pos, **images)
+		Weapon.__init__ (self, pos, **images)
 		self._has_been_launched = False
-		self._set_knockback_factor (5)
+		self.set_knockback_factor (5)
 		self._damage = 5
 
 	def get_description (self) :
@@ -19,10 +19,10 @@ class Bomb (Weapon, Projectile) :
 		if self._owner != None :
 
 			#make sure bomb doesn't hurt its owner
-			self.friendly_entities.append (self._owner)
-			self.pass_through_entities.append (self._owner)
+			self._friendly_entities.append (self._owner)
+			self._pass_through_entities.append (self._owner)
 
-			if self.owner.direction == Direction.right :
+			if self._owner._direction == Direction.right :
 				v_x = 10.0
 			else :
 				v_x = -10.0
@@ -51,9 +51,10 @@ class Bomb (Weapon, Projectile) :
 		Projectile.launch (self, velocity)
 		self._has_been_launched = True
 
-	def made_contact (self, entity) :
+	def _made_contact (self, entity) :
 		#spawn an explosion
-		explosion = Explosion (self.rect.centerx, self.rect.centery, 80, 80)
+		explosion = Explosion (default='images/explosion.png')
+		explosion.set_pos ( (self.rect.centerx, self.rect.centery) )
 		explosion.rect.center = self.rect.center
 		for entity in self._friendly_entities :
 			explosion._friendly_entities.append (entity)
@@ -67,7 +68,7 @@ class Bomb (Weapon, Projectile) :
 		else :
 			Weapon.update (self)
 
-	def calculate_knockback (self, entity) :
+	def _calculate_knockback (self, entity) :
 		touching = get_touching (self.rect, entity.rect)
 		
 		assert (touching != Location.none)
