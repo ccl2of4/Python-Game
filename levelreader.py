@@ -87,11 +87,11 @@ def _create_composite (game, data) :
 def _create_player (game, data) :
 	assert game.get_main_entity () == None
 	player = Character (
-		default = 'images/mario_stand.png',
-		stand='images/mario_stand.png',
-		walk='images/mario_walk.png',
-		run='images/mario_run.png',
-		jump='images/mario_jump.png',)
+		default = 'images/player_stand.png',
+		stand='images/player_stand.png',
+		walk='images/player_walk.png',
+		run='images/player_run.png',
+		jump='images/player_jump.png',)
 	player.set_name ("Main")
 	player.set_controller (UserInputEntityController ())
 	game.set_main_entity (player)
@@ -170,7 +170,7 @@ def _create_m60 (game, data) :
 			magazine.append (res)
 
 	m60.set_magazine (magazine)
-	
+
 	return m60
 
 def _create_entity_spawner (game, data) :
@@ -194,28 +194,28 @@ def _create_entity_spawner (game, data) :
 	
 	return entity_spawner
 
-def _create_enemy (game, data) :
+def _create_zombie (game, data) :
 	assert len (game.get_defend_points ()) > 0
-	enemy = Character (
-		default = 'images/mario_stand.png',
-		stand='images/mario_stand.png',
-		walk='images/mario_walk.png',
-		run='images/mario_run.png',
-		jump='images/mario_jump.png',)
-	enemy.set_name ("AI")
-	enemy.set_hostile (True)
-	enemy_c = AIEntityController ()
-	enemy.set_controller (enemy_c)
-	enemy_c.set_target_entity (game.get_defend_points ()[0])
-	game.get_enemies().append (enemy)
-	enemy.set_status_display (StatusDisplay ())
+	zombie = Character (
+		default = 'images/zombie_stand.png',
+		stand='images/zombie_stand.png',
+		walk='images/zombie_walk.png',
+		run='images/zombie_run.png',
+		jump='images/zombie_jump.png',)
+	zombie.set_name ("AI")
+	zombie.set_hostile (True)
+	zombie_c = AIEntityController ()
+	zombie.set_controller (zombie_c)
+	zombie_c.set_target_entity (game.get_defend_points ()[0])
+	game.get_enemies().append (zombie)
+	zombie.set_status_display (StatusDisplay ())
 
 	try :
-		enemy.rect.x, enemy.rect.y = data['x'], data['y']
+		zombie.rect.x, zombie.rect.y = data['x'], data['y']
 	except :
 		pass
 
-	return enemy
+	return zombie
 
 def _create_defend_point (game, data) :
 	defend_point = PointOfInterest ()
@@ -254,7 +254,7 @@ function_mappings = {
 	'ground' : _create_ground,
 	'wood' : _create_wood,
 	'm60' : _create_m60,
-	'enemy' : _create_enemy,
+	'zombie' : _create_zombie,
 	'defend point' : _create_defend_point,
 	'entity spawner' : _create_entity_spawner,
 	'.30 cal' : _create_30_cal

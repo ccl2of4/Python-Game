@@ -21,4 +21,4 @@ class Camera :
 	def update(self):
 		l, t, _, _ = self._target.rect # l = left,  t = top
 		_, _, w, h = self._state      # w = width, h = height
-		self._state = Rect(-l + w/2.0, -t + h/2.0, w, h)
+		self._state = Rect(1.0*w/4.0 - l,h/2.0 - t, w, h)

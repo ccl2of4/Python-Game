@@ -11,7 +11,7 @@
 
 	{
 		"category" : "group",
-		"count" : 5,
+		"count" : 6,
 		"x" : "0",
 		"y" : "436 - 64*i",
 		"entity" : {
@@ -22,9 +22,9 @@
 
 	{
 		"category" : "group",
-		"count" : 3,
+		"count" : 2,
 		"x" : "500",
-		"y" : "436 - 128 - 64*i",
+		"y" : "436 - 256 - 64*i",
 		"entity" : {
 			"category" : "wood"
 		}
@@ -35,7 +35,7 @@
 		"category" : "group",
 		"count" : 11,
 		"x" : "-64 + 32*i",
-		"y" : "180 - 10*i",
+		"y" : "180 - 64 - 10*i",
 		"entity" : {
 			"category" : "roof"
 		}
@@ -45,7 +45,7 @@
 		"category" : "group",
 		"count" : 10,
 		"x" : "564 - 32*i",
-		"y" : "180 - 10*i",
+		"y" : "180 - 64 - 10*i",
 		"entity" : {
 			"category" : "roof"
 		}
@@ -59,7 +59,7 @@
 
 	{
 		"category" : "group",
-		"count" : 2,
+		"count" : 4,
 		"x" : "500",
 		"y" : "436 - 64*i",
 		"entity" : {
@@ -73,7 +73,25 @@
 		"y" : 436,
 		"magazine" : [
 			{
-				"category" : ".30 cal"
+				"category" : "group",
+				"count" : 100,
+				"entity" : {
+					"category" : ".30 cal"
+				}
+			}
+		]
+	},
+	{
+		"category" : "entity spawner",
+		"x" : 1000,
+		"y" : 100,
+		"contents" : [
+			{
+				"category" : "group",
+				"count" : 10,
+				"entity" : {
+					"category" : "zombie"
+				}
 			}
 		]
 	}

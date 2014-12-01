@@ -15,7 +15,7 @@ class PerishableEntity (Entity, LifeControllerClient) :
 
 	def life_controller_client_died (self) :
 		NotificationCenter.shared_center().post_notification (self, perishable_entity_died_notification)
-		self.delegate.despawn_entity (self)
+		self._delegate.despawn_entity (self)
 
 	#the life controller that monitors this entity's life
 	def get_life_controller (self) :
