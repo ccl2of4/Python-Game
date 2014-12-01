@@ -2,8 +2,8 @@ from projectile import Projectile
 from bullet import Bullet
 
 class ShotgunShell (Projectile) :
-	def __init__ (self,x=0,y=0,width=10,height=10, **images) :
-		Projectile.__init__ (self,x,y,width,height,**images)
+	def __init__ (self, pos = (0,0), **images) :
+		Projectile.__init__ (self, pos, **images)
 		self._spread = .10
 
 	def get_description (self) :
@@ -11,15 +11,15 @@ class ShotgunShell (Projectile) :
 
 	def launch (self, velocity) :
 		
-		b1 = Bullet (default='images/platform.png')
+		b1 = Bullet (default='images/bullet.png')
 		b1.rect.x = self.rect.x
 		b1.rect.y = self.rect.y
 
-		b2 = Bullet (default='images/platform.png')
+		b2 = Bullet (default='images/bullet.png')
 		b2.rect.x = self.rect.x
 		b2.rect.y = self.rect.y
 
-		b3 = Bullet (default='images/platform.png')
+		b3 = Bullet (default='images/bullet.png')
 		b3.rect.x = self.rect.x
 		b3.rect.y = self.rect.y
 
