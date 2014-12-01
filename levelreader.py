@@ -16,6 +16,7 @@ from shotgunshell import ShotgunShell
 from moveableentity import MoveableEntity
 from automaticfirearm import AutomaticFirearm
 from entityspawner import EntitySpawner
+from compositeentity import CompositeEntity
 import json
 
 ##
@@ -43,11 +44,45 @@ def _create_group (game, data) :
 	entity = data['entity']
 	category = entity['category']
 
+	x_logic = None
+	y_logic = None
+
+	if 'x' in data :
+		x_logic = data['x']
+	if 'y' in data :
+		y_logic = data['y']
+
 	func = function_mappings[category]
 	for i in range (count) :
-		entities.append (func (game, entity))
+		entity = func (game, entity)
+		if x_logic != None :
+			entity.rect.x = eval (x_logic)
+		if y_logic != None :
+			entity.rect.y = eval (y_logic)
+		entities.append (entity)
 
 	return entities
+
+def _create_composite (game, data) :
+	assert (False)
+	composite_entity = CompositeEntity ()
+	entities = []
+
+	for entity in data['entities'] :
+		category = entity['category']
+		res = function_mappings[category] (game, entity)
+		try :
+			entities.extend (res)
+		except :
+			entities.append (res)
+
+	try :
+		composite_entity.rect.x, composite_entity.rect.y = data['x'], data['y']
+	except :
+		pass
+
+	composite_entity.set_inner_entities (entities)
+	return composite_entity
 
 def _create_player (game, data) :
 	assert game.get_main_entity () == None
@@ -82,6 +117,35 @@ def _create_platform (game, data) :
 
 	return platform
 
+def _create_wood (game, data) :
+	block = Entity (default='images/wood.png')
+
+	try :
+		block.rect.x, block.rect.y = data['x'], data['y']
+	except :
+		pass
+
+	return block
+
+def _create_ground (game, data) :
+	block = Entity (default='images/ground.png')
+
+	try :
+		block.rect.x, block.rect.y = data['x'], data['y']
+	except :
+		pass
+
+	return block
+
+def _create_roof (game, data) :
+	block = Entity (default='images/roof.png')
+
+	try :
+		block.rect.x, block.rect.y = data['x'], data['y']
+	except :
+		pass
+
+	return block
 
 def _create_30_cal (game, data) :
 	p30_cal = Bullet (default='images/bullet.png')
@@ -106,6 +170,7 @@ def _create_m60 (game, data) :
 			magazine.append (res)
 
 	m60.set_magazine (magazine)
+	
 	return m60
 
 def _create_entity_spawner (game, data) :
@@ -172,14 +237,22 @@ def _create_game (data) :
 		category = entity['category']
 
 		game_entity = function_mappings[category](game, entity)
-		game.spawn_entity (game_entity)
+		try :
+			for s_game_entity in game_entity :
+				game.spawn_entity (s_game_entity)
+		except :
+			game.spawn_entity (game_entity)
 
 	return game
 
 function_mappings = {
 	'group' : _create_group,
+	'roof' : _create_roof,
 	'player' : _create_player,
 	'platform' : _create_platform,
+	'composite' : _create_composite,
+	'ground' : _create_ground,
+	'wood' : _create_wood,
 	'm60' : _create_m60,
 	'enemy' : _create_enemy,
 	'defend point' : _create_defend_point,

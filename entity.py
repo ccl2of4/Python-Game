@@ -23,6 +23,7 @@ class Entity (pygame.sprite.Sprite) :
 		pygame.sprite.Sprite.__init__ (self)
 
 		self._layer = 0
+		self._pos = pos
 
 		#instance variables
 		self._direction = Direction.right

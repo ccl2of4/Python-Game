@@ -6,7 +6,7 @@ global point_of_interest_reached_notification
 point_of_interest_reached_notification = 'point of interest reached notification'
 
 class PointOfInterest (Entity) :
-	def __init__ (self, pos = (0,0), size = (50,50)) :
+	def __init__ (self, pos = (0,0), size = (64,64)) :
 		Entity.__init__ (self,pos)
 		self.set_physical (False)
 		self._size = size

@@ -10,6 +10,11 @@ class Camera :
 	def set_target (self, target) :
 		self._target = target
 
+	def set_state (self, state) :
+		self._state = state
+	def get_state (self) :
+		return self._state
+
 	def apply(self, entity):
 		entity.rect.move_ip(self._state.topleft)
 

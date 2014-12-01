@@ -1,69 +1,79 @@
 [
 	{
-		"category" : "platform",
-		"x" : 0,
-		"y" : 500
+		"category" : "group",
+		"count" : 50,
+		"x" : "64*i",
+		"y" : "500",
+		"entity" : {
+			"category" : "ground"
+		}
+	},
+
+	{
+		"category" : "group",
+		"count" : 5,
+		"x" : "0",
+		"y" : "436 - 64*i",
+		"entity" : {
+			"category" : "wood"
+		}
+	},
+
+
+	{
+		"category" : "group",
+		"count" : 3,
+		"x" : "500",
+		"y" : "436 - 128 - 64*i",
+		"entity" : {
+			"category" : "wood"
+		}
+	},
+
+
+	{
+		"category" : "group",
+		"count" : 11,
+		"x" : "-64 + 32*i",
+		"y" : "180 - 10*i",
+		"entity" : {
+			"category" : "roof"
+		}
+	},
+
+	{
+		"category" : "group",
+		"count" : 10,
+		"x" : "564 - 32*i",
+		"y" : "180 - 10*i",
+		"entity" : {
+			"category" : "roof"
+		}
 	},
 
 	{
 		"category" : "player",
-		"x" : 0,
-		"y" : 0
+		"x" : 128,
+		"y" : 200
+	},
+
+	{
+		"category" : "group",
+		"count" : 2,
+		"x" : "500",
+		"y" : "436 - 64*i",
+		"entity" : {
+			"category" : "defend point"
+		}
 	},
 
 	{
 		"category" : "m60",
-		"x" : 100,
-		"y" : 0,
+		"x" : 64,
+		"y" : 436,
 		"magazine" : [
 			{
-				"category" : "group",
-				"count" : 10,
-				"entity" : {
-					"category" : ".30 cal"
-				}
-			}
-		]
-	},
-
-	{
-		"category" : "defend point",
-		"x" : 100,
-		"y" : 400
-	},
-
-	{
-		"category" : "enemy",
-		"x" : 200,
-		"y" : 0
-	},
-
-	{
-		"category" : "entity spawner",
-		"x" : 400,
-		"y" : 100,
-		"contents" : [
-			{
-				"category" : "enemy"
-			},
-			{
-				"category" : "m60",
-				"magazine" : [
-					{
-						"category" : "group",
-						"count" : 10,
-						"entity" : {
-							"category" : ".30 cal"
-						}
-					}
-				]
-			},
-			{
-				"category" : "group",
-				"count" : 10,
-				"entity" : {
-					"category" : "enemy"
-				}
+				"category" : ".30 cal"
 			}
 		]
 	}

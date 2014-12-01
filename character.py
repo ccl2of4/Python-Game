@@ -202,7 +202,7 @@ class Character (PerishableEntity, MoveableEntity, StatusDisplayClient) :
 
 			touching = get_touching (self.rect,entity.rect)
 			if ((Location.left == touching and self._direction == Direction.left)
-				or (Location.right == touching and self._direction == Direction.right)):
+				or (Location.right == touching and self._direction == Direction.right)) and False:
 				distance = self.rect.bottom - entity.rect.top
 				if 0 < distance < self.rect.height * .20 :
 					self._velocity = self._velocity[0], self._velocity[1] - 1.1 * self._gravity

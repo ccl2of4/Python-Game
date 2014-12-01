@@ -109,7 +109,9 @@ class Game (EntityDelegate) :
 					pygame.quit ()
 					break;
 				elif event.type==pygame.VIDEORESIZE:
-					screen=pygame.display.set_mode(event.dict['size'],pygame.HWSURFACE|pygame.DOUBLEBUF|pygame.RESIZABLE)
+					size = event.dict['size']
+					screen=pygame.display.set_mode(size,pygame.HWSURFACE|pygame.DOUBLEBUF|pygame.RESIZABLE)
+					self.camera.set_state ((0,0,size[0],size[1]))
 
 			#user input
 			keys = pygame.key.get_pressed ()

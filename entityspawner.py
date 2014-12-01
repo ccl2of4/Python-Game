@@ -15,7 +15,7 @@ class EntitySpawner (Entity) :
 		self._layer = -1
 		self._size = size
 		self._entities = []
-		self._cooldown = 60
+		self._cooldown = 600
 		self._data_source = None
 		self._frames_till_next_spawn = 0
 		self._should_update_image = True
