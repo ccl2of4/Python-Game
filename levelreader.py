@@ -38,6 +38,18 @@ def read (file_path) :
 
 	return game
 
+def _get_coords (data) :
+	try :
+		x, y = data['coords'][0], data['coords'][1]
+	except :
+		return (0,0)
+	return x, y
+
+def _unpack_sprites (data) :
+	pass
+def _unpack_anchors (data) :
+	pass
+
 def _create_group (game, data) :
 	entities = []
 	count = data['count']
@@ -61,29 +73,9 @@ def _create_group (game, data) :
 
 	return entities
 
-def _create_composite (game, data) :
-	assert (False)
-	composite_entity = CompositeEntity ()
-	entities = []
-
-	for entity in data['entities'] :
-		category = entity['category']
-		res = function_mappings[category] (game, entity)
-		try :
-			entities.extend (res)
-		except :
-			entities.append (res)
-
-	try :
-		composite_entity.rect.x, composite_entity.rect.y = data['coords'][0], data['coords'][1]
-	except :
-		pass
-
-	composite_entity.set_inner_entities (entities)
-	return composite_entity
-
 def _create_player (game, data) :
 	assert game.get_main_entity () == None
+
 	player = Character (
 		default = 'images/player_stand.png',
 		stand='images/player_stand.png',
@@ -99,59 +91,43 @@ def _create_player (game, data) :
 	status_display.set_client (player)
 	game.spawn_entity_absolute (status_display)
 
-	try :
-		player.rect.x, player.rect.y = data['coords'][0], data['coords'][1]
-	except :
-		pass
+	player.rect.topleft = _get_coords (data)
+
 
 	return player
 
 def _create_platform (game, data) :
 	platform = Entity (default='images/platform.png')
-
-	try :
-		platform.rect.x, platform.rect.y = data['coords'][0], data['coords'][1]
-	except :
-		pass
+	platform.rect.topleft = _get_coords (data)
 
 	return platform
 
 def _create_wood (game, data) :
-	block = Entity (default='images/wood.png')
+	wood = Entity (default='images/wood.png')
+	wood.rect.topleft = _get_coords (data)
 
-	try :
-		block.rect.x, block.rect.y = data['coords'][0], data['coords'][1]
-	except :
-		pass
-
-	return block
+	return wood
 
 def _create_ground (game, data) :
-	block = Entity (default='images/ground.png')
+	ground = Entity (default='images/ground.png')
+	ground.rect.topleft = _get_coords (data)
 
-	try :
-		block.rect.x, block.rect.y = data['coords'][0], data['coords'][1]
-	except :
-		pass
-
-	return block
+	return ground
 
 def _create_roof (game, data) :
-	block = Entity (default='images/roof.png')
+	roof = Entity (default='images/roof.png')
+	roof.rect.topleft = _get_coords (data)
 
-	try :
-		block.rect.x, block.rect.y = data['coords'][0], data['coords'][1]
-	except :
-		pass
-
-	return block
+	return roof
 
 def _create_30_cal (game, data) :
 	p30_cal = Bullet (default='images/30_cal.png')
+	p30_cal.rect.topleft = _get_coords (data)
 	return p30_cal
 
 def _create_buckshot (game, data) :
 	buckshot = ShotgunShell ()
+	buckshot.rect.topleft = _get_coords (data)
 	return buckshot
 
 def _create_870 (game, data) :
@@ -159,10 +135,7 @@ def _create_870 (game, data) :
 	r870.set_anchor_points (muzzle=(147,4), grip=(54,14))
 	magazine = []
 
-	try :
-		r870.rect.x, r870.rect.y = data['coords'][0], data['coords'][1]
-	except :
-		pass
+	r870.rect.topleft = _get_coords (data)
 
 	for projectile in data['magazine'] :
 		category = projectile['category']
@@ -181,10 +154,7 @@ def _create_m1911 (game, data) :
 	m1911.set_anchor_points (muzzle=(29,4), grip=(15,9))
 	magazine = []
 
-	try :
-		m1911.rect.x, m1911.rect.y = data['coords'][0], data['coords'][1]
-	except :
-		pass
+	m1911.rect.topleft = _get_coords (data)
 
 	for projectile in data['magazine'] :
 		category = projectile['category']
@@ -203,10 +173,7 @@ def _create_m60 (game, data) :
 	m60.set_anchor_points (muzzle=(175,15), grip=(62,30))
 	magazine = []
 
-	try :
-		m60.rect.x, m60.rect.y = data['coords'][0], data['coords'][1]
-	except :
-		pass
+	m60.rect.topleft = _get_coords (data)
 
 	for projectile in data['magazine'] :
 		category = projectile['category']
@@ -223,20 +190,14 @@ def _create_m60 (game, data) :
 def _create_m67 (game, data) :
 	m67 = Bomb (default='images/m67.png')
 	m67.set_anchor_points (grip=(7,7))
-	try :
-		m67.rect.x, m67.rect.y = data['coords'][0], data['coords'][1]
-	except :
-		pass
+	m67.rect.topleft = _get_coords (data)
 	return m67
 
 def _create_entity_spawner (game, data) :
 	entity_spawner = EntitySpawner ()
 	entities = []
 
-	try :
-		entity_spawner.rect.x, entity_spawner.rect.y = data['coords'][0], data['coords'][1]
-	except :
-		pass
+	entity_spawner.rect.topleft = _get_coords (data)
 	
 	for entity in data['contents'] :
 		category = entity['category']
@@ -267,21 +228,14 @@ def _create_zombie (game, data) :
 	game.get_enemies().append (zombie)
 	zombie.set_status_display (StatusDisplay ())
 
-	try :
-		zombie.rect.x, zombie.rect.y = data['coords'][0], data['coords'][1]
-	except :
-		pass
+	zombie.rect.topleft = _get_coords (data)
 
 	return zombie
 
 def _create_defend_point (game, data) :
 	defend_point = PointOfInterest ()
 	game.get_defend_points().append (defend_point)
-	
-	try :
-		defend_point.rect.x, defend_point.rect.y = data['coords'][0], data['coords'][1]
-	except :
-		pass
+	defend_point.rect.topleft = _get_coords (data)
 
 	return defend_point
 
