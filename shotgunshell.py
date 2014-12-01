@@ -11,15 +11,15 @@ class ShotgunShell (Projectile) :
 
 	def launch (self, velocity) :
 		
-		b1 = Bullet (default='images/bullet.png')
+		b1 = Bullet (default='images/buckshot.png')
 		b1.rect.x = self.rect.x
 		b1.rect.y = self.rect.y
 
-		b2 = Bullet (default='images/bullet.png')
+		b2 = Bullet (default='images/buckshot.png')
 		b2.rect.x = self.rect.x
 		b2.rect.y = self.rect.y
 
-		b3 = Bullet (default='images/bullet.png')
+		b3 = Bullet (default='images/buckshot.png')
 		b3.rect.x = self.rect.x
 		b3.rect.y = self.rect.y
 

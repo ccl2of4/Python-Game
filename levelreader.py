@@ -148,7 +148,7 @@ def _create_roof (game, data) :
 	return block
 
 def _create_30_cal (game, data) :
-	p30_cal = Bullet (default='images/bullet.png')
+	p30_cal = Bullet (default='images/30_cal.png')
 	return p30_cal
 
 def _create_buckshot (game, data) :
