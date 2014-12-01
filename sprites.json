@@ -1,0 +1,118 @@
+{
+	"player" : {
+	
+		"default" : {
+			"src" : "images/player_stand.png",
+			"anchors" : {
+				"hand" : [37,152]
+			}
+		},
+
+		"stand" : {
+			"src" : "images/player_stand.png",
+			"anchors" : {
+				"hand" : [37,152]
+			}
+		},
+		
+		"walk" : {
+			"src" : "images/player_walk.png",
+			"anchors" : {
+				"hand" : [37,152]
+			}
+		},
+
+		"run" : {
+			"src" : "images/player_run.png",
+			"anchors" : {
+				"hand" : [37,152]
+			}
+		},
+
+		"jump" : {
+			"src" : "images/player_jump.png",
+			"anchors" : {
+				"hand" : [37,152]
+			}
+		}
+	},
+
+	"zombie" : {
+
+		"default" : {
+			"src" : "images/zombie_stand.png",
+			"anchors" : {
+				"hand" : [37,152]
+			}
+		},
+
+		"stand" : {
+			"src" : "images/zombie_stand.png",
+			"anchors" : {
+				"hand" : [37,152]
+			}
+		},
+		
+		"walk" : {
+			"src" : "images/zombie_walk.png",
+			"anchors" : {
+				"hand" : [37,152]
+			}
+		},
+
+		"run" : {
+			"src" : "images/zombie_run.png",
+			"anchors" : {
+				"hand" : [37,152]
+			}
+		},
+
+		"jump" : {
+			"src" : "images/zombie_jump.png",
+			"anchors" : {
+				"hand" : [37,152]
+			}
+		}
+	},
+
+	"m60" : {
+		"default" : {
+			"src" : "images/m60.png",
+			"anchors" : {
+				"grip" : [62,30],
+				"muzzle" : [175,15]
+			}
+		}
+	},
+
+	"870" : {
+		"default" : {
+			"src" : "images/870.png",
+			"anchors" : {
+				"grip" : [54,14],
+				"muzzle" : [147,4]
+			}
+		}
+	},
+
+	"m1911" : {
+		"default" : {
+			"src" : "images/m1911.png",
+			"anchors" : {
+				"grip" : [15,9],
+				"muzzle" : [29,4]
+			}
+		}
+	},
+
+	"m67" : {
+		"default" : {
+			"src" : "images/m67.png",
+			"anchors" : {
+				"grip" : [7,7],
+			}
+		}
+	}
+
+
+}

@@ -16,7 +16,6 @@ from shotgunshell import ShotgunShell
 from moveableentity import MoveableEntity
 from automaticfirearm import AutomaticFirearm
 from entityspawner import EntitySpawner
-from compositeentity import CompositeEntity
 import json
 
 ##
@@ -308,7 +307,6 @@ function_mappings = {
 	'roof' : _create_roof,
 	'player' : _create_player,
 	'platform' : _create_platform,
-	'composite' : _create_composite,
 	'ground' : _create_ground,
 	'wood' : _create_wood,
 	'm60' : _create_m60,
