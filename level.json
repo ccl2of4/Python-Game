@@ -2,8 +2,7 @@
 	{
 		"category" : "group",
 		"count" : 50,
-		"x" : "64*i",
-		"y" : "500",
+		"coords" : ["64*i", "500"],
 		"entity" : {
 			"category" : "ground"
 		}
@@ -12,8 +11,7 @@
 	{
 		"category" : "group",
 		"count" : 6,
-		"x" : "0",
-		"y" : "436 - 64*i",
+		"coords" : ["0", "436 - 64*i"],
 		"entity" : {
 			"category" : "wood"
 		}
@@ -23,8 +21,7 @@
 	{
 		"category" : "group",
 		"count" : 2,
-		"x" : "500",
-		"y" : "436 - 256 - 64*i",
+		"coords" : ["500", "436 - 256 - 64*i"],
 		"entity" : {
 			"category" : "wood"
 		}
@@ -34,8 +31,7 @@
 	{
 		"category" : "group",
 		"count" : 11,
-		"x" : "-64 + 32*i",
-		"y" : "180 - 64 - 10*i",
+		"coords" : ["-64 + 32*i", "180 - 64 - 10*i"],
 		"entity" : {
 			"category" : "roof"
 		}
@@ -44,8 +40,7 @@
 	{
 		"category" : "group",
 		"count" : 10,
-		"x" : "564 - 32*i",
-		"y" : "180 - 64 - 10*i",
+		"coords" : ["564 - 32*i", "180 - 64 - 10*i"],
 		"entity" : {
 			"category" : "roof"
 		}
@@ -53,15 +48,13 @@
 
 	{
 		"category" : "player",
-		"x" : 128,
-		"y" : 100
+		"coords" : [128,100]
 	},
 
 	{
 		"category" : "group",
 		"count" : 4,
-		"x" : "500",
-		"y" : "436 - 64*i",
+		"coords" : ["500", "436 - 64*i"],
 		"entity" : {
 			"category" : "defend point"
 		}
@@ -69,8 +62,7 @@
 
 	{
 		"category" : "m60",
-		"x" : 64,
-		"y" : 436,
+		"coords" : [64,436],
 		"magazine" : [
 			{
 				"category" : "group",
@@ -84,8 +76,7 @@
 
 	{
 		"category" : "m1911",
-		"x" : 64,
-		"y" : 370,
+		"coords" : [64,370],
 		"magazine" : [
 			{
 				"category" : "group",
@@ -99,8 +90,7 @@
 
 	{
 		"category" : "870",
-		"x" : 64,
-		"y" : 390,
+		"coords" : [64,390],
 		"magazine" : [
 			{
 				"category" : "group",
@@ -114,14 +104,12 @@
 
 	{
 		"category" : "m67",
-		"x" : 100,
-		"y" : 370
+		"coords" : [100,370]
 	},
 
 	{
 		"category" : "entity spawner",
-		"x" : 1000,
-		"y" : 100,
+		"coords" : [1000,100],
 		"contents" : [
 			{
 				"category" : "group",

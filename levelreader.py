@@ -25,6 +25,8 @@ import json
 #	http://dustination.deviantart.com/gallery/33496765/Gun-Sprites
 #
 ##
+
+global sprite_mappings
 global function_mappings
 
 def read (file_path) :
@@ -45,17 +47,15 @@ def _create_group (game, data) :
 	x_logic = None
 	y_logic = None
 
-	if 'x' in data :
-		x_logic = data['x']
-	if 'y' in data :
-		y_logic = data['y']
+	if 'coords' in data :
+		x_logic = data['coords'][0]
+		y_logic = data['coords'][1]
 
 	func = function_mappings[category]
 	for i in range (count) :
 		entity = func (game, entity)
-		if x_logic != None :
+		if x_logic != None and y_logic != None :
 			entity.rect.x = eval (x_logic)
-		if y_logic != None :
 			entity.rect.y = eval (y_logic)
 		entities.append (entity)
 
@@ -75,7 +75,7 @@ def _create_composite (game, data) :
 			entities.append (res)
 
 	try :
-		composite_entity.rect.x, composite_entity.rect.y = data['x'], data['y']
+		composite_entity.rect.x, composite_entity.rect.y = data['coords'][0], data['coords'][1]
 	except :
 		pass
 
@@ -100,7 +100,7 @@ def _create_player (game, data) :
 	game.spawn_entity_absolute (status_display)
 
 	try :
-		player.rect.x, player.rect.y = data['x'], data['y']
+		player.rect.x, player.rect.y = data['coords'][0], data['coords'][1]
 	except :
 		pass
 
@@ -110,7 +110,7 @@ def _create_platform (game, data) :
 	platform = Entity (default='images/platform.png')
 
 	try :
-		platform.rect.x, platform.rect.y = data['x'], data['y']
+		platform.rect.x, platform.rect.y = data['coords'][0], data['coords'][1]
 	except :
 		pass
 
@@ -120,7 +120,7 @@ def _create_wood (game, data) :
 	block = Entity (default='images/wood.png')
 
 	try :
-		block.rect.x, block.rect.y = data['x'], data['y']
+		block.rect.x, block.rect.y = data['coords'][0], data['coords'][1]
 	except :
 		pass
 
@@ -130,7 +130,7 @@ def _create_ground (game, data) :
 	block = Entity (default='images/ground.png')
 
 	try :
-		block.rect.x, block.rect.y = data['x'], data['y']
+		block.rect.x, block.rect.y = data['coords'][0], data['coords'][1]
 	except :
 		pass
 
@@ -140,7 +140,7 @@ def _create_roof (game, data) :
 	block = Entity (default='images/roof.png')
 
 	try :
-		block.rect.x, block.rect.y = data['x'], data['y']
+		block.rect.x, block.rect.y = data['coords'][0], data['coords'][1]
 	except :
 		pass
 
@@ -160,7 +160,7 @@ def _create_870 (game, data) :
 	magazine = []
 
 	try :
-		r870.rect.x, r870.rect.y = data['x'], data['y']
+		r870.rect.x, r870.rect.y = data['coords'][0], data['coords'][1]
 	except :
 		pass
 
@@ -182,7 +182,7 @@ def _create_m1911 (game, data) :
 	magazine = []
 
 	try :
-		m1911.rect.x, m1911.rect.y = data['x'], data['y']
+		m1911.rect.x, m1911.rect.y = data['coords'][0], data['coords'][1]
 	except :
 		pass
 
@@ -204,7 +204,7 @@ def _create_m60 (game, data) :
 	magazine = []
 
 	try :
-		m60.rect.x, m60.rect.y = data['x'], data['y']
+		m60.rect.x, m60.rect.y = data['coords'][0], data['coords'][1]
 	except :
 		pass
 
@@ -224,7 +224,7 @@ def _create_m67 (game, data) :
 	m67 = Bomb (default='images/m67.png')
 	m67.set_anchor_points (grip=(7,7))
 	try :
-		m67.rect.x, m67.rect.y = data['x'], data['y']
+		m67.rect.x, m67.rect.y = data['coords'][0], data['coords'][1]
 	except :
 		pass
 	return m67
@@ -234,7 +234,7 @@ def _create_entity_spawner (game, data) :
 	entities = []
 
 	try :
-		entity_spawner.rect.x, entity_spawner.rect.y = data['x'], data['y']
+		entity_spawner.rect.x, entity_spawner.rect.y = data['coords'][0], data['coords'][1]
 	except :
 		pass
 	
@@ -268,7 +268,7 @@ def _create_zombie (game, data) :
 	zombie.set_status_display (StatusDisplay ())
 
 	try :
-		zombie.rect.x, zombie.rect.y = data['x'], data['y']
+		zombie.rect.x, zombie.rect.y = data['coords'][0], data['coords'][1]
 	except :
 		pass
 
@@ -279,7 +279,7 @@ def _create_defend_point (game, data) :
 	game.get_defend_points().append (defend_point)
 	
 	try :
-		defend_point.rect.x, defend_point.rect.y = data['x'], data['y']
+		defend_point.rect.x, defend_point.rect.y = data['coords'][0], data['coords'][1]
 	except :
 		pass
 
@@ -301,6 +301,10 @@ def _create_game (data) :
 			game.spawn_entity (game_entity)
 
 	return game
+
+
+with open ('sprites.json', 'r') as f :
+		sprite_mappings = json.load (f)
 
 function_mappings = {
 	'group' : _create_group,

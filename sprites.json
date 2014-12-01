@@ -109,7 +109,7 @@
 		"default" : {
 			"src" : "images/m67.png",
 			"anchors" : {
-				"grip" : [7,7],
+				"grip" : [7,7]
 			}
 		}
 	}
