@@ -38,6 +38,15 @@
 
 	{
 		"category" : "group",
+		"count" : 14,
+		"coords" : ["764 - 32*i", "180 - 64 - 10*i"],
+		"entity" : {
+			"category" : "roof"
+		}
+	},
+
+	{
+		"category" : "group",
 		"count" : 6,
 		"coords" : ["0", "436 - 64*i"],
 		"entity" : {

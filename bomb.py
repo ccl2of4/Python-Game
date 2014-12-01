@@ -54,8 +54,7 @@ class Bomb (Weapon, Projectile) :
 	def _made_contact (self, entity) :
 		#spawn an explosion
 		explosion = Explosion (default='images/explosion.png')
-		explosion.set_pos ( (self.rect.centerx, self.rect.centery) )
-		explosion.rect.center = self.rect.center
+		explosion.set_pos ( (self.rect.centerx - 50, self.rect.centery - 50) )
 		for entity in self._friendly_entities :
 			explosion._friendly_entities.append (entity)
 		for entity in self._pass_through_entities :

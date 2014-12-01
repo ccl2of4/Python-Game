@@ -82,7 +82,7 @@ def _create_player (game, data) :
 		walk='images/player_walk.png',
 		run='images/player_run.png',
 		jump='images/player_jump.png',)
-	player.set_anchor_points (hand=(37,152))
+	player.set_anchor_points (hand=(62,150))
 	player.set_name ("Main")
 	player.set_controller (UserInputEntityController ())
 	player.set_jump_acceleration (-20.0)
