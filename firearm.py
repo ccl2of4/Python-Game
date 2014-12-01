@@ -13,7 +13,7 @@ firearm_out_of_ammo_notification = 'firearm out of ammo notification'
 class Firearm (Weapon) :
 	def __init__(self, pos = (0,0), **images) :
 		Weapon.__init__ (self, pos,**images)
-		self._firing_velocity = 50
+		self._firing_velocity = 20
 		self._magazine = []
 		self._cooldown = 30
 

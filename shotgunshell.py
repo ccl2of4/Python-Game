@@ -36,13 +36,13 @@ class ShotgunShell (Projectile) :
 		b3.set_friendly_entities (entities_list)
 
 		self._delegate.spawn_entity (b1)
-		b1.launch ( (velocity[0], -1) )
+		b1.launch ( (velocity[0], -2) )
 
 		self._delegate.spawn_entity (b2)
 		b2.launch ( (velocity[0], 0) )
 
 		self._delegate.spawn_entity (b3)
-		b3.launch ( (velocity[0], 1) )
+		b3.launch ( (velocity[0], 2) )
 
 		self._delegate.despawn_entity (self)
 
