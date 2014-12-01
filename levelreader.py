@@ -152,7 +152,7 @@ def _create_30_cal (game, data) :
 	return p30_cal
 
 def _create_buckshot (game, data) :
-	buckshot = ShotgunShell (default='images/bullet.png')
+	buckshot = ShotgunShell ()
 	return buckshot
 
 def _create_870 (game, data) :
@@ -176,6 +176,28 @@ def _create_870 (game, data) :
 	r870.set_magazine (magazine)
 
 	return r870
+
+def _create_m1911 (game, data) :
+	m1911 = Firearm (default='images/m1911.png')
+	m1911.set_anchor_points (muzzle=(29,4), grip=(15,9))
+	magazine = []
+
+	try :
+		m1911.rect.x, m1911.rect.y = data['x'], data['y']
+	except :
+		pass
+
+	for projectile in data['magazine'] :
+		category = projectile['category']
+		res = function_mappings[category] (game, projectile)
+		try :
+			magazine.extend (res)
+		except :
+			magazine.append (res)
+
+	m1911.set_magazine (magazine)
+
+	return m1911
 
 def _create_m60 (game, data) :
 	m60 = AutomaticFirearm (default='images/m60.png')
@@ -282,6 +304,7 @@ function_mappings = {
 	'wood' : _create_wood,
 	'm60' : _create_m60,
 	'870' : _create_870,
+	'm1911' : _create_m1911,
 	'zombie' : _create_zombie,
 	'defend point' : _create_defend_point,
 	'entity spawner' : _create_entity_spawner,

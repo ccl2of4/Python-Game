@@ -83,6 +83,21 @@
 	},
 
 	{
+		"category" : "m1911",
+		"x" : 64,
+		"y" : 370,
+		"magazine" : [
+			{
+				"category" : "group",
+				"count" : 100,
+				"entity" : {
+					"category" : ".30 cal"
+				}
+			}
+		]
+	},
+
+	{
 		"category" : "870",
 		"x" : 64,
 		"y" : 390,
