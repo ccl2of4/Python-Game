@@ -58,4 +58,3 @@ class EntitySpawner (Entity) :
 			self.image = pygame.Surface (self._size)
 			self.image.fill ((60,60,60))
 			self._should_update_image = False
-		assert (self.image != None)

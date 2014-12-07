@@ -11,6 +11,7 @@ class PointOfInterest (Entity) :
 		self.set_physical (False)
 		self._size = size
 		self._layer = -1
+		self._needs_update = True
 
 	#post notification if any other entity touches this entity
 	def update (self) :
@@ -21,5 +22,7 @@ class PointOfInterest (Entity) :
 		Entity.update (self)
 
 	def update_image (self) :
-		self.image = pygame.Surface (self._size)
-		self.image.fill ((0,255,0))
+		if self._needs_update :
+			self.image = pygame.Surface (self._size)
+			self.image.fill ((0,255,0))
+			self._needs_update = False
