@@ -4,7 +4,7 @@ from character import Character
 from entity import Entity
 from camera import Camera
 from userinputentitycontroller import UserInputEntityController
-from aientitycontroller import AIEntityController
+from aientitycontrollers import ZombieEntityController, SlayerEntityController
 from firearm import Firearm
 from bomb import Bomb
 from statusdisplay import StatusDisplay
@@ -231,7 +231,7 @@ def _create_zombie (game, data) :
 	zombie.set_anchor_points (hand=(37,152))
 	zombie.set_name ("Zombie")
 	zombie.set_hostile (True)
-	zombie_c = AIEntityController ()
+	zombie_c = ZombieEntityController ()
 	zombie.set_controller (zombie_c)
 	zombie_c.set_target_entity (game.get_defend_points ()[0])
 	game.get_enemies().append (zombie)
@@ -240,6 +240,27 @@ def _create_zombie (game, data) :
 	zombie.set_pos (_get_coords (data))
 
 	return zombie
+
+def _create_slayer (game, data) :
+	assert (game.get_main_entity != None)
+	slayer = Character (
+		default = 'images/zombie_stand.png',
+		stand='images/zombie_stand.png',
+		walk='images/zombie_walk.png',
+		run='images/zombie_run.png',
+		jump='images/zombie_jump.png',)
+	slayer.set_anchor_points (hand=(37,152))
+	slayer.set_name ("Slayer")
+	slayer.set_hostile (True)
+	slayer_c = SlayerEntityController ()
+	slayer.set_controller (slayer_c)
+	slayer_c.set_target_entity (game.get_main_entity ())
+	game.get_enemies().append (slayer)
+	slayer.set_status_display (StatusDisplay ())
+
+	slayer.set_pos (_get_coords (data))
+
+	return slayer
 
 def _create_defend_point (game, data) :
 	defend_point = PointOfInterest ()
@@ -297,6 +318,7 @@ function_mappings = {
 	'm1911' : _create_m1911,
 	'm67' : _create_m67,
 	'zombie' : _create_zombie,
+	'slayer' : _create_slayer,
 	'defend point' : _create_defend_point,
 	'entity spawner' : _create_entity_spawner,
 	'.30 cal' : _create_30_cal,

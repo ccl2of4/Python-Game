@@ -152,11 +152,22 @@
 		"coords" : [3000,100],
 		"contents" : [
 			{
-				"category" : "group",
-				"count" : 10,
-				"entity" : {
-					"category" : "zombie"
-				}
+				"category" : "zombie"
+			},
+			{
+				"category" : "slayer"
+			},
+			{
+				"category" : "zombie"
+			},
+			{
+				"category" : "slayer"
+			},
+			{
+				"category" : "slayer"
+			},
+			{
+				"category" : "zombie"
 			}
 		]
 	},
