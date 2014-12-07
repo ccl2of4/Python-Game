@@ -10,9 +10,7 @@ class Bomb (Weapon, Projectile) :
 		self._has_been_launched = False
 		self.set_knockback_factor (5)
 		self._damage = 5
-
-	def get_description (self) :
-		return "Bomb"
+		self._name = "Bomb"
 
 	def begin_attacking (self) :
 		v_x, v_y = 0, 0

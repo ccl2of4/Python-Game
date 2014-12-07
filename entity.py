@@ -40,6 +40,8 @@ class Entity (pygame.sprite.Sprite) :
 		self._pass_through_entities = []
 		self._friendly_entities = []
 
+		self._name = "Entity"
+
 	def get_pos (self) :
 		return self.rect.x, self.rect.y
 	def set_pos (self, pos) :
@@ -51,8 +53,14 @@ class Entity (pygame.sprite.Sprite) :
 	def set_anchor_points (self, **anchor_points) :
 		self._anchor_points = anchor_points
 
+	def get_name (self) :
+		return self._name
+	def set_name (self, name) :
+		self._name = name
+
+	#used for display
 	def get_description (self) :
-		return "Entity"
+		return self._name
 
 	#default value None
 	def get_controller (self) :

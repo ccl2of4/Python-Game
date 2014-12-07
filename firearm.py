@@ -16,12 +16,13 @@ class Firearm (Weapon) :
 		self._firing_velocity = 20
 		self._magazine = []
 		self._cooldown = 30
+		self._name = "Firearm"
 
 		#used for timing
 		self._cooldown_frames_left = 0
 
 	def get_description (self) :
-		result = "Firearm ("
+		result = self._name + " ("
 		if len (self._magazine) > 0 :
 			result += self._magazine[0].get_description () + " x" + str (len (self._magazine))
 		else :

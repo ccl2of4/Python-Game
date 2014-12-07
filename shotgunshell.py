@@ -5,9 +5,7 @@ class ShotgunShell (Projectile) :
 	def __init__ (self, pos = (0,0), **images) :
 		Projectile.__init__ (self, pos, **images)
 		self._spread = .10
-
-	def get_description (self) :
-		return "Shotgun Shell"
+		self._name = "Shotgun Shell"
 
 	def launch (self, velocity) :
 		

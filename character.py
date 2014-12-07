@@ -112,9 +112,9 @@ class Character (PerishableEntity, MoveableEntity, StatusDisplayClient) :
 	def get_max_health (self) :
 		return self.get_life_controller().get_max_health ()
 	def get_name (self) :
-		return self._name
+		return Entity.get_name (self)
 	def set_name (self, name) :
-		self._name = name
+		Entity.set_name (self, name)
 	def get_weapon_str (self) :
 		if self._weapon :
 			return self._weapon.get_description ()
@@ -162,9 +162,6 @@ class Character (PerishableEntity, MoveableEntity, StatusDisplayClient) :
 	##############
 	#actions
 	##############
-
-	def get_description (self) :
-		return self.get_name ()
 
 	def is_hostile (self) :
 		return self._hostile

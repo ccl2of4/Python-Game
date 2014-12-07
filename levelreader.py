@@ -84,7 +84,7 @@ def _create_player (game, data) :
 		run='images/player_run.png',
 		jump='images/player_jump.png',)
 	player.set_anchor_points (hand=(62,150))
-	player.set_name ("Main")
+	player.set_name ("Player")
 	player.set_controller (UserInputEntityController ())
 	player.set_jump_acceleration (-20.0)
 	game.set_main_entity (player)
@@ -126,16 +126,19 @@ def _create_roof (game, data) :
 def _create_30_cal (game, data) :
 	p30_cal = Bullet (default='images/30_cal.png')
 	p30_cal.set_pos (_get_coords (data))
+	p30_cal.set_name (".30 cal")
 	return p30_cal
 
 def _create_buckshot (game, data) :
 	buckshot = ShotgunShell ()
 	buckshot.set_pos (_get_coords (data))
+	buckshot.set_name ("buckshot")
 	return buckshot
 
 def _create_870 (game, data) :
 	r870 = Firearm (default='images/870.png')
 	r870.set_anchor_points (muzzle=(147,4), grip=(54,14))
+	r870.set_name ("870")
 	magazine = []
 
 	r870.set_pos (_get_coords (data))
@@ -155,6 +158,7 @@ def _create_870 (game, data) :
 def _create_m1911 (game, data) :
 	m1911 = Firearm (default='images/m1911.png')
 	m1911.set_anchor_points (muzzle=(29,4), grip=(15,9))
+	m1911.set_name ("m1911")
 	magazine = []
 
 	m1911.set_pos (_get_coords (data))
@@ -174,6 +178,7 @@ def _create_m1911 (game, data) :
 def _create_m60 (game, data) :
 	m60 = AutomaticFirearm (default='images/m60.png')
 	m60.set_anchor_points (muzzle=(175,15), grip=(62,30))
+	m60.set_name ("m60")
 	magazine = []
 
 	m60.set_pos (_get_coords (data))
@@ -194,6 +199,7 @@ def _create_m67 (game, data) :
 	m67 = Bomb (default='images/m67.png')
 	m67.set_anchor_points (grip=(7,7))
 	m67.set_pos (_get_coords (data))
+	m67.set_name ("m67")
 	return m67
 
 def _create_entity_spawner (game, data) :
@@ -223,7 +229,7 @@ def _create_zombie (game, data) :
 		run='images/zombie_run.png',
 		jump='images/zombie_jump.png',)
 	zombie.set_anchor_points (hand=(37,152))
-	zombie.set_name ("AI")
+	zombie.set_name ("Zombie")
 	zombie.set_hostile (True)
 	zombie_c = AIEntityController ()
 	zombie.set_controller (zombie_c)

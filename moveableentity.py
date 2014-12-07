@@ -8,9 +8,7 @@ class MoveableEntity (Entity) :
 		self._sliding = True
 		self._mass = 0
 		self._gravity = 1.0
-
-	def get_description (self) :
-		return "Moveable Entity"
+		self._name = "Moveable Entity"
 
 	#is the entity on top of another entity?
 	def is_grounded (self) :

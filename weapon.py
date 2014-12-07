@@ -11,6 +11,7 @@ class Weapon (MoveableEntity) :
 		self.set_physical (True)
 		self.set_gravity (1.0)
 		self._owner = None
+		self._name = "Weapon"
 
 	#attacking has begin/end state instead of just being called so that things
 	#	like automatic gunfine can be implemented
@@ -23,9 +24,6 @@ class Weapon (MoveableEntity) :
 	#created by the weapon
 	def get_owner (self) :
 		return self._owner
-
-	def get_description (self) :
-		return "Weapon"
 
 	def drop (self, drop_rect) :
 

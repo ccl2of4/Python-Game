@@ -5,16 +5,6 @@ class AutomaticFirearm (Firearm) :
 		Firearm.__init__ (self,pos,**images)
 		self._firing = False
 
-	def get_description (self) :
-		result = "Auto-Firearm ("
-		if len (self._magazine) > 0 :
-			result += self._magazine[0].get_description () + " x" + str (len (self._magazine))
-		else :
-			result += "Empty"
-		result += ")"
-
-		return result
-
 	def begin_attacking (self) :
 		self._firing = True
 		Firearm.begin_attacking (self)

@@ -11,6 +11,7 @@ class PerishableEntity (Entity, LifeControllerClient) :
 		Entity.__init__ (self, pos,**images)
 		self._life_controller = None
 		self.set_life_controller (LifeController ())
+		self._name = "Perishable Entity"
 
 
 	def life_controller_client_died (self) :

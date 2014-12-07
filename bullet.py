@@ -7,9 +7,7 @@ class Bullet (Projectile) :
 		self.set_gravity (0)
 		self.set_knockback_factor (5)
 		self.set_damage (5)
-
-	def get_description (self) :
-		return "Bullet"
+		self._name = "Bullet"
 
 	def _calculate_knockback (self, entity) :
 		touching = get_touching (self.rect, entity.rect)
