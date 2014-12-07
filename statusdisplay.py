@@ -55,9 +55,9 @@ class StatusDisplay (Entity) :
 
 	def update_image (self) :
 		if self._needs_redraw :
-			if self.image == None :
-				self.image = pygame.Surface (self._size)
-				self.image.set_colorkey ((255,255,255))
+			self.image = pygame.Surface (self._size)
+			self.image.set_colorkey ((255,255,255))
+			self._needs_surface = False
 
 			self.image.fill ((255,255,255))
 			self._add_health_bar ()
