@@ -14,6 +14,10 @@ class Positioning :
 	absolute = 0
 	relative = 1
 
+def clear_rect (surf, rect) :
+	color = 255,255,255
+	surf.fill (color, rect)
+
 class Game (EntityDelegate) :
 	def __init__(self, width=800, height=400, camera=None) :
 		pygame.init()
@@ -29,6 +33,9 @@ class Game (EntityDelegate) :
 		self.in_settings = False
 		self.defend_points = []
 		self.enemies = []
+
+		self._log_message_rect = pygame.Rect (0,0,0,0)
+		self._fps_rect = pygame.Rect (0,0,0,0)
 
 		#settings stuff
 		self.settings_button_needs_reset = False
@@ -97,21 +104,10 @@ class Game (EntityDelegate) :
 		self.log_message_duration = 0
 
 	def run (self) :
+
+		clear_rect (self.screen, self.screen.get_rect ())
+
 		while 1:
-
-			#QQ
-			self.screen.fill ((255,255,255))
-
-
-			#framerate stuff
-			self.clock.tick (60)
-			font = pygame.font.Font (None, 36)
-			color = (0, 0, 0)
-			text = font.render ('FPS: ' + str (int (self.clock.get_fps ())), False, color, (255,255,255))
-			text.set_colorkey ((255,255,255))
-			textpos = text.get_rect ()
-			textpos.topright = self.screen.get_rect().topright
-			self.screen.blit (text, textpos)
 
 			#quit or resize screen
 			pygame.event.pump ()
@@ -123,6 +119,7 @@ class Game (EntityDelegate) :
 				elif event.type==pygame.VIDEORESIZE:
 					size = event.dict['size']
 					screen=pygame.display.set_mode(size,pygame.HWSURFACE|pygame.DOUBLEBUF|pygame.RESIZABLE)
+					clear_rect (screen, screen.get_rect ())
 					self.camera.set_state ((0,0,size[0],size[1]))
 
 			#user input
@@ -138,6 +135,20 @@ class Game (EntityDelegate) :
 				self.update_settings ()
 			else :
 				self.update_game ()
+
+			#framerate stuff
+			self.clock.tick (60)
+			clear_rect (self.screen, self._fps_rect)
+			font = pygame.font.Font (None, 36)
+			color = (0, 0, 0)
+			text = font.render ('FPS: ' + str (int (self.clock.get_fps ())), False, color, (255,255,255))
+			text.set_colorkey ((255,255,255))
+			textpos = text.get_rect ()
+			textpos.topright = self.screen.get_rect().topright
+			self.screen.blit (text, textpos)
+			self._fps_rect = textpos
+	
+			pygame.display.flip ()
 
 
 	def update_settings (self) :
@@ -155,9 +166,10 @@ class Game (EntityDelegate) :
 			if entity.positioning == Positioning.relative :
 				self.camera.apply (entity)
 
-
+		self.all_entities.clear (self.screen, clear_rect)
 		self.all_entities.draw (self.screen)
 
+		clear_rect (self.screen, self._log_message_rect)
 		if self.log_message != None :
 			percent = min (1.0, self.log_message_duration/60.0)
 			if percent < 1 :
@@ -169,11 +181,9 @@ class Game (EntityDelegate) :
 				textpos.centerx = self.screen.get_rect().centerx
 				self.screen.blit (text, textpos)
 				self.log_message_duration += 1
+				self._log_message_rect = textpos
 			else :
 				log_message = None
-
-		pygame.display.flip ()
-
 
 	###########################
 	#EntityDelegate methods /

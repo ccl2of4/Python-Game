@@ -7,13 +7,12 @@ class CompositeEntity (Entity) :
 	def __init__ (self, pos=(0,0)) :
 		Entity.__init__ (self, pos)
 		self._entities = None
-		self.image = None
+		self._needs_update = True
 
 	def get_entities (self) :
 		return self._entities
 
 	def set_entities (self, entities) :
-		self.image = None
 		self.rect = None
 
 		for entity in entities :
@@ -26,10 +25,11 @@ class CompositeEntity (Entity) :
 			else :
 				self.rect.union_ip (rect)
 
+		self._needs_update = True
 		self._entities = entities
 
 	def update_image (self) :
-		if self.image != None :
+		if not self._needs_update :
 			return
 
 		self.image = pygame.Surface (self.rect.size)
@@ -41,3 +41,5 @@ class CompositeEntity (Entity) :
 			rect.x, rect.y = entity.rect.x - self.rect.x, entity.rect.y - self.rect.y
 
 			self.image.blit (entity.image, rect)
+
+		self._needs_update = False
