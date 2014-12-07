@@ -16,6 +16,7 @@ from shotgunshell import ShotgunShell
 from moveableentity import MoveableEntity
 from automaticfirearm import AutomaticFirearm
 from entityspawner import EntitySpawner
+from compositeentity import CompositeEntity
 import json
 
 ##
@@ -241,6 +242,22 @@ def _create_defend_point (game, data) :
 
 	return defend_point
 
+def _create_composite_entity (game, data) :
+	composite_entity = CompositeEntity ()
+	entities = []
+
+	for entity in data['entities'] :
+		category = entity['category']
+		res = function_mappings[category] (game, entity)
+		try :
+			entities.extend (res)
+		except :
+			entities.append (res)
+
+	composite_entity.set_entities (entities)
+	
+	return composite_entity
+
 def _create_game (data) :
 	game = Game (800, 450)
 	game.set_camera (Camera (800,450))
@@ -277,5 +294,6 @@ function_mappings = {
 	'defend point' : _create_defend_point,
 	'entity spawner' : _create_entity_spawner,
 	'.30 cal' : _create_30_cal,
-	'buckshot' : _create_buckshot
+	'buckshot' : _create_buckshot,
+	'composite entity' : _create_composite_entity
 }
