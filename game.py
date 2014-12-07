@@ -115,7 +115,7 @@ class Game (EntityDelegate) :
 			for event in events :
 				if event.type == pygame.QUIT :
 					pygame.quit ()
-					break;
+					return
 				elif event.type==pygame.VIDEORESIZE:
 					size = event.dict['size']
 					screen=pygame.display.set_mode(size,pygame.HWSURFACE|pygame.DOUBLEBUF|pygame.RESIZABLE)
