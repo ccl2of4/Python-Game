@@ -16,8 +16,7 @@ class Camera :
 		return self._state
 
 	def apply(self, entity):
-		pass
-		#entity.rect.move_ip(self._state.topleft)
+		entity.rect.move_ip(self._state.topleft)
 
 	def update(self):
 		l, t, _, _ = self._target.rect # l = left,  t = top
