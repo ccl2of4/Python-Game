@@ -68,8 +68,8 @@ def _create_group (game, data) :
 	for i in range (count) :
 		entity = func (game, entity)
 		if x_logic != None and y_logic != None :
-			entity.rect.x = eval (x_logic)
-			entity.rect.y = eval (y_logic)
+			pos = eval (x_logic), eval (y_logic)
+			entity.set_pos (pos)
 		entities.append (entity)
 
 	return entities
@@ -100,37 +100,37 @@ def _create_player (game, data) :
 
 def _create_platform (game, data) :
 	platform = Entity (default='images/platform.png')
-	platform.rect.topleft = _get_coords (data)
+	platform.set_pos (_get_coords (data))
 
 	return platform
 
 def _create_wood (game, data) :
 	wood = PerishableEntity (default='images/wood.png')
 
-	wood.rect.topleft = _get_coords (data)
+	wood.set_pos (_get_coords (data))
 
 	return wood
 
 def _create_ground (game, data) :
 	ground = Entity (default='images/ground.png')
-	ground.rect.topleft = _get_coords (data)
+	ground.set_pos (_get_coords (data))
 
 	return ground
 
 def _create_roof (game, data) :
 	roof = Entity (default='images/roof.png')
-	roof.rect.topleft = _get_coords (data)
+	roof.set_pos (_get_coords (data))
 
 	return roof
 
 def _create_30_cal (game, data) :
 	p30_cal = Bullet (default='images/30_cal.png')
-	p30_cal.rect.topleft = _get_coords (data)
+	p30_cal.set_pos (_get_coords (data))
 	return p30_cal
 
 def _create_buckshot (game, data) :
 	buckshot = ShotgunShell ()
-	buckshot.rect.topleft = _get_coords (data)
+	buckshot.set_pos (_get_coords (data))
 	return buckshot
 
 def _create_870 (game, data) :
@@ -138,7 +138,7 @@ def _create_870 (game, data) :
 	r870.set_anchor_points (muzzle=(147,4), grip=(54,14))
 	magazine = []
 
-	r870.rect.topleft = _get_coords (data)
+	r870.set_pos (_get_coords (data))
 
 	for projectile in data['magazine'] :
 		category = projectile['category']
@@ -157,7 +157,7 @@ def _create_m1911 (game, data) :
 	m1911.set_anchor_points (muzzle=(29,4), grip=(15,9))
 	magazine = []
 
-	m1911.rect.topleft = _get_coords (data)
+	m1911.set_pos (_get_coords (data))
 
 	for projectile in data['magazine'] :
 		category = projectile['category']
@@ -176,7 +176,7 @@ def _create_m60 (game, data) :
 	m60.set_anchor_points (muzzle=(175,15), grip=(62,30))
 	magazine = []
 
-	m60.rect.topleft = _get_coords (data)
+	m60.set_pos (_get_coords (data))
 
 	for projectile in data['magazine'] :
 		category = projectile['category']
@@ -193,14 +193,14 @@ def _create_m60 (game, data) :
 def _create_m67 (game, data) :
 	m67 = Bomb (default='images/m67.png')
 	m67.set_anchor_points (grip=(7,7))
-	m67.rect.topleft = _get_coords (data)
+	m67.set_pos (_get_coords (data))
 	return m67
 
 def _create_entity_spawner (game, data) :
 	entity_spawner = EntitySpawner ()
 	entities = []
 
-	entity_spawner.rect.topleft = _get_coords (data)
+	entity_spawner.set_pos (_get_coords (data))
 	
 	for entity in data['contents'] :
 		category = entity['category']
@@ -231,14 +231,14 @@ def _create_zombie (game, data) :
 	game.get_enemies().append (zombie)
 	zombie.set_status_display (StatusDisplay ())
 
-	zombie.rect.topleft = _get_coords (data)
+	zombie.set_pos (_get_coords (data))
 
 	return zombie
 
 def _create_defend_point (game, data) :
 	defend_point = PointOfInterest ()
 	game.get_defend_points().append (defend_point)
-	defend_point.rect.topleft = _get_coords (data)
+	defend_point.set_pos (_get_coords (data))
 
 	return defend_point
 
