@@ -100,7 +100,7 @@ class Game (EntityDelegate) :
 		while 1:
 			#framerate stuff
 			self.clock.tick (60)
-			print self.clock.get_fps ()
+			#print self.clock.get_fps ()
 
 			#quit or resize screen
 			pygame.event.pump ()
