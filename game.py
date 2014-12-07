@@ -98,9 +98,20 @@ class Game (EntityDelegate) :
 
 	def run (self) :
 		while 1:
+
+			#QQ
+			self.screen.fill ((255,255,255))
+
+
 			#framerate stuff
 			self.clock.tick (60)
-			#print self.clock.get_fps ()
+			font = pygame.font.Font (None, 36)
+			color = (0, 0, 0)
+			text = font.render ('FPS: ' + str (int (self.clock.get_fps ())), False, color, (255,255,255))
+			text.set_colorkey ((255,255,255))
+			textpos = text.get_rect ()
+			textpos.topright = self.screen.get_rect().topright
+			self.screen.blit (text, textpos)
 
 			#quit or resize screen
 			pygame.event.pump ()
@@ -145,8 +156,6 @@ class Game (EntityDelegate) :
 				self.camera.apply (entity)
 
 
-		#rendering
-		self.screen.fill ((255,255,255))
 		self.all_entities.draw (self.screen)
 
 		if self.log_message != None :
@@ -154,7 +163,7 @@ class Game (EntityDelegate) :
 			if percent < 1 :
 				font = pygame.font.Font (None, 36)
 				color = (100, 100, 100)
-				text = font.render (self.log_message, False, color, (255,255,255)).convert ()
+				text = font.render (self.log_message, False, color, (255,255,255))
 				text.set_colorkey ((255,255,255))
 				textpos = text.get_rect ()
 				textpos.centerx = self.screen.get_rect().centerx
