@@ -14,52 +14,6 @@
 	},
 
 	{
-		"category" : "group",
-		"count" : 6,
-		"coords" : ["0", "436 - 64*i"],
-		"entity" : {
-			"category" : "wood"
-		}
-	},
-
-	{
-		"category" : "group",
-		"count" : 2,
-		"coords" : ["700", "436 - 256 - 64*i"],
-		"entity" : {
-			"category" : "wood"
-		}
-	},
-
-
-	{
-		"category" : "group",
-		"count" : 14,
-		"coords" : ["-64 + 32*i", "180 - 64 - 10*i"],
-		"entity" : {
-			"category" : "roof"
-		}
-	},
-
-	{
-		"category" : "group",
-		"count" : 14,
-		"coords" : ["764 - 32*i", "180 - 64 - 10*i"],
-		"entity" : {
-			"category" : "roof"
-		}
-	},
-
-	{
-		"category" : "group",
-		"count" : 6,
-		"coords" : ["0", "436 - 64*i"],
-		"entity" : {
-			"category" : "wood"
-		}
-	},
-
-	{
 		"category" : "player",
 		"coords" : [128,100]
 	}
