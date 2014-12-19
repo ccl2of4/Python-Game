@@ -113,6 +113,10 @@ class Entity (pygame.sprite.Sprite) :
 	def was_attacked (self, knockback, damage) :
 		pass
 
+	#some entity (other) wishes to interact with this entity
+	def interact (self, other) :
+		pass
+		
 	#can be overriden in subclasses
 	#this code should be called anyway though
 	def update (self) :

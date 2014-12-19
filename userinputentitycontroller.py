@@ -32,6 +32,7 @@ class UserInputEntityController (EntityController) :
 		self._attacking = False
 		self._dropping = False
 		self._picking_up = False
+		self._interacting = False
 
 		#walk
 		if keys[pygame.K_a] :
@@ -50,6 +51,12 @@ class UserInputEntityController (EntityController) :
 			self._jumping = True
 		elif self._entity.is_grounded ():
 			self._jump_needs_reset = False
+
+		#interact
+		if keys[pygame.K_w] :
+			self._interacting = True
+		else :
+			self._interacting = False
 
 		#attack with weapon
 		if keys[pygame.K_o] :
@@ -91,6 +98,9 @@ class UserInputEntityController (EntityController) :
 			if not self._drop_needs_reset :
 				self._entity.drop_weapon ()
 				self._drop_needs_reset = True
+
+		if self._interacting :
+			self._entity.find_interaction ()
 
 		if self._w_attacking :
 			if not self._w_attack_needs_reset :

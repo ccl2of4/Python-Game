@@ -234,6 +234,16 @@ class Character (PerishableEntity, MoveableEntity, StatusDisplayClient) :
 					self.pick_up_weapon (entity)
 					break
 
+	#look for an entity with which to interact
+	def find_interaction (self) :
+		for entity in self._delegate.get_all_entities () :
+			touching = get_touching (self.rect, entity.rect)
+			if touching != Location.none :
+				self.do_interact_with (entity)
+
+	def do_interact_with (self, other) :
+		other.interact (self)
+
 	def pick_up_weapon (self, weapon) :
 		assert (self._weapon == None)
 		if weapon.pick_up (self) :

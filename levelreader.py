@@ -17,6 +17,7 @@ from moveableentity import MoveableEntity
 from automaticfirearm import AutomaticFirearm
 from entityspawner import EntitySpawner
 from compositeentity import CompositeEntity
+from ladder import Ladder
 import json
 
 ##
@@ -122,6 +123,12 @@ def _create_roof (game, data) :
 	roof.set_pos (_get_coords (data))
 
 	return roof
+
+def _create_ladder (game, data) :
+	ladder = Ladder ()
+	ladder.set_pos (_get_coords (data))
+
+	return ladder
 
 def _create_30_cal (game, data) :
 	p30_cal = Bullet (default='images/30_cal.png')
@@ -323,5 +330,6 @@ function_mappings = {
 	'entity spawner' : _create_entity_spawner,
 	'.30 cal' : _create_30_cal,
 	'buckshot' : _create_buckshot,
-	'composite entity' : _create_composite_entity
+	'composite entity' : _create_composite_entity,
+	'ladder' : _create_ladder
 }
