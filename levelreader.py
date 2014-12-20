@@ -18,6 +18,7 @@ from automaticfirearm import AutomaticFirearm
 from entityspawner import EntitySpawner
 from compositeentity import CompositeEntity
 from ladder import Ladder
+from fallthroughplatform import FallThroughPlatform
 import json
 
 ##
@@ -100,34 +101,28 @@ def _create_player (game, data) :
 	return player
 
 def _create_platform (game, data) :
-	platform = Entity (default='images/platform.png')
+	platform = FallThroughPlatform ()
 	platform.set_pos (_get_coords (data))
-
 	return platform
 
 def _create_wood (game, data) :
 	wood = PerishableEntity (default='images/wood.png')
-
 	wood.set_pos (_get_coords (data))
-
 	return wood
 
 def _create_ground (game, data) :
 	ground = Entity (default='images/ground.png')
 	ground.set_pos (_get_coords (data))
-
 	return ground
 
 def _create_roof (game, data) :
 	roof = Entity (default='images/roof.png')
 	roof.set_pos (_get_coords (data))
-
 	return roof
 
 def _create_ladder (game, data) :
 	ladder = Ladder ()
 	ladder.set_pos (_get_coords (data))
-
 	return ladder
 
 def _create_30_cal (game, data) :

@@ -19,6 +19,11 @@
 	},
 
 	{
+		"category" : "platform",
+		"coords" : [1000,0]
+	},
+
+	{
 		"category" : "composite entity",
 		"entities" : [
 			{

@@ -105,7 +105,12 @@ class Entity (pygame.sprite.Sprite) :
 				and self.is_physical ()
 				and entity.is_physical ()
 				and not (entity in self._pass_through_entities) 
-				and not (self in entity._pass_through_entities))
+				and not (self in entity._pass_through_entities)
+				and self._additional_collision_conditions (entity)
+				and entity._additional_collision_conditions (self))
+
+	def _additional_collision_conditions (self, entity) :
+		return True
 
 	#called when the entity is attacked by another entity
 	#	can be refined in subclasses
