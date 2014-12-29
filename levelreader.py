@@ -121,7 +121,7 @@ def _create_roof (game, data) :
 	return roof
 
 def _create_ladder (game, data) :
-	ladder = Ladder ()
+	ladder = Ladder (default='images/ladder.png')
 	ladder.set_pos (_get_coords (data))
 	return ladder
 

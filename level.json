@@ -14,13 +14,17 @@
 	},
 
 	{
-		"category" : "ladder",
-		"coords" : [1000,0]
+		"category" : "group",
+		"count" : 8,
+		"coords" : ["1000","436 - 64*i"],
+		"entity" : {
+			"category" : "ladder"
+		}
 	},
 
 	{
 		"category" : "platform",
-		"coords" : [1000,0]
+		"coords" : [1000,-12]
 	},
 
 	{
