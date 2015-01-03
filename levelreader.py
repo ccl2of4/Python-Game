@@ -19,6 +19,7 @@ from entityspawner import EntitySpawner
 from compositeentity import CompositeEntity
 from ladder import Ladder
 from fallthroughplatform import FallThroughPlatform
+from door import Door
 import json
 
 ##
@@ -97,8 +98,15 @@ def _create_player (game, data) :
 
 	player.rect.topleft = _get_coords (data)
 
-
 	return player
+
+def _create_door (game, data) :
+	door = Door (
+		default = 'images/door_closed.png',
+		closed='images/door_closed.png',
+		open='images/door_open.png')
+	door.set_pos (_get_coords (data))
+	return door
 
 def _create_platform (game, data) :
 	platform = FallThroughPlatform ()
@@ -326,5 +334,6 @@ function_mappings = {
 	'.30 cal' : _create_30_cal,
 	'buckshot' : _create_buckshot,
 	'composite entity' : _create_composite_entity,
-	'ladder' : _create_ladder
+	'ladder' : _create_ladder,
+	'door' : _create_door
 }

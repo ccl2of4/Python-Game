@@ -28,6 +28,11 @@
 	},
 
 	{
+		"category" : "door",
+		"coords" : [700, 244]
+	},
+
+	{
 		"category" : "composite entity",
 		"entities" : [
 			{
@@ -102,7 +107,7 @@
 	{
 		"category" : "group",
 		"count" : 4,
-		"coords" : ["700", "436 - 64*i"],
+		"coords" : ["650", "436 - 64*i"],
 		"entity" : {
 			"category" : "defend point"
 		}
